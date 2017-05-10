@@ -1,19 +1,17 @@
 package com.excilys.cdb.ui;
 
-import com.excilys.cdb.service.DbConnection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import com.excilys.cdb.persistence.*;
 
 public class Main {
 
 	public static void main(String[] args) {
-		DbConnection connection = new DbConnection();
 		
-		connection.openConnection();
-		try {
-			DriverManager.getDriver(DbConnection.URL);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+			//CompanyDaoImpl companyDao = new CompanyDaoImpl();
+			ComputerDaoImpl computerDao = new ComputerDaoImpl();
+			
+			//companyDao.listRequest();
+			
+			//computerDao.listRequest();
+			computerDao.showDetails(5);
 	}
 }

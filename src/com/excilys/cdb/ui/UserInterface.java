@@ -11,6 +11,7 @@ public class UserInterface {
 	private static UserInterface uiInstance = null;
 	private Scanner scanner;
 	
+	
 	/**
 	 * Private constructor for the User Interface.
 	 */
@@ -20,7 +21,7 @@ public class UserInterface {
 	
 	/**
 	 * Returns unique instance, or instantiates it if null.
-	 * @return 
+	 * @return Instance of UserInterface.
 	 */
 	public static UserInterface getInstance() {
 		if (uiInstance == null) {
@@ -30,6 +31,10 @@ public class UserInterface {
 		return uiInstance;
 	}
 
+	/**
+	 * Gets the next line written by the user.
+	 * @return Input command.
+	 */
 	public String getNextLine() {
 		return scanner.nextLine();
 	}
