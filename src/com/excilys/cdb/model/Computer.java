@@ -1,23 +1,23 @@
 package com.excilys.cdb.model;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 /**
- * Model for computer.
+ * Model for a computer.
  * @author excilys
  *
  */
 public class Computer {
 	private int id;
 	private String name;
-	private Date introduced;
-	private Date discontinued;
+	private LocalDate introduced;
+	private LocalDate discontinued;
 	private int companyId;
 	
 	/**
-	 * Constructor for Computer class.
-	 * @param pId
-	 * @param pName
+	 * Constructor using identifier and name of the computer.
+	 * @param pId Unique identifier for the computer.
+	 * @param pName Name of the computer.
 	 */
 	public Computer (int pId, String pName) {
 		setId(pId);
@@ -44,19 +44,19 @@ public class Computer {
 		this.name = pName;
 	}
 
-	public Date getIntroduced() {
+	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(Date pIntroduced) {
+	public void setIntroduced(LocalDate pIntroduced) {
 		this.introduced = pIntroduced;
 	}
 
-	public Date getDiscontinued() {
+	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(Date pDiscontinued) {
+	public void setDiscontinued(LocalDate pDiscontinued) {
 		if (pDiscontinued.compareTo(this.discontinued) > 0) {
 			this.discontinued = pDiscontinued;
 		}

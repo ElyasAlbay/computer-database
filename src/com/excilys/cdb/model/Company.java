@@ -1,7 +1,7 @@
 package com.excilys.cdb.model;
 
 /**
- * Model for company.
+ * Model for a company.
  * @author excilys
  *
  */
@@ -11,9 +11,9 @@ public class Company {
 	
 	
 	/**
-	 * Constructor for Company class.
-	 * @param pId
-	 * @param pName
+	 * Constructor using identifier and name of the company.
+	 * @param pId Unique identifier for the company.
+	 * @param pName Company name.
 	 */
 	public Company (int pId, String pName) {
 		setId(pId);
