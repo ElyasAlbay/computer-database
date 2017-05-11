@@ -25,6 +25,16 @@ public class Computer {
 	}
 	
 	
+	/**
+	 * Converts computer into a string detailing its fields.
+	 */
+	public String toString() {
+		String delimit = " | ";
+		String string = this.getId() + delimit + this.getName() + delimit + this.getIntroduced() + delimit + this.getDiscontinued() +delimit + this.getCompanyId();
+		return string;
+	}
+	
+	
 	/* Getters and setters */
 	public int getId () {
 		return this.id;
