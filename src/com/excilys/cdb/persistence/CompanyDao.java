@@ -1,7 +1,7 @@
 package com.excilys.cdb.persistence;
 
-public interface CompanyDao extends BaseDao {
+import com.excilys.cdb.model.Company;
+
+public interface CompanyDao extends BaseDao<Company> {
 	
-	public void getById (int id);
-	public void getByName (String name);
 }

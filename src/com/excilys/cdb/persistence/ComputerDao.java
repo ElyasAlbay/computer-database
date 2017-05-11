@@ -1,12 +1,8 @@
 package com.excilys.cdb.persistence;
 
-import com.excilys.cdb.model.*;
+import com.excilys.cdb.model.Computer;
 
-public interface ComputerDao extends BaseDao {
-
-	public void showDetails(int id);
-	
-	public void showDetails(String name);
+public interface ComputerDao extends BaseDao<Computer> {
 	
 	public void create(Computer computer);
 	
