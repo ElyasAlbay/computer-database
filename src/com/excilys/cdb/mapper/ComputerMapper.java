@@ -1,12 +1,13 @@
 package com.excilys.cdb.mapper;
 
-import com.excilys.cdb.model.Computer;
-
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.excilys.cdb.model.Computer;
 
 /**
  * Mapper class for Computer. This class converts a ResultSet from a database request into
@@ -40,15 +41,25 @@ public class ComputerMapper {
 	 */
 	public static Computer getComputer (ResultSet resultSet) throws SQLException {
 		Computer computer = null;
-		Date dateInt = resultSet.getDate("introduced");
-		Date dateDis = resultSet.getDate("discontinued");
+		Date dateInt = null;
+		Date dateDis = null;
+		
 		
 		if (resultSet.next()) {
 			computer = new Computer(resultSet.getInt("id"), resultSet.getString("name"));
-			if(dateInt != null)
+			
+			Timestamp timeInt = resultSet.getTimestamp("introduced");
+			if(timeInt != null) {
+				dateInt = new Date(timeInt.getTime());
 				computer.setIntroduced(dateInt.toLocalDate());
-			if(dateDis != null)
+			}
+			
+			Timestamp timeDis = resultSet.getTimestamp("discontinued");
+			if(timeDis != null) {
+				dateDis = new Date(timeDis.getTime());
 				computer.setDiscontinued(dateDis.toLocalDate());
+			}
+				
 			computer.setCompanyId(resultSet.getInt("company_id"));
 		}
 		
