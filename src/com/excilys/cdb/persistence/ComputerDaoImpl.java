@@ -9,6 +9,7 @@ import java.util.List;
 import com.excilys.cdb.mapper.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 
+
 /**
  * Implementation of ComputerDao, sends requests to the database and gets an instance of Computer
  * from the corresponding Mapper.
@@ -70,7 +71,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		try {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(request);
-			ComputerMapper.getComputer(resultSet);
+			computer = ComputerMapper.getComputer(resultSet);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -117,12 +118,20 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Computer create(Computer computer) {
 		connection = dbConnection.openConnection();
-		
-		String request = "INSERT INTO computer SET name='" + computer.getName() + ", introduced=";
+
+		String request = "INSERT INTO computer SET name='" + computer.getName() + 
+				"', introduced='" + computer.getIntroduced() +
+				"', discontinued ='" + computer.getDiscontinued() +
+				"', company_id =" + computer.getCompanyId();
 		
 		try {
 			statement = connection.createStatement();
-			statement.executeUpdate(request);
+			statement.executeUpdate(request, Statement.RETURN_GENERATED_KEYS);
+			resultSet = statement.getGeneratedKeys();
+			
+			if(resultSet.next()){
+				computer.setId(resultSet.getInt(1));
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();

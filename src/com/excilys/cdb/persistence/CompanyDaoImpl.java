@@ -9,6 +9,7 @@ import java.util.List;
 import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
 
+
 /**
  * Implementation of CompanyDao, sends requests to the database and gets an instance of Company
  * from the corresponding Mapper.
