@@ -30,29 +30,19 @@ public class UserInterface {
 		
 		return uiInstance;
 	}
-
+	
 	/**
-	 * Gets the next line written by the user.
-	 * @return Input command.
+	 * Loops while user inputs lines. Breaks if method parseLine() returns false.
 	 */
-	public String getNextLine() {
-		return scanner.nextLine();
+	public void getUserInput() {
+		
+		while (scanner.hasNextLine()) {
+			
+			if (!Parser.parseLine(scanner.nextLine())) {
+				break;
+			}
+		}
 	}
 	
-	
-	
-	/*public static void main(String[] args) {
-		Scanner lineSc;
-		String line;
-		UserInterface instance = getInstance();
-		
-		System.out.println("Saisir une commande :");
-		line = instance.getNextLine();
-		lineSc = new Scanner(line);
-		
-		System.out.println(line);
-		System.out.println(lineSc.next());
-		System.out.println(lineSc.next());
-	}*/
 
 }

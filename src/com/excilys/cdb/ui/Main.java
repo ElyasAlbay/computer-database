@@ -8,16 +8,21 @@ import com.excilys.cdb.persistence.*;
 public class Main {
 
 	public static void main(String[] args) {
-		List<Computer> computersList = null;
+		/*List<Computer> computersList = null;
 		
-			//CompanyDaoImpl companyDao = new CompanyDaoImpl();
+			CompanyDaoImpl companyDao = new CompanyDaoImpl();
 			ComputerDaoImpl computerDao = new ComputerDaoImpl();
 			
 			computersList = computerDao.listRequest();
 			for(Computer computer : computersList) {
 				System.out.println(computer.getName());
 			}
-			//computerDao.listRequest();
-			//computerDao.showDetails(5);
+			computerDao.listRequest();
+			computerDao.showDetails(5);*/
+		
+		UserInterface instance = UserInterface.getInstance();
+		instance.getUserInput();
+		
+		
 	}
 }
