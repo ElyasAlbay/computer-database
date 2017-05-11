@@ -40,6 +40,12 @@ public class Parser {
 			System.out.println(token);
 			
 		} else if (token.equals(Command.QUIT.toString())) {
+			System.out.println("Here is a list of all valid commands :");
+			for(Command comm : Command.values()){
+				System.out.println(comm.toString());
+			}
+			
+		} else if (token.equals(Command.QUIT.toString())) {
 			loop = false;
 			
 		} else {

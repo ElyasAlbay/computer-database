@@ -11,6 +11,7 @@ public enum Command {
 	CREATE("create"),
 	UPDATE("update"),
 	DELETE("delete"),
+	HELP("help"),
 	QUIT("quit");
 	
 	private String name = "";
