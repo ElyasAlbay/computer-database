@@ -16,10 +16,18 @@ import com.excilys.cdb.model.Company;
  *
  */
 public class CompanyDaoImpl implements CompanyDao {
-	DbConnection dbConnection = DbConnection.getInstance();
+	DbConnection dbConnection;
 	Connection connection;
 	Statement statement;
 	ResultSet resultSet;
+	
+	
+	/**
+	 * Class constructor. Initiates connection to the database.
+	 */
+	public CompanyDaoImpl() {
+		dbConnection = DbConnection.getInstance();
+	}
 	
 	
 	/**
@@ -37,6 +45,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(request);
 			companiesList = CompanyMapper.getCompanies(resultSet);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -63,6 +72,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(request);
 			company = CompanyMapper.getCompany(resultSet);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -89,6 +99,7 @@ public class CompanyDaoImpl implements CompanyDao {
 			statement = connection.createStatement();
 			resultSet = statement.executeQuery(request);
 			company = CompanyMapper.getCompany(resultSet);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

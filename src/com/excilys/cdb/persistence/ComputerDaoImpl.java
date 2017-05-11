@@ -16,10 +16,18 @@ import com.excilys.cdb.model.Computer;
  *
  */
 public class ComputerDaoImpl implements ComputerDao {
-	DbConnection dbConnection = DbConnection.getInstance();
+	DbConnection dbConnection;
 	Connection connection;
 	Statement statement;
 	ResultSet resultSet;
+	
+	
+	/**
+	 * Class constructor. Initiates connection to the database.
+	 */
+	public ComputerDaoImpl() {
+		dbConnection = DbConnection.getInstance();
+	}
 	
 	
 	/**
@@ -74,7 +82,10 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	/**
-	 * 
+	 * Sends a request to the database to get a unique instance of Computer
+	 * corresponding to the given id.
+	 * @param id Identifier of the computer in the dabatase.
+	 * @return Instance of computer.
 	 */
 	@Override
 	public Computer getByName(String name) {
@@ -98,10 +109,13 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	/**
-	 * 
+	 * Sends a request to the database to get a unique instance of Computer
+	 * corresponding to the given name.
+	 * @param name Name of the computer in the dabatase.
+	 * @return Instance of computer.
 	 */
 	@Override
-	public void create(Computer computer) {
+	public Computer create(Computer computer) {
 		connection = dbConnection.openConnection();
 		
 		String request = "INSERT INTO computer SET name='" + computer.getName() + ", introduced=";
@@ -116,13 +130,15 @@ public class ComputerDaoImpl implements ComputerDao {
 			dbConnection.closeConnection();
 		}
 
+		return computer;
 	}
 
 	/**
-	 * 
+	 * Sends a request to the database to update a given entry of the Computer table in the database.
+	 * @param computer Instance of Computer to update.
 	 */
 	@Override
-	public void update(Computer computer) {
+	public Computer update(Computer computer) {
 		connection = dbConnection.openConnection();
 		
 		String request = "UPDATE computer SET name='" + computer.getName() + "WHERE id=" + computer.getId();
@@ -137,16 +153,18 @@ public class ComputerDaoImpl implements ComputerDao {
 			dbConnection.closeConnection();
 		}
 
+		return computer;
 	}
 
 	/**
-	 * 
+	 * Sends a request to the database to delete a given entry of the Computer table in the database.
+	 * @param id Identifier of the computer in the database.
 	 */
 	@Override
-	public void delete(int id) {
+	public void delete(Computer computer) {
 		connection = dbConnection.openConnection();
 		
-		String request = "DELETE FROM computer WHERE id=" + id;
+		String request = "DELETE FROM computer WHERE id=" + computer.getId();
 		
 		try {
 			statement = connection.createStatement();
