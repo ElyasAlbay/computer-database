@@ -33,6 +33,8 @@ public class Computer {
 	public void setId (int pId) {
 		if (pId >= 0) {
 			this.id = pId;
+		} else {
+			System.out.println("Error in Computer : Incorrect Id");
 		}
 	}
 	
@@ -57,9 +59,18 @@ public class Computer {
 	}
 
 	public void setDiscontinued(LocalDate pDiscontinued) {
-		if (pDiscontinued.compareTo(this.discontinued) > 0) {
+		if(this.getIntroduced() != null) {
+			
+			if (pDiscontinued.isAfter(this.getIntroduced())) {
+				this.discontinued = pDiscontinued;
+			} else {
+				System.out.println("Error in Computer : Incorrect Discontinued date");
+			}
+			
+		} else {
 			this.discontinued = pDiscontinued;
 		}
+		
 	}
 
 	public int getCompanyId() {

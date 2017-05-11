@@ -29,6 +29,8 @@ public class Company {
 	public void setId (int pId) {
 		if(pId >= 0) {
 			this.id = pId;
+		} else {
+			System.out.println("Error in Company : Incorrect Id");
 		}
 	}
 	
