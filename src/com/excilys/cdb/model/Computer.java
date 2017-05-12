@@ -22,6 +22,7 @@ public class Computer {
 	public Computer (int pId, String pName) {
 		setId(pId);
 		setName(pName);
+		
 	}
 	
 	
@@ -69,16 +70,20 @@ public class Computer {
 	}
 
 	public void setDiscontinued(LocalDate pDiscontinued) {
-		if(this.getIntroduced() != null) {
-			
-			if (pDiscontinued.isAfter(this.getIntroduced())) {
-				this.discontinued = pDiscontinued;
+		if(pDiscontinued != null) {
+			if(this.getIntroduced() != null) {
+				if (pDiscontinued.isAfter(this.getIntroduced())) {
+					this.discontinued = pDiscontinued;
+					
+				} else {
+					System.out.println("Error in Computer : Incorrect Discontinued date");
+				}
+				
 			} else {
-				System.out.println("Error in Computer : Incorrect Discontinued date");
+				this.discontinued = pDiscontinued;
 			}
-			
 		} else {
-			this.discontinued = pDiscontinued;
+			this.discontinued = null;
 		}
 		
 	}
