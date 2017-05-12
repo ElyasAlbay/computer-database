@@ -45,7 +45,7 @@ public class Display<T> {
 			} else if(comm.equals(Command.SHOW)) {
 				System.out.println(comm.toString() + " 'id'");
 			} else if(comm.equals(Command.CREATE)) {
-				System.out.println(comm.toString() + " 'name' (Date format : yyyy-mm-dd)");
+				System.out.println(comm.toString());
 			} else if(comm.equals(Command.UPDATE)) {
 				System.out.println(comm.toString() + " 'id'");
 			} else if(comm.equals(Command.DELETE)) {

@@ -50,15 +50,13 @@ public class Parser {
 			parseShow(scanLine.next());
 			
 		} else if (token.equals(Command.CREATE.toString())) {
-			parseCreate(scanLine.next());
+			parseCreate();
 			
 		} else if (token.equals(Command.UPDATE.toString())) {
-			token = scanLine.next();
-			System.out.println(token);
+			parseUpdate(scanLine.next());
 			
 		} else if (token.equals(Command.DELETE.toString())) {
-			token = scanLine.next();
-			System.out.println(token);
+			parseDelete(scanLine.next());
 			
 		} else if (token.equals(Command.HELP.toString())) {
 			Display.displayHelp();
@@ -110,25 +108,32 @@ public class Parser {
 	 * Parses line to create a computer.
 	 * @param token Input name.
 	 */
-	public void parseCreate(String token) {
-		Computer computer = new Computer (0, token);
+	public void parseCreate() {
+		Computer computer = new Computer (0, "placeholder");
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
 		Scanner scanner = new Scanner(System.in);
 		
+		String computerName;
 		String computerIntroDate;
 		String computerDiscDate;
 		int computerCompanyId;
 		
-		System.out.println("Date introduced : "); 
+		
+		System.out.println("Name: "); 
+		if (scanner.hasNext()) {
+			computerName = scanner.next();
+			computer.setName(computerName);
+		}
+		
+		System.out.println("Date introduced (yyyy-mm-dd): "); 
 		if (scanner.hasNext()) {
 			computerIntroDate = scanner.next();
 			if (computerIntroDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				System.out.println("succes");
 				computer.setIntroduced(LocalDate.parse(computerIntroDate, formatter));
 			}
 		}
 		
-		System.out.println("Date discontinued : "); 
+		System.out.println("Date discontinued (yyyy-mm-dd): "); 
 		if (scanner.hasNext()) {
 			computerDiscDate = scanner.next();
 			if (computerDiscDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
@@ -136,7 +141,7 @@ public class Parser {
 			}
 		}
 		
-		System.out.println("Company id : "); 
+		System.out.println("Company id: "); 
 		if (scanner.hasNext()) {
 			computerCompanyId = Integer.parseInt(scanner.next());
 			computer.setCompanyId(computerCompanyId);
@@ -163,41 +168,32 @@ public class Parser {
 		String computerDiscDate;
 		int computerCompanyId;
 		
-		System.out.println("Name : "); 
+		System.out.println("Name: "); 
 		if (scanner.hasNext()) {
 			computerName = scanner.next();
 			computer.setName(computerName);
 		}
 		
-		System.out.println("Date introduced : "); 
+		System.out.println("Date introduced (yyyy-mm-dd): "); 
 		if (scanner.hasNext()) {
 			computerIntroDate = scanner.next();
 			if (computerIntroDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				System.out.println("succes");
 				computer.setIntroduced(LocalDate.parse(computerIntroDate, formatter));
 			}
 		}
 		
-		System.out.println("Date introduced : "); 
-		if (scanner.hasNext()) {
-			computerIntroDate = scanner.next();
-			if (computerIntroDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				System.out.println("succes");
-				computer.setIntroduced(LocalDate.parse(computerIntroDate, formatter));
-			} else if (computerIntroDate.equals("")) {
-				
-			}
-		}
 		
-		System.out.println("Date discontinued : "); 
+		System.out.println("Date discontinued (yyyy-mm-dd): "); 
 		if (scanner.hasNext()) {
 			computerDiscDate = scanner.next();
 			if (computerDiscDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
 				computer.setDiscontinued(LocalDate.parse(computerDiscDate, formatter));
+			} else if (computerDiscDate.equals("null")){
+				computer.setDiscontinued(null);
 			}
 		}
 		
-		System.out.println("Company id : "); 
+		System.out.println("Company id: "); 
 		if (scanner.hasNext()) {
 			computerCompanyId = Integer.parseInt(scanner.next());
 			computer.setCompanyId(computerCompanyId);
@@ -208,5 +204,10 @@ public class Parser {
 		displayComputer.displayShow(computer);
 
 		scanner.close();
+	}
+	
+	
+	public void parseDelete(String token) {
+		computerService.delete(Integer.parseInt(token));
 	}
 }
