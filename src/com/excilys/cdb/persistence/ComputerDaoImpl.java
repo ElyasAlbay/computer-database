@@ -1,6 +1,8 @@
 package com.excilys.cdb.persistence;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -20,6 +22,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	DbConnection dbConnection;
 	Connection connection;
 	Statement statement;
+	PreparedStatement preStatement;
 	ResultSet resultSet;
 	
 	
@@ -43,8 +46,8 @@ public class ComputerDaoImpl implements ComputerDao {
 		String request = "SELECT * FROM computer";
 		
 		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(request);
+			preStatement = connection.prepareStatement(request);
+			resultSet = preStatement.executeQuery();
 			computersList = ComputerMapper.getComputers(resultSet);
 			
 		} catch (SQLException e) {
@@ -66,11 +69,13 @@ public class ComputerDaoImpl implements ComputerDao {
 		connection = dbConnection.openConnection();
 		Computer computer = null;
 		
-		String request = "SELECT * FROM computer WHERE id=" + id;
+		String request = "SELECT * FROM computer WHERE id=?";
 		
 		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(request);
+			preStatement = connection.prepareStatement(request);
+			preStatement.setInt(1, id);
+			
+			resultSet = preStatement.executeQuery();
 			computer = ComputerMapper.getComputer(resultSet);
 			
 		} catch (SQLException e) {
@@ -93,12 +98,14 @@ public class ComputerDaoImpl implements ComputerDao {
 		connection = dbConnection.openConnection();
 		Computer computer = null;
 		
-		String request = "SELECT * FROM computer WHERE name='" + name;
+		String request = "SELECT * FROM computer WHERE name=?";
 		
 		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(request);
-			ComputerMapper.getComputer(resultSet);
+			preStatement = connection.prepareStatement(request);
+			preStatement.setString(1, request);
+			
+			resultSet = preStatement.executeQuery();
+			computer = ComputerMapper.getComputer(resultSet);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,15 +126,27 @@ public class ComputerDaoImpl implements ComputerDao {
 	public Computer create(Computer computer) {
 		connection = dbConnection.openConnection();
 
-		String request = "INSERT INTO computer SET name='" + computer.getName() + 
-				"', introduced='" + computer.getIntroduced() +
-				"', discontinued ='" + computer.getDiscontinued() +
-				"', company_id =" + computer.getCompanyId();
+		String request = "INSERT INTO computer SET name=?, introduced=?, discontinued =?, company_id =?";
 		
 		try {
-			statement = connection.createStatement();
-			statement.executeUpdate(request, Statement.RETURN_GENERATED_KEYS);
-			resultSet = statement.getGeneratedKeys();
+			preStatement = connection.prepareStatement(request, PreparedStatement.RETURN_GENERATED_KEYS);
+			preStatement.setString(1, computer.getName());
+			preStatement.setInt(4, computer.getCompanyId());
+			
+			if (computer.getIntroduced() == null) {
+				preStatement.setNull(2, java.sql.Types.TIMESTAMP);
+			} else {
+				preStatement.setDate(2, Date.valueOf(computer.getIntroduced()));
+			}
+			
+			if (computer.getDiscontinued() == null) {
+				preStatement.setNull(3, java.sql.Types.TIMESTAMP);
+			} else {
+				preStatement.setDate(3, Date.valueOf(computer.getDiscontinued()));
+			}
+			
+			preStatement.executeUpdate();
+			resultSet = preStatement.getGeneratedKeys();
 			
 			if(resultSet.next()){
 				computer.setId(resultSet.getInt(1));
@@ -150,15 +169,27 @@ public class ComputerDaoImpl implements ComputerDao {
 	public Computer update(Computer computer) {
 		connection = dbConnection.openConnection();
 		
-		String request = "UPDATE computer SET name='" + computer.getName() + 
-				"', introduced='" + computer.getIntroduced() +
-				"', discontinued ='" + computer.getDiscontinued() +
-				"', company_id =" + computer.getCompanyId() +
-				" WHERE id=" + computer.getId();
+		String request = "UPDATE computer SET name=?, introduced=?, discontinued =?, company_id =? WHERE id=?";
 		
 		try {
-			statement = connection.createStatement();
-			statement.executeUpdate(request);
+			preStatement = connection.prepareStatement(request);
+			preStatement.setString(1, computer.getName());
+			preStatement.setInt(4, computer.getCompanyId());
+			preStatement.setInt(5, computer.getId());
+			
+			if (computer.getIntroduced() == null) {
+				preStatement.setNull(2, java.sql.Types.TIMESTAMP);
+			} else {
+				preStatement.setDate(2, Date.valueOf(computer.getIntroduced()));
+			}
+			
+			if (computer.getDiscontinued() == null) {
+				preStatement.setNull(3, java.sql.Types.TIMESTAMP);
+			} else {
+				preStatement.setDate(3, Date.valueOf(computer.getDiscontinued()));
+			}
+
+			preStatement.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -177,11 +208,13 @@ public class ComputerDaoImpl implements ComputerDao {
 	public void delete(int id) {
 		connection = dbConnection.openConnection();
 		
-		String request = "DELETE FROM computer WHERE id=" + id;
+		String request = "DELETE FROM computer WHERE id=?";
 		
 		try {
-			statement = connection.createStatement();
-			statement.executeUpdate(request);
+			preStatement = connection.prepareStatement(request);
+			preStatement.setInt(1, id);
+			
+			preStatement.executeUpdate();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
