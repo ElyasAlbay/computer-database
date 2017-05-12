@@ -150,7 +150,11 @@ public class ComputerDaoImpl implements ComputerDao {
 	public Computer update(Computer computer) {
 		connection = dbConnection.openConnection();
 		
-		String request = "UPDATE computer SET name='" + computer.getName() + "WHERE id=" + computer.getId();
+		String request = "UPDATE computer SET name='" + computer.getName() + 
+				"', introduced='" + computer.getIntroduced() +
+				"', discontinued ='" + computer.getDiscontinued() +
+				"', company_id =" + computer.getCompanyId() +
+				" WHERE id=" + computer.getId();
 		
 		try {
 			statement = connection.createStatement();
@@ -170,10 +174,10 @@ public class ComputerDaoImpl implements ComputerDao {
 	 * @param id Identifier of the computer in the database.
 	 */
 	@Override
-	public void delete(Computer computer) {
+	public void delete(int id) {
 		connection = dbConnection.openConnection();
 		
-		String request = "DELETE FROM computer WHERE id=" + computer.getId();
+		String request = "DELETE FROM computer WHERE id=" + id;
 		
 		try {
 			statement = connection.createStatement();

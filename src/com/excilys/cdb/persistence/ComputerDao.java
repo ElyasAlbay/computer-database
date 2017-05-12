@@ -12,5 +12,5 @@ public interface ComputerDao extends BaseDao<Computer> {
 	
 	public Computer update(Computer computer);
 	
-	public void delete(Computer computer);
+	public void delete(int id);
 }
