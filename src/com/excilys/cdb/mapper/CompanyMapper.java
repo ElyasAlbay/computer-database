@@ -25,10 +25,26 @@ public class CompanyMapper {
 		List<Company> companiesList = new ArrayList<>();
 
 		while (resultSet.next()) {
-			companiesList.add(getCompany(resultSet));
+			companiesList.add(extractCompany(resultSet));
 		}
 		
 		return companiesList;
+	}
+	
+	/**
+	 * Static method to get an instance of Computer from a query. Assert ResultSet.next();
+	 * @param resultSet ResultSet received from DAO.
+	 * @return Instance of Computer.
+	 * @throws SQLException
+	 */
+	public static Company getCompany (ResultSet resultSet) throws SQLException {
+		Company company = null;
+		
+		if(resultSet.next()) {
+			company = extractCompany(resultSet);
+		}
+
+		return company;
 	}
 	
 	/**
@@ -37,12 +53,10 @@ public class CompanyMapper {
 	 * @return Instance of Company.
 	 * @throws SQLException
 	 */
-	public static Company getCompany (ResultSet resultSet) throws SQLException {
+	public static Company extractCompany (ResultSet resultSet) throws SQLException {
 		Company company = null;
 		
-		if (resultSet.next()) {
-			company = new Company(resultSet.getInt("id"), resultSet.getString("name"));
-		}
+		company = new Company(resultSet.getInt("id"), resultSet.getString("name"));
 		
 		return company;
 	}
