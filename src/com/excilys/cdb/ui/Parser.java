@@ -66,7 +66,7 @@ public class Parser {
 			loop = false;
 			
 		} else {
-			System.err.println("Incorrect command : command invalid");
+			System.err.println("Parser: invalid command");
 		}
 		
 		scanLine.close();
@@ -90,7 +90,7 @@ public class Parser {
 			displayComputer.displayList(computerList);
 			
 		} else {
-			System.err.println("Incorrect command : this table does not exist");
+			System.err.println("Parser: Incorrect command, this table does not exist");
 		}
 	}
 	
@@ -184,7 +184,7 @@ public class Parser {
 				try {
 					return LocalDate.parse(date, formatter);
 				} catch (DateTimeParseException e) {
-					System.err.println("Invalid Discontinued date.");
+					System.err.println("Parser: Invalid Discontinued date.");
 				}
 			} else if (date.equals("null")) {
 				return null;
