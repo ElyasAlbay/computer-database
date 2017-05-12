@@ -71,22 +71,14 @@ public class Computer {
 	}
 
 	public void setDiscontinued(LocalDate discontinued) {		
-		if(discontinued != null && !discontinued.equals("")) {
-			if(this.getIntroduced() != null) {
-				if (discontinued.compareTo(this.getIntroduced()) >= 0) {	//pDiscontinued.isAfter(this.getIntroduced()) doesn't work if discontinued = introduced
-					this.discontinued = discontinued;
-					
-				} else {
-					System.err.println("Error in Computer : Incorrect Discontinued date");
-				}
-				
-			} else {
-				this.discontinued = discontinued;
+		if(discontinued != null) {
+			this.discontinued = discontinued;
+			
+			if (this.getIntroduced() != null && discontinued.compareTo(this.getIntroduced()) < 0) {
+				this.discontinued = null;
+				System.err.println("Error in Computer " + getId() + ": Incorrect Discontinued date");
 			}
-		} else {
-			this.discontinued = null;
 		}
-		
 	}
 
 	public int getCompanyId() {
