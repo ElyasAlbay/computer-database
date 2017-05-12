@@ -69,10 +69,10 @@ public class Computer {
 		return discontinued;
 	}
 
-	public void setDiscontinued(LocalDate pDiscontinued) {
-		if(pDiscontinued != null) {
+	public void setDiscontinued(LocalDate pDiscontinued) {		
+		if(pDiscontinued != null && !pDiscontinued.equals("")) {
 			if(this.getIntroduced() != null) {
-				if (pDiscontinued.isAfter(this.getIntroduced())) {
+				if (pDiscontinued.compareTo(this.getIntroduced()) >= 0) {	//pDiscontinued.isAfter(this.getIntroduced()) doesn't work if discontinued = introduced
 					this.discontinued = pDiscontinued;
 					
 				} else {
