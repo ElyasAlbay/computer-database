@@ -27,11 +27,29 @@ public class ComputerMapper {
 		List<Computer> computersList = new ArrayList<>();
 
 		while (resultSet.next()) {
-			computersList.add(getComputer(resultSet));
+			computersList.add(extractComputer(resultSet));
 		}
 		
 		return computersList;
 	}
+	
+	
+	/**
+	 * Static method to get an instance of Computer from a query. Assert ResultSet.next();
+	 * @param resultSet ResultSet received from DAO.
+	 * @return Instance of Computer.
+	 * @throws SQLException
+	 */
+	public static Computer getComputer (ResultSet resultSet) throws SQLException {
+		Computer computer = null;
+		
+		if(resultSet.next()) {
+			computer = extractComputer(resultSet);
+		}
+
+		return computer;
+	}
+	
 	
 	/**
 	 * Static method to get an instance of Computer from a query.
@@ -39,31 +57,31 @@ public class ComputerMapper {
 	 * @return Instance of Computer.
 	 * @throws SQLException
 	 */
-	public static Computer getComputer (ResultSet resultSet) throws SQLException {
+	public static Computer extractComputer (ResultSet resultSet) throws SQLException {
 		Computer computer = null;
 		Date dateInt = null;
 		Date dateDis = null;
 		
-		
-		if (resultSet.next()) {
-			computer = new Computer(resultSet.getInt("id"), resultSet.getString("name"));
+		computer = new Computer(resultSet.getInt("id"), resultSet.getString("name"));
 			
-			Timestamp timeInt = resultSet.getTimestamp("introduced");
-			if(timeInt != null) {
-				dateInt = new Date(timeInt.getTime());
-				computer.setIntroduced(dateInt.toLocalDate());
-			}
+		Timestamp timeInt = resultSet.getTimestamp("introduced");
+		if(timeInt != null) {
+			dateInt = new Date(timeInt.getTime());
+			computer.setIntroduced(dateInt.toLocalDate());
+		}
 			
-			Timestamp timeDis = resultSet.getTimestamp("discontinued");
-			if(timeDis != null) {
-				dateDis = new Date(timeDis.getTime());
-				computer.setDiscontinued(dateDis.toLocalDate());
-			}
-				
-			computer.setCompanyId(resultSet.getInt("company_id"));
+		Timestamp timeDis = resultSet.getTimestamp("discontinued");
+		if(timeDis != null) {
+			dateDis = new Date(timeDis.getTime());
+			computer.setDiscontinued(dateDis.toLocalDate());
 		}
 		
+		computer.setCompanyId(resultSet.getInt("company_id"));
+
 		return computer;
 	}
+	
+	
+	
 	
 }
