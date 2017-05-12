@@ -19,9 +19,9 @@ public class Computer {
 	 * @param pId Unique identifier for the computer.
 	 * @param pName Name of the computer.
 	 */
-	public Computer (int pId, String pName) {
-		setId(pId);
-		setName(pName);
+	public Computer (int id, String name) {
+		setId(id);
+		setName(name);
 		
 	}
 	
@@ -32,6 +32,7 @@ public class Computer {
 	public String toString() {
 		String delimit = " | ";
 		String string = this.getId() + delimit + this.getName() + delimit + this.getIntroduced() + delimit + this.getDiscontinued() +delimit + this.getCompanyId();
+		
 		return string;
 	}
 	
@@ -41,11 +42,11 @@ public class Computer {
 		return this.id;
 	}
 	
-	public void setId (int pId) {
-		if (pId >= 0) {
-			this.id = pId;
+	public void setId (int id) {
+		if (id >= 0) {
+			this.id = id;
 		} else {
-			System.out.println("Error in Computer : Incorrect Id");
+			System.err.println("Error in Computer : Incorrect Id");
 		}
 	}
 	
@@ -53,34 +54,34 @@ public class Computer {
 		return this.name;
 	}
 	
-	public void setName (String pName) {
-		this.name = pName;
+	public void setName (String name) {
+		this.name = name;
 	}
 
 	public LocalDate getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(LocalDate pIntroduced) {
-		this.introduced = pIntroduced;
+	public void setIntroduced(LocalDate introduced) {
+		this.introduced = introduced;
 	}
 
 	public LocalDate getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(LocalDate pDiscontinued) {		
-		if(pDiscontinued != null && !pDiscontinued.equals("")) {
+	public void setDiscontinued(LocalDate discontinued) {		
+		if(discontinued != null && !discontinued.equals("")) {
 			if(this.getIntroduced() != null) {
-				if (pDiscontinued.compareTo(this.getIntroduced()) >= 0) {	//pDiscontinued.isAfter(this.getIntroduced()) doesn't work if discontinued = introduced
-					this.discontinued = pDiscontinued;
+				if (discontinued.compareTo(this.getIntroduced()) >= 0) {	//pDiscontinued.isAfter(this.getIntroduced()) doesn't work if discontinued = introduced
+					this.discontinued = discontinued;
 					
 				} else {
-					System.out.println("Error in Computer : Incorrect Discontinued date");
+					System.err.println("Error in Computer : Incorrect Discontinued date");
 				}
 				
 			} else {
-				this.discontinued = pDiscontinued;
+				this.discontinued = discontinued;
 			}
 		} else {
 			this.discontinued = null;
@@ -92,7 +93,7 @@ public class Computer {
 		return companyId;
 	}
 
-	public void setCompanyId(int pCompanyId) {
-		this.companyId = pCompanyId;
+	public void setCompanyId(int companyId) {
+		this.companyId = companyId;
 	}
 }
