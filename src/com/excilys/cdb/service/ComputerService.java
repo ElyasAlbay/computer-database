@@ -4,7 +4,7 @@ import com.excilys.cdb.model.Computer;
 
 /**
  * Interface implemented by Computer service.
- * @author excilys
+ * @author Elyas Albay
  *
  */
 public interface ComputerService extends BaseService<Computer> {

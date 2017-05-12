@@ -4,7 +4,7 @@ import com.excilys.cdb.model.Company;
 
 /**
  * Interface implemented by Company service.
- * @author excilys
+ * @author Elyas Albay
  *
  */
 public interface CompanyService extends BaseService<Company> {

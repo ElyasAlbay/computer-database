@@ -10,18 +10,20 @@ import com.excilys.cdb.persistence.ComputerDaoImpl;
 /**
  * This class is the intermediary between user interface and Computer DAO.
  * Transmits queries to the DAO.
- * @author excilys
+ * @author Elyas Albay
  *
  */
-public class ComputerServiceImpl implements ComputerService {
+public enum ComputerServiceImpl implements ComputerService {
+	INSTANCE;
+	
 	ComputerDao computerDao;
 	
 	
 	/**
 	 * Class constructor. Instantiates DAO.
 	 */
-	public ComputerServiceImpl () {
-		computerDao = new ComputerDaoImpl();
+	private ComputerServiceImpl () {
+		computerDao = ComputerDaoImpl.INSTANCE;
 	}
 	
 	
@@ -44,17 +46,6 @@ public class ComputerServiceImpl implements ComputerService {
 	public Computer getById(int id) {
 		
 		return computerDao.getById(id);
-	}
-
-	/**
-	 * Calls corresponding method of DAO instance to get a computer by its name in the database.
-	 * @param name Name of the computer in the database.
-	 * @return Instance of Computer.
-	 */
-	@Override
-	public Computer getByName(String name) {
-		
-		return computerDao.getByName(name);
 	}
 
 	/**

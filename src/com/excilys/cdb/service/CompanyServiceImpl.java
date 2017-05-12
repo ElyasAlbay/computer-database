@@ -10,18 +10,20 @@ import com.excilys.cdb.persistence.CompanyDaoImpl;
 /**
  * This class is the intermediary between user interface and Company DAO.
  * Transmits queries to the DAO.
- * @author excilys
+ * @author Elyas Albay
  *
  */
-public class CompanyServiceImpl implements CompanyService {
+public enum CompanyServiceImpl implements CompanyService {
+	INSTANCE;
+	
 	CompanyDao companyDao;
 	
 	
 	/**
 	 * Class constructor. Instantiates DAO.
 	 */
-	public CompanyServiceImpl () {
-		companyDao = new CompanyDaoImpl();
+	private CompanyServiceImpl () {
+		companyDao = CompanyDaoImpl.INSTANCE;
 	}
 	
 	
@@ -44,17 +46,6 @@ public class CompanyServiceImpl implements CompanyService {
 	public Company getById(int id) {
 		
 		return companyDao.getById(id);
-	}
-
-	/**
-	 * Calls corresponding method of DAO instance to get a company by its name in the database.
-	 * @param name Name of the company in the database.
-	 * @return Instance of Company.
-	 */
-	@Override
-	public Company getByName(String name) {
-		
-		return companyDao.getByName(name);
 	}
 
 }
