@@ -2,7 +2,7 @@ package com.excilys.cdb.ui;
 
 /**
  * Enumeration listing every command usable.
- * @author excilys
+ * @author Elyas Albay
  *
  */
 public enum Command {

@@ -8,9 +8,9 @@ import com.excilys.cdb.model.Computer;
 
 /**
  * Display class. This class displays appropriate information to the user.
- * @author excilys
+ * @author Elyas Albay
  *
- * @param <T>
+ * @param <T> Computer or Company class.
  */
 public class Display<T> {
 	
@@ -31,7 +31,7 @@ public class Display<T> {
 		if (computer != null) {
 			System.out.println(computer.toString());
 		} else {
-			System.out.println("This computer does not exist in the database.");
+			System.err.println("This computer does not exist in the database.");
 		}
 		
 	}

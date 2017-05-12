@@ -17,7 +17,7 @@ import com.excilys.cdb.service.ComputerServiceImpl;
 /**
  * Parser for user input. This class parses the input and does appropriate treatment
  * according to the command.
- * @author excilys
+ * @author Elyas Albay
  *
  */
 public class Parser {
@@ -29,8 +29,8 @@ public class Parser {
 	 * Class constructor. Instantiates services.
 	 */
 	public Parser() {
-		companyService = new CompanyServiceImpl();
-		computerService = new ComputerServiceImpl();
+		companyService = CompanyServiceImpl.INSTANCE;
+		computerService = ComputerServiceImpl.INSTANCE;
 	}
 	
 	
@@ -66,7 +66,7 @@ public class Parser {
 			loop = false;
 			
 		} else {
-			System.out.println("Incorrect command : command invalid");
+			System.err.println("Incorrect command : command invalid");
 		}
 		
 		scanLine.close();
@@ -78,7 +78,7 @@ public class Parser {
 	 * Parses a single input word to display a list.
 	 * @param token Input word.
 	 */
-	public void parseList(String token) {
+	private void parseList(String token) {
 		if (token.equals("company")) {
 			List<Company> companyList = companyService.listRequest();
 			Display<Company> displayCompany = new Display<>();
@@ -90,7 +90,7 @@ public class Parser {
 			displayComputer.displayList(computerList);
 			
 		} else {
-			System.out.println("Incorrect command : this table does not exist");
+			System.err.println("Incorrect command : this table does not exist");
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class Parser {
 	 * Parses id to display details of a computer.
 	 * @param token Input id.
 	 */
-	public void parseShow(String token) {
+	private void parseShow(String token) {
 		Computer computer = computerService.getById(Integer.parseInt(token));
 		Display<Computer> displayComputer = new Display<>();
 		displayComputer.displayShow(computer);
@@ -109,7 +109,7 @@ public class Parser {
 	 * Parses line to create a computer.
 	 * @param token Input name.
 	 */
-	public void parseCreate() {
+	private void parseCreate() {
 		Computer computer = new Computer (0, "placeholder");
 		Scanner scanner = new Scanner(System.in);
 		
@@ -137,7 +137,7 @@ public class Parser {
 	 * Parses line to update a computer.
 	 * @param token Input id.
 	 */
-	public void parseUpdate(String token) {
+	private void parseUpdate(String token) {
 		Computer computer = new Computer (Integer.parseInt(token), "placeholder");
 		Scanner scanner = new Scanner(System.in);
 		
@@ -165,7 +165,7 @@ public class Parser {
 	 * Parses line to delete a computer.
 	 * @param token Input id.
 	 */
-	public void parseDelete(String token) {
+	private void parseDelete(String token) {
 		computerService.delete(Integer.parseInt(token));
 	}
 	
@@ -174,7 +174,7 @@ public class Parser {
 	 * @param scanner Scanner instance to get user input.
 	 * @return LocalDate instance parsed from user input.
 	 */
-	public LocalDate getDate(Scanner scanner) {
+	private LocalDate getDate(Scanner scanner) {
 		String date;
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
 		
@@ -184,7 +184,7 @@ public class Parser {
 				try {
 					return LocalDate.parse(date, formatter);
 				} catch (DateTimeParseException e) {
-					System.out.println("Invalid Discontinued date.");
+					System.err.println("Invalid Discontinued date.");
 				}
 			} else if (date.equals("null")) {
 				return null;
@@ -199,7 +199,7 @@ public class Parser {
 	 * @param scanner Scanner instance to get user input.
 	 * @return int parsed from user input.
 	 */
-	public int getInt(Scanner scanner) {
+	private int getInt(Scanner scanner) {
 
 		if (scanner.hasNext()) {
 			return Integer.parseInt(scanner.next());
@@ -213,7 +213,7 @@ public class Parser {
 	 * @param scanner Scanner instance to get user input.
 	 * @return String from user input.
 	 */
-	public String getString(Scanner scanner) {
+	private String getString(Scanner scanner) {
 
 		if (scanner.hasNext()) {
 			return scanner.next();

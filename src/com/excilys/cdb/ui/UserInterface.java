@@ -5,11 +5,12 @@ import java.util.Scanner;
 
 /**
  * Command Line Interface class. Using Singleton pattern.
- * @author excilys
+ * @author Elyas Albay
  *
  */
-public class UserInterface {
-	private static UserInterface uiInstance = null;
+public enum UserInterface {
+	INSTANCE;
+	
 	private Parser parser;
 	private Scanner scanner;
 	
@@ -22,17 +23,6 @@ public class UserInterface {
 		scanner = new Scanner(System.in);
 	}
 	
-	/**
-	 * Returns unique instance, or instantiates it if null.
-	 * @return Instance of UserInterface.
-	 */
-	public static UserInterface getInstance() {
-		if (uiInstance == null) {
-			uiInstance = new UserInterface();
-		}
-		
-		return uiInstance;
-	}
 	
 	/**
 	 * Loops while user inputs lines. Breaks if method parseLine() returns false.
@@ -40,11 +30,10 @@ public class UserInterface {
 	public void getUserInput() {
 		System.out.println("Please type 'help' to get a list of valid commands.");
 		System.out.println("Awaiting input...");
-		while (scanner.hasNextLine()) {
-			
-			if (!parser.parseLine(scanner.nextLine())) {
-				break;
-			}
+		boolean parse = true;
+		
+		while (scanner.hasNextLine() && parse) {
+			parse = parser.parseLine(scanner.nextLine());
 		}
 	}
 	
