@@ -2,6 +2,7 @@ package com.excilys.cdb.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -110,48 +111,26 @@ public class Parser {
 	 */
 	public void parseCreate() {
 		Computer computer = new Computer (0, "placeholder");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
 		Scanner scanner = new Scanner(System.in);
-		
-		String computerName;
-		String computerIntroDate;
-		String computerDiscDate;
-		int computerCompanyId;
 		
 		
 		System.out.println("Name: "); 
-		if (scanner.hasNext()) {
-			computerName = scanner.next();
-			computer.setName(computerName);
-		}
+		computer.setName(getString(scanner));
 		
-		System.out.println("Date introduced (yyyy-mm-dd): "); 
-		if (scanner.hasNext()) {
-			computerIntroDate = scanner.next();
-			if (computerIntroDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				computer.setIntroduced(LocalDate.parse(computerIntroDate, formatter));
-			}
-		}
+		System.out.println("Date introduced (yyyy-mm-dd or null): ");
+		computer.setIntroduced(getDate(scanner));
 		
-		System.out.println("Date discontinued (yyyy-mm-dd): "); 
-		if (scanner.hasNext()) {
-			computerDiscDate = scanner.next();
-			if (computerDiscDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				computer.setDiscontinued(LocalDate.parse(computerDiscDate, formatter));
-			}
-		}
+		System.out.println("Date discontinued (yyyy-mm-dd or null): "); 
+		computer.setDiscontinued(getDate(scanner));
 		
 		System.out.println("Company id: "); 
-		if (scanner.hasNext()) {
-			computerCompanyId = Integer.parseInt(scanner.next());
-			computer.setCompanyId(computerCompanyId);
-		}
+		computer.setCompanyId(getInt(scanner));
+		
 		
 		computer = computerService.create(computer);
 		Display<Computer> displayComputer = new Display<>();
 		displayComputer.displayShow(computer);
 
-		scanner.close();
 	}
 	
 	/**
@@ -160,54 +139,87 @@ public class Parser {
 	 */
 	public void parseUpdate(String token) {
 		Computer computer = new Computer (Integer.parseInt(token), "placeholder");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
 		Scanner scanner = new Scanner(System.in);
 		
-		String computerName;
-		String computerIntroDate;
-		String computerDiscDate;
-		int computerCompanyId;
 		
 		System.out.println("Name: "); 
-		if (scanner.hasNext()) {
-			computerName = scanner.next();
-			computer.setName(computerName);
-		}
+		computer.setName(getString(scanner));
 		
-		System.out.println("Date introduced (yyyy-mm-dd): "); 
-		if (scanner.hasNext()) {
-			computerIntroDate = scanner.next();
-			if (computerIntroDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				computer.setIntroduced(LocalDate.parse(computerIntroDate, formatter));
-			}
-		}
+		System.out.println("Date introduced (yyyy-mm-dd or null): ");
+		computer.setIntroduced(getDate(scanner));
 		
-		
-		System.out.println("Date discontinued (yyyy-mm-dd): "); 
-		if (scanner.hasNext()) {
-			computerDiscDate = scanner.next();
-			if (computerDiscDate.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				computer.setDiscontinued(LocalDate.parse(computerDiscDate, formatter));
-			} else if (computerDiscDate.equals("null")){
-				computer.setDiscontinued(null);
-			}
-		}
+		System.out.println("Date discontinued (yyyy-mm-dd or null): "); 
+		computer.setDiscontinued(getDate(scanner));
 		
 		System.out.println("Company id: "); 
-		if (scanner.hasNext()) {
-			computerCompanyId = Integer.parseInt(scanner.next());
-			computer.setCompanyId(computerCompanyId);
-		}
+		computer.setCompanyId(getInt(scanner));
+		
 		
 		computer = computerService.update(computer);
 		Display<Computer> displayComputer = new Display<>();
 		displayComputer.displayShow(computer);
 
-		scanner.close();
 	}
 	
-	
+	/**
+	 * Parses line to delete a computer.
+	 * @param token Input id.
+	 */
 	public void parseDelete(String token) {
 		computerService.delete(Integer.parseInt(token));
 	}
+	
+	/**
+	 * Gets a date from user input, then returns it as a LocalDate instance.
+	 * @param scanner Scanner instance to get user input.
+	 * @return LocalDate instance parsed from user input.
+	 */
+	public LocalDate getDate(Scanner scanner) {
+		String date;
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
+		
+		do {
+			date = scanner.next();
+			if (date.matches("\\d{4}-\\d{2}-\\d{2}")) {
+				try {
+					return LocalDate.parse(date, formatter);
+				} catch (DateTimeParseException e) {
+					System.out.println("Invalid Discontinued date.");
+				}
+			} else if (date.equals("null")) {
+				return null;
+			}
+		} while (scanner.hasNext());
+		
+		return null;
+	}
+	
+	/**
+	 * Gets an int from user input, then returns it.
+	 * @param scanner Scanner instance to get user input.
+	 * @return int parsed from user input.
+	 */
+	public int getInt(Scanner scanner) {
+
+		if (scanner.hasNext()) {
+			return Integer.parseInt(scanner.next());
+		}
+		
+		return 0;
+	}
+	
+	/**
+	 * Gets a String from user input, then returns it.
+	 * @param scanner Scanner instance to get user input.
+	 * @return String from user input.
+	 */
+	public String getString(Scanner scanner) {
+
+		if (scanner.hasNext()) {
+			return scanner.next();
+		}
+		
+		return null;
+	}
+	
 }
