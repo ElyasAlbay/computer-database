@@ -1,4 +1,4 @@
-package com.excilys.cdb.mapper;
+package com.excilys.cdb.persistence;
 
 import java.sql.Date;
 import java.sql.ResultSet;
@@ -12,7 +12,7 @@ import com.excilys.cdb.model.Computer;
 /**
  * Mapper class for Computer. This class converts a ResultSet from a database request into
  * an instance of Computer.
- * @author excilys
+ * @author Elyas Albay
  *
  */
 public class ComputerMapper {
@@ -57,7 +57,7 @@ public class ComputerMapper {
 	 * @return Instance of Computer.
 	 * @throws SQLException
 	 */
-	public static Computer extractComputer (ResultSet resultSet) throws SQLException {
+	private static Computer extractComputer (ResultSet resultSet) throws SQLException {
 		Computer computer = null;
 		Date dateInt = null;
 		Date dateDis = null;

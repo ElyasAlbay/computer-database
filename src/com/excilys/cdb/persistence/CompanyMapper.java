@@ -1,4 +1,4 @@
-package com.excilys.cdb.mapper;
+package com.excilys.cdb.persistence;
 
 import com.excilys.cdb.model.Company;
 
@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Mapper class for Company. This class converts a ResultSet from a database request into
  * an instance of Company.
- * @author excilys
+ * @author Elyas Albay
  *
  */
 public class CompanyMapper {
@@ -53,7 +53,7 @@ public class CompanyMapper {
 	 * @return Instance of Company.
 	 * @throws SQLException
 	 */
-	public static Company extractCompany (ResultSet resultSet) throws SQLException {
+	private static Company extractCompany (ResultSet resultSet) throws SQLException {
 		Company company = null;
 		
 		company = new Company(resultSet.getInt("id"), resultSet.getString("name"));

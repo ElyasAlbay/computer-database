@@ -4,13 +4,12 @@ import java.util.List;
 
 /**
  * Interface inherited by each DAO interface.
- * @author excilys
+ * @author Elyas Albay
  *
- * @param <T>
+ * @param <T> Computer or Company class.
  */
 public interface BaseDao<T> {
 	
 	public List<T> listRequest();
 	public T getById(int id);
-	public T getByName(String name);
 }

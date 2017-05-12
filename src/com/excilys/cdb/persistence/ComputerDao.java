@@ -4,7 +4,7 @@ import com.excilys.cdb.model.Computer;
 
 /**
  * Interface implemented by Computer DAO.
- * @author excilys
+ * @author Elyas Albay
  *
  */
 public interface ComputerDao extends BaseDao<Computer> {

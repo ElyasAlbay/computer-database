@@ -9,12 +9,13 @@ import java.sql.SQLException;
  * @author excilys
  *
  */
-public class DbConnection {
+public enum DbConnection {
+	INSTANCE;
+	
 	public final static String URL = "jdbc:mysql://localhost:3306/computer-database-db?zeroDateTimeBehavior=convertToNull";
 	private final String USER_NAME = "admincdb";
 	private final String PASSWORD = "qwerty1234";
 	
-	private static DbConnection dbcInstance = null;
 	private Connection connection;
 
 
@@ -25,17 +26,6 @@ public class DbConnection {
 		
 	}
 	
-	/**
-	 * Returns unique instance of class.
-	 * @return Instance of DbConnection
-	 */
-	public static DbConnection getInstance() {
-		if (dbcInstance == null) {
-			dbcInstance = new DbConnection();
-		}
-		
-		return dbcInstance;
-	}
 	
 	/**
 	 * Opens connection to the database.

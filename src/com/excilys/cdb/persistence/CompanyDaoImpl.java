@@ -1,33 +1,33 @@
 package com.excilys.cdb.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
-import com.excilys.cdb.mapper.CompanyMapper;
 import com.excilys.cdb.model.Company;
 
 
 /**
  * Implementation of CompanyDao, sends requests to the database and gets an instance of Company
  * from the corresponding Mapper.
- * @author excilys
+ * @author Elyas Albay
  *
  */
-public class CompanyDaoImpl implements CompanyDao {
-	DbConnection dbConnection;
-	Connection connection;
-	Statement statement;
-	ResultSet resultSet;
+public enum CompanyDaoImpl implements CompanyDao {
+	INSTANCE;
+	
+	private DbConnection dbConnection;
+	private final static String LIST = "SELECT * FROM company";
+	private final static String GET_BY_ID = "SELECT* FROM company WHERE id=?";
 	
 	
 	/**
 	 * Class constructor. Initiates connection to the database.
 	 */
-	public CompanyDaoImpl() {
-		dbConnection = DbConnection.getInstance();
+	private CompanyDaoImpl() {
+		dbConnection = DbConnection.INSTANCE;
 	}
 	
 	
@@ -37,20 +37,19 @@ public class CompanyDaoImpl implements CompanyDao {
 	 */
 	@Override
 	public List<Company> listRequest() {
-		connection = dbConnection.openConnection();
+		PreparedStatement statement;
+		ResultSet resultSet;
 		List<Company> companiesList = null;
 		
-		String request = "SELECT * FROM company";
-		
-		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(request);
+		try (Connection connection = dbConnection.openConnection()) {
+			statement = connection.prepareStatement(LIST);
+			resultSet = statement.executeQuery();
 			companiesList = CompanyMapper.getCompanies(resultSet);
 			
+			resultSet.close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			dbConnection.closeConnection();
 		}
 		
 		return companiesList;
@@ -64,47 +63,19 @@ public class CompanyDaoImpl implements CompanyDao {
 	 */
 	@Override
 	public Company getById(int id) {
-		connection = dbConnection.openConnection();
+		PreparedStatement statement;
+		ResultSet resultSet;
 		Company company = null;
 		
-		String request = "SELECT * FROM company WHERE id=" + id;
-		
-		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(request);
+		try (Connection connection = dbConnection.openConnection()) {
+			statement = connection.prepareStatement(GET_BY_ID);
+			resultSet = statement.executeQuery();
 			company = CompanyMapper.getCompany(resultSet);
 			
+			resultSet.close();
+			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			dbConnection.closeConnection();
-		}
-		
-		return company;
-	}
-
-	/**
-	 * Sends a request to the database to get a unique instance of Company
-	 * corresponding to the given name.
-	 * @param name Name of the company in the dabatase.
-	 * @return Instance of company.
-	 */
-	@Override
-	public Company getByName(String name) {
-		connection = dbConnection.openConnection();
-		Company company = null;
-		
-		String request = "SELECT * FROM company WHERE name=\"" + name;
-		
-		try {
-			statement = connection.createStatement();
-			resultSet = statement.executeQuery(request);
-			company = CompanyMapper.getCompany(resultSet);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			dbConnection.closeConnection();
 		}
 		
 		return company;
