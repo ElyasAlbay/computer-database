@@ -12,5 +12,5 @@ public interface ComputerService extends BaseService<Computer> {
 	
 	public Computer update(Computer computer);
 	
-	public void delete(Computer computer);
+	public void delete(int id);
 }

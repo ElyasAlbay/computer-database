@@ -84,8 +84,8 @@ public class ComputerServiceImpl implements ComputerService {
 	 * @param computer Instance of Computer to delete.
 	 */
 	@Override
-	public void delete(Computer computer) {
-		computerDao.delete(computer);
+	public void delete(int id) {
+		computerDao.delete(id);
 
 	}
 
