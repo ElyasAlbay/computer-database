@@ -1,84 +1,116 @@
 package com.excilys.cdb.ui;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import com.excilys.cdb.Exceptions.InvalidCommandException;
+import com.excilys.cdb.exceptions.InvalidCommandException;
+import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.service.CompanyService;
+import com.excilys.cdb.service.ComputerService;
 
 
 public class ParserTest {
+	private CompanyService companyServiceMock;
+	private ComputerService computerServiceMock;
+	private Display displayMock;
+	
+	private Parser parser;
+	
+	
+	@Before
+	public void setUp() throws Exception {
+		parser = new Parser();
+		
+		List<Company> listCmpny = new ArrayList<>();
+		Company cmpny = new Company(1,"Test company");
+		listCmpny.add(cmpny);
+		
+		List<Computer> listCmptr = new ArrayList<>();
+		Computer cmptr = new Computer(1,"Test computer");
+		listCmptr.add(cmptr);
+		
+		
+		// Mocking class fields.
+		companyServiceMock = Mockito.mock(CompanyService.class);
+		parser.setCompanyService(companyServiceMock);
+		
+		computerServiceMock = Mockito.mock(ComputerService.class);
+		parser.setComputerService(computerServiceMock);
+		
+		displayMock = Mockito.mock(Display.class);
+		parser.setDisplay(displayMock);
+		
+		
+		// Moking methods
+		Mockito.when(companyServiceMock.listRequest()).thenReturn(listCmpny);
+		Mockito.when(computerServiceMock.listRequest()).thenReturn(listCmptr);
+		Mockito.when(computerServiceMock.getById(5)).thenReturn(cmptr);
+		Mockito.when(computerServiceMock.create(cmptr)).thenReturn(cmptr);
+		Mockito.when(computerServiceMock.update(cmptr)).thenReturn(cmptr);
+		Mockito.doNothing().when(computerServiceMock).delete(1);;
+		
+		Mockito.doNothing().when(displayMock).displayShow(cmptr);
+		Mockito.doNothing().when(displayMock).displayListComputer(listCmptr);
+		Mockito.doNothing().when(displayMock).displayListCompany(listCmpny);
+		
+	}
+	
 	
 	@Test
 	public void testParseLine() throws InvalidCommandException {
-		Parser parser = new Parser();
-		String str;
-		boolean bool;
-		
-		str = "list computer";
-		bool = true;
-		assertTrue("str list", parser.parseLine(str) == bool);
-		
-		str = "show 5";
-		bool = true;
-		assertTrue("str show", parser.parseLine(str) == bool);
-		
-		str = "create";
-		bool = true;
-		assertTrue("str create", parser.parseLine(str) == bool);
-		
-		str = "update";
-		bool = true;
-		assertTrue("str update", parser.parseLine(str) == bool);
-		
-		str = "delete";
-		bool = true;
-		assertTrue("str delete", parser.parseLine(str) == bool);
-		
-		str = "quit";
-		bool = false;
-		assertTrue("str quit", parser.parseLine(str) == bool);
+				
+		assertTrue("str list company", parser.parseLine("list company") == true);
+		assertTrue("str list computer", parser.parseLine("list computer") == true);
+		assertTrue("str show", parser.parseLine("show 5") == true);
+		assertTrue("str create", parser.parseLine("create") == true);
+		assertTrue("str update", parser.parseLine("update 1") == true);
+		assertTrue("str delete", parser.parseLine("delete 1") == true);
+		assertTrue("str help", parser.parseLine("help") == true);
+		assertTrue("str quit", parser.parseLine("quit") == false);
 	}
 	
 	@Test
 	public void testParseLineTooLong() throws InvalidCommandException {
-		Parser parser = new Parser();
-		String str;
-		boolean bool;
 		
-		str = "list computer test";
-		bool = true;
-		assertTrue("str list", parser.parseLine(str) == bool);
+		assertTrue("str list company_long", parser.parseLine("list company test") == true);
+		assertTrue("str list computer_long", parser.parseLine("list computer test") == true);
+		assertTrue("str create long", parser.parseLine("create test") == true);
+		assertTrue("str update id long", parser.parseLine("update 1 test") == true);
+		assertTrue("str delete id long", parser.parseLine("delete 1 test") == true);
+		assertTrue("str help long", parser.parseLine("help test") == true);
+		assertTrue("str quit long", parser.parseLine("quit test") == false);
 	}
 	
 	@Test
 	public void testParseLineEmptyOrNull() throws InvalidCommandException {
-		Parser parser = new Parser();
-		String str;
-		boolean bool;
 		
-		str = "";
-		bool = true;
-		assertTrue("str empty", parser.parseLine(str) == bool);
-		
-		str = null;
-		bool = true;
-		assertTrue("str null", parser.parseLine(str) == bool);
+		assertTrue("str empty", parser.parseLine("") == true);
+		assertTrue("str null", parser.parseLine(null) == true);
 	}
 	
 	@Test
-	public void testParseLineInvalidCommand() {
-		Parser parser = new Parser();
-		String str;
-		boolean bool;
+	public void testParseLineInvalidCommand() {		
 		
-		str = "invalid";
-		bool = true;
 		try {
-			assertTrue("str invalid", parser.parseLine(str) == bool);
+			assertTrue("str invalid", parser.parseLine("invalid") == true);
 			fail("Exception not caught if command invalid.");
 		} catch (InvalidCommandException e) {
 			assertTrue(e.getMessage().contains("Unknown command"));
+		}
+		
+		try {
+			assertTrue("str list invalid", parser.parseLine("list invalid_table") == true);
+			fail("Exception not caught if table not exists.");
+		} catch (InvalidCommandException e) {
+			assertTrue(e.getMessage().contains("Unknown table"));
 		}
 	}
 

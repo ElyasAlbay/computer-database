@@ -18,11 +18,12 @@ public enum CompanyServiceImpl implements CompanyService {
 	
 	CompanyDao companyDao;
 	
-	
+
 	/**
 	 * Class constructor. Instantiates DAO.
 	 */
 	private CompanyServiceImpl () {
+		
 		companyDao = CompanyDaoImpl.INSTANCE;
 	}
 	

@@ -6,13 +6,9 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Scanner;
 
-import com.excilys.cdb.Exceptions.InvalidCommandException;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.CompanyServiceImpl;
-import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ComputerServiceImpl;
+import com.excilys.cdb.exceptions.InvalidCommandException;
+import com.excilys.cdb.model.*;
+import com.excilys.cdb.service.*;
 
 
 /**
@@ -24,6 +20,7 @@ import com.excilys.cdb.service.ComputerServiceImpl;
 public class Parser {
 	private CompanyService companyService;
 	private ComputerService computerService;
+	private Display display;
 	
 	/**
 	 * Class constructor. Instantiates services.
@@ -31,6 +28,7 @@ public class Parser {
 	public Parser() {
 		companyService = CompanyServiceImpl.INSTANCE;
 		computerService = ComputerServiceImpl.INSTANCE;
+		display = new Display();
 	}
 	
 	
@@ -67,7 +65,7 @@ public class Parser {
 			parseDelete(scanLine.next());
 			
 		} else if (token.equals(Command.HELP.toString())) {
-			Display.displayHelp();
+			display.displayHelp();
 			
 		} else if (token.equals(Command.QUIT.toString())) {
 			loop = false;
@@ -85,20 +83,19 @@ public class Parser {
 	/**
 	 * Parses a single input word to display a list.
 	 * @param token Input word.
+	 * @throws InvalidCommandException 
 	 */
-	private void parseList(String token) {
+	private void parseList(String token) throws InvalidCommandException {
 		if (token.equals("company")) {
 			List<Company> companyList = companyService.listRequest();
-			Display<Company> displayCompany = new Display<>();
-			displayCompany.displayList(companyList);
+			display.displayListCompany(companyList);
 			
 		} else if (token.equals("computer")) {
 			List<Computer> computerList = computerService.listRequest();
-			Display<Computer> displayComputer = new Display<>();
-			displayComputer.displayList(computerList);
+			display.displayListComputer(computerList);
 			
 		} else {
-			System.err.println("Parser: Incorrect command, this table does not exist");
+			throw new InvalidCommandException("Unknown table");
 		}
 	}
 	
@@ -108,8 +105,7 @@ public class Parser {
 	 */
 	private void parseShow(String token) {
 		Computer computer = computerService.getById(Integer.parseInt(token));
-		Display<Computer> displayComputer = new Display<>();
-		displayComputer.displayShow(computer);
+		display.displayShow(computer);
 
 	}
 	
@@ -121,23 +117,10 @@ public class Parser {
 		Computer computer = new Computer (0, "placeholder");
 		Scanner scanner = new Scanner(System.in);
 		
-		
-		System.out.println("Name: "); 
-		computer.setName(getString(scanner));
-		
-		System.out.println("Date introduced (yyyy-mm-dd or null): ");
-		computer.setIntroduced(getDate(scanner));
-		
-		System.out.println("Date discontinued (yyyy-mm-dd or null): "); 
-		computer.setDiscontinued(getDate(scanner));
-		
-		System.out.println("Company id: "); 
-		computer.setCompanyId(getInt(scanner));
-		
+		getComputerInfo(computer, scanner);
 		
 		computer = computerService.create(computer);
-		Display<Computer> displayComputer = new Display<>();
-		displayComputer.displayShow(computer);
+		display.displayShow(computer);
 
 	}
 	
@@ -149,6 +132,28 @@ public class Parser {
 		Computer computer = new Computer (Integer.parseInt(token), "placeholder");
 		Scanner scanner = new Scanner(System.in);
 		
+		getComputerInfo(computer, scanner);
+		
+		computer = computerService.update(computer);
+		display.displayShow(computer);
+
+	}
+	
+	/**
+	 * Parses line to delete a computer.
+	 * @param token Input id.
+	 */
+	private void parseDelete(String token) {
+		computerService.delete(Integer.parseInt(token));
+	}
+	
+	
+	/**
+	 * Asks and gets computer information from user input.
+	 * @param computer Computer instance.
+	 * 		scanner Scanner instance to get user input.
+	 */
+	public void getComputerInfo(Computer computer, Scanner scanner) {
 		
 		System.out.println("Name: "); 
 		computer.setName(getString(scanner));
@@ -161,20 +166,6 @@ public class Parser {
 		
 		System.out.println("Company id: "); 
 		computer.setCompanyId(getInt(scanner));
-		
-		
-		computer = computerService.update(computer);
-		Display<Computer> displayComputer = new Display<>();
-		displayComputer.displayShow(computer);
-
-	}
-	
-	/**
-	 * Parses line to delete a computer.
-	 * @param token Input id.
-	 */
-	private void parseDelete(String token) {
-		computerService.delete(Integer.parseInt(token));
 	}
 	
 	/**
@@ -192,9 +183,9 @@ public class Parser {
 				try {
 					return LocalDate.parse(date, formatter);
 				} catch (DateTimeParseException e) {
-					System.err.println("Parser: Invalid Discontinued date.");
+					System.out.println("Invalid date.");
 				}
-			} else if (date.equals("null")) {
+			} else if (date.equals("null") || date.isEmpty() || date==null) {
 				return null;
 			}
 		} while (scanner.hasNext());
@@ -229,5 +220,32 @@ public class Parser {
 		
 		return null;
 	}
+	
+	
+	/* Getters and setters */
+	public CompanyService getCompanyService() {
+		return this.companyService;
+	}
+	
+	public void setCompanyService(CompanyService companyService) {
+		this.companyService = companyService;
+	}
+	
+	public ComputerService getComputerService() {
+		return this.computerService;
+	}
+	
+	public void setComputerService(ComputerService computerService) {
+		this.computerService = computerService;
+	}
+	
+	public Display getDisplay() {
+		return this.display;
+	}
+	
+	public void setDisplay(Display display) {
+		this.display = display;
+	}
+	
 	
 }

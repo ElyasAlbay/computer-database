@@ -1,0 +1,31 @@
+<dataset>
+    <company id="1"
+             name="Apple Inc."/> 
+    <company id="2"
+	     name="Thinking Machines"/>
+    <company id="3"
+	     name="RCA"/>
+    <company id="4"
+	     name="Netronics"/>
+    <company id="5"
+	     name="Tandy Corporation"/>
+
+    <computer id="1" 
+              name="MacBook Pro"
+	      introduced="1991-01-01"
+	      company_id="1"/>
+    <computer id="2" 
+              name="CM-2a"
+	      company_id="2"/>
+    <computer id="3" 
+              name="Apple IIe"
+	      introduced="1995-02-01"
+	      discontinued="1995-03-01"/>
+    <computer id="4" 
+              name="Connection Machine"
+	      introduced="1987-01-01"
+	      company_id="2"/>
+    <computer id="5" 
+              name="COSMAC ELF"
+	      company_id="4"/>
+</dataset>

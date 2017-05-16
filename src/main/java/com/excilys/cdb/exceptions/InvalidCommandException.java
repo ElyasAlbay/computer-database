@@ -1,4 +1,4 @@
-package com.excilys.cdb.Exceptions;
+package com.excilys.cdb.exceptions;
 
 public class InvalidCommandException extends Exception {
 	private static final long serialVersionUID = 27008857691171309L;

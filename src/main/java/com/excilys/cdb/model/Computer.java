@@ -97,7 +97,7 @@ public class Computer {
 	}
 	
 	public void setId (int id) {
-		if (id >= 0) {
+		if(id >= 0) {
 			this.id = id;
 		} else {
 			System.err.println("Error in Computer : Incorrect Id");

@@ -1,0 +1,11 @@
+<!ELEMENT dataset (COMPANY*, COMPUTER*)>
+
+<!ATTLIST company id ID #REQUIRED>
+<!ATTLIST company name CDATA #REQUIRED>
+
+<!ATTLIST computer id ID #REQUIRED>
+<!ATTLIST computer name CDATA #REQUIRED>
+<!ATTLIST computer introduced CDATA #IMPLIED>
+<!ATTLIST computer discontinued CDATA #IMPLIED>
+<!ATTLIST computer id ID ref
+			company IDREF #IMPLIED>
