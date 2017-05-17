@@ -7,5 +7,5 @@
 <!ATTLIST computer name CDATA #REQUIRED>
 <!ATTLIST computer introduced CDATA #IMPLIED>
 <!ATTLIST computer discontinued CDATA #IMPLIED>
-<!ATTLIST computer id ID ref
+<!ATTLIST computer company_id ID ref
 			company IDREF #IMPLIED>
