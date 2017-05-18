@@ -2,8 +2,6 @@ package com.excilys.cdb.ui;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,40 +22,32 @@ public class DisplayTest {
 	public void testDisplayListCompany() {
 		Company cmpny1 = new Company(1, "test company 1");
 		Company cmpny2 = new Company(2, "test company 2");
-		List<Company> listCmpny = new ArrayList<>();
-		listCmpny.add(cmpny1);
-		listCmpny.add(cmpny2);
+		Page<Company> companyPage = new Page<>();
+		companyPage.getElements().add(cmpny1);
+		companyPage.getElements().add(cmpny2);
 		
-		display.displayListCompany(listCmpny);
+		display.displayListCompany(companyPage);
 	}
 	
 	@Test
 	public void testDisplayListComputer() {
 		Computer cmptr1 = new Computer(1, "test computer 1");
 		Computer cmptr2 = new Computer(2, "test computer 2");
-		List<Computer> listCmptr = new ArrayList<>();
-		listCmptr.add(cmptr1);
-		listCmptr.add(cmptr2);
+		Page<Computer> computerPage = new Page<>();
+		computerPage.getElements().add(cmptr1);
+		computerPage.getElements().add(cmptr2);
 		
-		display.displayListComputer(listCmptr);
+		display.displayListComputer(computerPage);
 	}
 	
 	@Test
 	public void testDisplayListCompanyNull() {
-		List<Company> listCmpny = new ArrayList<>();
-		listCmpny.add(null);
-		
-		display.displayListCompany(listCmpny);
 		
 		display.displayListCompany(null);
 	}
 	
 	@Test
 	public void testDisplayListComputerNull() {
-		List<Computer> listCmptr = new ArrayList<>();
-		listCmptr.add(null);
-		
-		display.displayListComputer(listCmptr);
 		
 		display.displayListComputer(null);
 	}

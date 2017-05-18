@@ -5,9 +5,9 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.ui.Page;
 
 
 /**
@@ -20,7 +20,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 	
 	DbConnection dbConnection;
-	private final static String LIST = "SELECT * FROM computer";
+	private final static String LIST = "SELECT * FROM computer LIMIT ?, ?";
 	private final static String GET_BY_ID = "SELECT* FROM computer WHERE id=?";
 	private final static String CREATE = "INSERT INTO computer SET name=?, introduced=?, discontinued =?, company_id =?";
 	private final static String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued =?, company_id =? WHERE id=?";
@@ -39,15 +39,17 @@ public enum ComputerDaoImpl implements ComputerDao {
 	 * @return List of computers.
 	 */
 	@Override
-	public List<Computer> listRequest() {
+	public Page<Computer> listRequest(Page<Computer> computerPage) {
 		PreparedStatement statement;
 		ResultSet resultSet;
-		List<Computer> computersList = null;
 		
 		try (Connection connection = dbConnection.openConnection()) {
 			statement = connection.prepareStatement(LIST);
+			statement.setInt(1, (computerPage.getPageNumber()-1)*computerPage.getPageSize());
+			statement.setInt(2, computerPage.getPageSize());
+			
 			resultSet = statement.executeQuery();
-			computersList = ComputerMapper.getComputers(resultSet);
+			computerPage.setElements(ComputerMapper.getComputers(resultSet));
 			
 			resultSet.close();
 			statement.close();
@@ -57,7 +59,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			dbConnection.closeConnection();
 		}
 		
-		return computersList;
+		return computerPage;
 	}
 
 	/**

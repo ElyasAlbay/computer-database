@@ -1,10 +1,9 @@
 package com.excilys.cdb.service;
 
-import java.util.List;
-
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.persistence.ComputerDao;
 import com.excilys.cdb.persistence.ComputerDaoImpl;
+import com.excilys.cdb.ui.Page;
 
 
 /**
@@ -32,9 +31,9 @@ public enum ComputerServiceImpl implements ComputerService {
 	 * @return List of Computer instances.
 	 */
 	@Override
-	public List<Computer> listRequest() {
+	public Page<Computer> listRequest(Page<Computer> computerPage) {
 		
-		return computerDao.listRequest();
+		return computerDao.listRequest(computerPage);
 	}
 
 	/**

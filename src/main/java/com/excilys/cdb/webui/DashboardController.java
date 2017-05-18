@@ -12,11 +12,12 @@ import javax.servlet.http.HttpServletResponse;
  * @author Elyas Albay
  *
  */
-public class Dashboard extends HttpServlet {
+public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 6646407915881068151L;
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		this.getServletContext().getRequestDispatcher( "/WEB-INF/views/dashboard.jsp" ).forward(request, response);
 	}
 }

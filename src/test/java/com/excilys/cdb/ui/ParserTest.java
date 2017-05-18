@@ -30,10 +30,12 @@ public class ParserTest {
 		parser = new Parser();
 		
 		List<Company> listCmpny = new ArrayList<>();
+		Page<Company> companyPage = new Page<>();
 		Company cmpny = new Company(1,"Test company");
 		listCmpny.add(cmpny);
 		
 		List<Computer> listCmptr = new ArrayList<>();
+		Page<Computer> computerPage = new Page<>();
 		Computer cmptr = new Computer(1,"Test computer");
 		listCmptr.add(cmptr);
 		
@@ -50,16 +52,16 @@ public class ParserTest {
 		
 		
 		// Moking methods
-		Mockito.when(companyServiceMock.listRequest()).thenReturn(listCmpny);
-		Mockito.when(computerServiceMock.listRequest()).thenReturn(listCmptr);
+		Mockito.when(companyServiceMock.listRequest(companyPage)).thenReturn(companyPage);
+		Mockito.when(computerServiceMock.listRequest(computerPage)).thenReturn(computerPage);
 		Mockito.when(computerServiceMock.getById(5)).thenReturn(cmptr);
 		Mockito.when(computerServiceMock.create(cmptr)).thenReturn(cmptr);
 		Mockito.when(computerServiceMock.update(cmptr)).thenReturn(cmptr);
 		Mockito.doNothing().when(computerServiceMock).delete(1);;
 		
 		Mockito.doNothing().when(displayMock).displayShow(cmptr);
-		Mockito.doNothing().when(displayMock).displayListComputer(listCmptr);
-		Mockito.doNothing().when(displayMock).displayListCompany(listCmpny);
+		Mockito.doNothing().when(displayMock).displayListComputer(computerPage);
+		Mockito.doNothing().when(displayMock).displayListCompany(companyPage);
 		
 	}
 	

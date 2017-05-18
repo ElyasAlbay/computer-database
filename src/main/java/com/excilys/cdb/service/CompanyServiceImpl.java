@@ -1,10 +1,9 @@
 package com.excilys.cdb.service;
 
-import java.util.List;
-
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.persistence.CompanyDao;
 import com.excilys.cdb.persistence.CompanyDaoImpl;
+import com.excilys.cdb.ui.Page;
 
 
 /**
@@ -33,9 +32,9 @@ public enum CompanyServiceImpl implements CompanyService {
 	 * @return List of Company instances.
 	 */
 	@Override
-	public List<Company> listRequest() {
+	public Page<Company> listRequest(Page<Company> companyPage) {
 		
-		return companyDao.listRequest();
+		return companyDao.listRequest(companyPage);
 	}
 
 	/**

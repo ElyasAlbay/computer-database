@@ -1,7 +1,5 @@
 package com.excilys.cdb.ui;
 
-import java.util.List;
-
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 
@@ -17,13 +15,15 @@ public class Display {
 	 * Display a list of companies.
 	 * @param companyList List of Company objects.
 	 */
-	public void displayListCompany(List<Company> companyList) {
-		if(companyList != null) {
-			for(Company c : companyList) {
+	public void displayListCompany(Page<Company> companyPage) {
+		if(companyPage != null) {
+			for(Company c : companyPage.getElements()) {
 				if(c != null) {
 					System.out.println(c.getName());
 				}
 			}
+		} else {
+			System.out.println("Empty page");
 		}
 	}
 	
@@ -31,13 +31,15 @@ public class Display {
 	 * Display a list of computers.
 	 * @param computerList List of Computer objects.
 	 */
-	public void displayListComputer(List<Computer> computerList) {
-		if(computerList != null) {
-			for(Computer c : computerList) {
+	public void displayListComputer(Page<Computer> computerPage) {
+		if(computerPage != null) {
+			for(Computer c : computerPage.getElements()) {
 				if(c != null) {
 					System.out.println(c.getName());
 				}
 			}
+		} else {
+			System.out.println("Empty page");
 		}
 	}
 	

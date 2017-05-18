@@ -1,6 +1,6 @@
 package com.excilys.cdb.persistence;
 
-import java.util.List;
+import com.excilys.cdb.ui.Page;
 
 /**
  * Interface inherited by each DAO interface.
@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface BaseDao<T> {
 	
-	public List<T> listRequest();
+	public Page<T> listRequest(Page<T> page);
 	public T getById(int id);
 }

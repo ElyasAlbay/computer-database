@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.ui.Page;
 
 
 /**
@@ -19,8 +19,8 @@ public enum CompanyDaoImpl implements CompanyDao {
 	INSTANCE;
 	
 	private DbConnection dbConnection;
-	private final static String LIST = "SELECT * FROM company";
-	private final static String GET_BY_ID = "SELECT* FROM company WHERE id=?";
+	private final static String LIST = "SELECT * FROM company LIMIT ?, ?";
+	private final static String GET_BY_ID = "SELECT * FROM company WHERE id=?";
 	
 	
 	/**
@@ -36,15 +36,17 @@ public enum CompanyDaoImpl implements CompanyDao {
 	 * @return List of companies.
 	 */
 	@Override
-	public List<Company> listRequest() {
+	public Page<Company> listRequest(Page<Company> companyPage) {
 		PreparedStatement statement;
 		ResultSet resultSet;
-		List<Company> companiesList = null;
 		
 		try (Connection connection = dbConnection.openConnection()) {
 			statement = connection.prepareStatement(LIST);
+			statement.setInt(1, (companyPage.getPageNumber()-1)*companyPage.getPageSize());
+			statement.setInt(2, companyPage.getPageSize());
+			
 			resultSet = statement.executeQuery();
-			companiesList = CompanyMapper.getCompanies(resultSet);
+			companyPage.setElements(CompanyMapper.getCompanies(resultSet));
 			
 			resultSet.close();
 			statement.close();
@@ -52,7 +54,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 			e.printStackTrace();
 		}
 		
-		return companiesList;
+		return companyPage;
 	}
 
 	/**
@@ -69,6 +71,8 @@ public enum CompanyDaoImpl implements CompanyDao {
 		
 		try (Connection connection = dbConnection.openConnection()) {
 			statement = connection.prepareStatement(GET_BY_ID);
+			statement.setInt(1, id);
+			
 			resultSet = statement.executeQuery();
 			company = CompanyMapper.getCompany(resultSet);
 			
