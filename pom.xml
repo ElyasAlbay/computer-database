@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
@@ -9,6 +8,8 @@
 	<packaging>war</packaging>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
 		<mysqlVersion>6.0.6</mysqlVersion>
 		<junitVersion>4.12</junitVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
@@ -16,6 +17,7 @@
 		<dbunitVersion>2.4.9</dbunitVersion>
 		<checkstyleVersion>2.17</checkstyleVersion>
 		<warVersion>3.0.0</warVersion>
+		<emmaVersion>2.1.5320</emmaVersion>
 	</properties>
 
 	<build>
@@ -76,6 +78,11 @@
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-checkstyle-plugin</artifactId>
 			<version>${checkstyleVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>emma</groupId>
+			<artifactId>emma</artifactId>
+			<version>${emmaVersion}</version>
 		</dependency>
 	</dependencies>
 
