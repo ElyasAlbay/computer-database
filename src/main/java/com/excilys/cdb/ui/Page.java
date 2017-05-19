@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Page<T> {
+	private int numberOfElements;
 	private int numberOfPages;
 	private int pageNumber;
 	private int pageSize;
@@ -27,11 +28,11 @@ public class Page<T> {
 
 	/* Getters and setters */
 	public int getNumberOfPages() {
-		return this.numberOfPages;
+		return this.numberOfElements;
 	}
 
 	public void setNumberOfPages(int numberOfPages) {
-		this.numberOfPages = numberOfPages;
+		this.numberOfElements = numberOfPages;
 	}
 
 	public int getPageNumber() {
