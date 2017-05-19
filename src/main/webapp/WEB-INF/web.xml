@@ -5,6 +5,7 @@
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   version="3.0">
 
+	<!-- Servlet configuration -->
 	<servlet>
 		<servlet-name>DashboardController</servlet-name>
 		<servlet-class>com.excilys.cdb.webui.DashboardController</servlet-class>
@@ -31,4 +32,12 @@
 		<servlet-name>EditComputerServlet</servlet-name>
 		<url-pattern>/editComputer</url-pattern>
 	</servlet-mapping>
+	
+	<!-- JSP configuration  -->
+	<jsp-config>
+        <jsp-property-group>
+            <url-pattern>*.jsp</url-pattern>
+            <include-prelude>/WEB-INF/taglibs.jsp</include-prelude>
+        </jsp-property-group>
+    </jsp-config> 
 </web-app>

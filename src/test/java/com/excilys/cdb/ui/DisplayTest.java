@@ -23,8 +23,8 @@ public class DisplayTest {
 		Company cmpny1 = new Company(1, "test company 1");
 		Company cmpny2 = new Company(2, "test company 2");
 		Page<Company> companyPage = new Page<>();
-		companyPage.getElements().add(cmpny1);
-		companyPage.getElements().add(cmpny2);
+		companyPage.getElementList().add(cmpny1);
+		companyPage.getElementList().add(cmpny2);
 		
 		display.displayListCompany(companyPage);
 	}
@@ -34,8 +34,8 @@ public class DisplayTest {
 		Computer cmptr1 = new Computer(1, "test computer 1");
 		Computer cmptr2 = new Computer(2, "test computer 2");
 		Page<Computer> computerPage = new Page<>();
-		computerPage.getElements().add(cmptr1);
-		computerPage.getElements().add(cmptr2);
+		computerPage.getElementList().add(cmptr1);
+		computerPage.getElementList().add(cmptr2);
 		
 		display.displayListComputer(computerPage);
 	}
@@ -59,7 +59,6 @@ public class DisplayTest {
 		
 		cmptr.setIntroduced(LocalDate.parse("2017-02-15", formatter));
 		cmptr.setDiscontinued(LocalDate.parse("2017-03-15", formatter));
-		cmptr.setCompanyId(5);
 		
 		display.displayShow(cmptr);
 	}
