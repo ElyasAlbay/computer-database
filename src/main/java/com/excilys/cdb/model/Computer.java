@@ -12,7 +12,7 @@ public class Computer {
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
-	private int companyId;
+	private Company company;
 	
 	
 	/**
@@ -23,7 +23,6 @@ public class Computer {
 	public Computer (int id, String name) {
 		setId(id);
 		setName(name);
-		
 	}
 	
 	
@@ -35,7 +34,7 @@ public class Computer {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + companyId;
+		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
 		result = prime * result + id;
 		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
@@ -57,7 +56,10 @@ public class Computer {
 		if (getClass() != obj.getClass())
 			return false;
 		Computer other = (Computer) obj;
-		if (companyId != other.companyId)
+		if (company == null) {
+			if (other.company != null)
+				return false;
+		} else if (!company.equals(other.company))
 			return false;
 		if (discontinued == null) {
 			if (other.discontinued != null)
@@ -85,7 +87,7 @@ public class Computer {
 	@Override
 	public String toString() {
 		String delimit = " | ";
-		String string = this.getId() + delimit + this.getName() + delimit + this.getIntroduced() + delimit + this.getDiscontinued() +delimit + this.getCompanyId();
+		String string = this.getId() + delimit + this.getName() + delimit + this.getIntroduced() + delimit + this.getDiscontinued() + delimit + this.getCompany().toString();
 		
 		return string;
 	}
@@ -135,11 +137,11 @@ public class Computer {
 		}
 	}
 
-	public int getCompanyId() {
-		return companyId;
+	public Company getCompany() {
+		return company;
 	}
 
-	public void setCompanyId(int companyId) {
-		this.companyId = companyId;
+	public void setCompany(Company company) {
+		this.company = company;
 	}
 }

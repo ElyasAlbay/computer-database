@@ -52,11 +52,11 @@ public class Page<T> {
 		}
 	}
 	
-	public List<T> getElements() {
+	public List<T> getElementList() {
 		return this.elementList;
 	}
 
-	public void setElements(List<T> elementList) {
+	public void setElementList(List<T> elementList) {
 		this.elementList = elementList;
 	}
 }

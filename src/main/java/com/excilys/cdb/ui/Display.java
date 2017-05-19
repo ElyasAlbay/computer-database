@@ -17,7 +17,7 @@ public class Display {
 	 */
 	public void displayListCompany(Page<Company> companyPage) {
 		if(companyPage != null) {
-			for(Company c : companyPage.getElements()) {
+			for(Company c : companyPage.getElementList()) {
 				if(c != null) {
 					System.out.println(c.getName());
 				}
@@ -33,7 +33,7 @@ public class Display {
 	 */
 	public void displayListComputer(Page<Computer> computerPage) {
 		if(computerPage != null) {
-			for(Computer c : computerPage.getElements()) {
+			for(Computer c : computerPage.getElementList()) {
 				if(c != null) {
 					System.out.println(c.getName());
 				}

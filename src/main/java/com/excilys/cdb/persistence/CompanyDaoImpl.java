@@ -21,6 +21,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 	private DbConnection dbConnection;
 	private final static String LIST = "SELECT * FROM company LIMIT ?, ?";
 	private final static String GET_BY_ID = "SELECT * FROM company WHERE id=?";
+	private final static String GET_NUMBER_OF_PAGES = "SELECT count(*) FROM company";
 	
 	
 	/**
@@ -33,7 +34,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 	
 	/**
 	 * Sends a request to the database to get a complete list of companies.
-	 * @return List of companies.
+	 * @return Page of companies.
 	 */
 	@Override
 	public Page<Company> listRequest(Page<Company> companyPage) {
@@ -41,12 +42,23 @@ public enum CompanyDaoImpl implements CompanyDao {
 		ResultSet resultSet;
 		
 		try (Connection connection = dbConnection.openConnection()) {
+			/* Get list of companies in the database */
 			statement = connection.prepareStatement(LIST);
 			statement.setInt(1, (companyPage.getPageNumber()-1)*companyPage.getPageSize());
 			statement.setInt(2, companyPage.getPageSize());
 			
 			resultSet = statement.executeQuery();
-			companyPage.setElements(CompanyMapper.getCompanies(resultSet));
+			companyPage.setElementList(CompanyMapper.getCompanies(resultSet));
+			
+			
+			/* Gets count of companies in the database */
+			statement = connection.prepareStatement(GET_NUMBER_OF_PAGES);
+			resultSet = statement.executeQuery();
+			
+			if(resultSet.next()) {
+				companyPage.setNumberOfPages(resultSet.getInt(1));
+			}
+			
 			
 			resultSet.close();
 			statement.close();
