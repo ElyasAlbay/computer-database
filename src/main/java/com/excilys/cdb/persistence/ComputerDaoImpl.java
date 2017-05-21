@@ -28,7 +28,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	private final static String CREATE = "INSERT INTO computer SET name=?, introduced=?, discontinued =?, company_id =?";
 	private final static String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued =?, company_id =? WHERE id=?";
 	private final static String DELETE = "DELETE FROM computer WHERE id=?";
-	private final static String GET_NUMBER_OF_PAGES = "SELECT count(*) FROM computer";
+	private final static String GET_NUMBER_OF_ELEMENTS = "SELECT count(*) FROM computer";
 
 	
 	/**
@@ -59,11 +59,19 @@ public enum ComputerDaoImpl implements ComputerDao {
 			computerPage.setElementList(ComputerMapper.getComputers(resultSet));
 
 			// Gets count of computers in the database 
-			statement = connection.prepareStatement(GET_NUMBER_OF_PAGES);
+			statement = connection.prepareStatement(GET_NUMBER_OF_ELEMENTS);
 			resultSet = statement.executeQuery();
 
 			if (resultSet.next()) {
-				computerPage.setNumberOfPages(resultSet.getInt(1));
+				computerPage.setNumberOfElements(resultSet.getInt(1));
+				int numberOfPages = computerPage.getNumberOfElements()/computerPage.getPageSize();
+
+				// Rounds to the upper integer if the division has a remainder.
+				if((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
+					computerPage.setNumberOfPages(numberOfPages+1);
+				} else {
+					computerPage.setNumberOfPages(numberOfPages);
+				}
 			}
 
 			resultSet.close();

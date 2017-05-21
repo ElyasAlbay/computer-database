@@ -23,7 +23,7 @@
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computerPage.numberOfPages} Computers found
+			<h1 id="homeTitle">${computerPage.numberOfElements} Computers found
 			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
@@ -91,6 +91,12 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
+			<c:if test="${computerPage.pageNumber > 1}">
+				<li><a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber -1} aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a></li>
+			</c:if>
+			
 			<c:choose>
 				<c:when test="${computerPage.pageNumber < 4}">
 					<c:forEach var="i" begin="1" end="5">
@@ -99,33 +105,26 @@
 						</li>
 					</c:forEach>
 				</c:when>
-				<c:when test="${computerPage.pageNumber > (computerPage.numberOfPages/computerPage.pageSize)-3}">
+				<c:when test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
 					<c:forEach var="i" begin="1" end="5">
 						<li>
-							<a href=${pageContext.request.contextPath}/dashboard?page_number=${(computerPage.numberOfPages/computerPage.pageSize)-5+i}>${(computerPage.numberOfPages/computerPage.pageSize)-5+i}</a>
+							<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}>${computerPage.numberOfPages-5+i}</a>
 						</li>
 					</c:forEach>
 				</c:when>
 				<c:otherwise>
 					<c:forEach var="i" begin="1" end="5">
 						<li>
-							<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}>${computerPage.pageNumber -3 + i}</a>
+							<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}>${computerPage.pageNumber-3+i}</a>
 						</li>
 					</c:forEach>
 				</c:otherwise>
 			</c:choose>
-				<!-- <li><a href="#" aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
+			
+			<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
+				<li><a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1} aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 				</a></li>
-
-				<li><a href="#">1</a></li>
-				<li><a
-					href=${pageContext.request.contextPath}/dashboard?page_number=2>2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>-->
+			</c:if>
 			</ul>
 
 

@@ -56,7 +56,15 @@ public enum CompanyDaoImpl implements CompanyDao {
 			resultSet = statement.executeQuery();
 			
 			if(resultSet.next()) {
-				companyPage.setNumberOfPages(resultSet.getInt(1));
+				companyPage.setNumberOfElements(resultSet.getInt(1));
+				int numberOfPages = companyPage.getNumberOfElements()/companyPage.getPageSize();
+
+				// Rounds to the upper integer if the division has a remainder.
+				if((companyPage.getNumberOfElements() % companyPage.getPageSize()) != 0) {
+					companyPage.setNumberOfPages(numberOfPages+1);
+				} else {
+					companyPage.setNumberOfPages(numberOfPages);
+				}
 			}
 			
 			

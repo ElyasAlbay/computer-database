@@ -27,12 +27,20 @@ public class Page<T> {
 	
 
 	/* Getters and setters */
-	public int getNumberOfPages() {
+	public int getNumberOfElements() {
 		return this.numberOfElements;
 	}
 
+	public void setNumberOfElements(int numberOfElements) {
+		this.numberOfElements = numberOfElements;
+	}
+	
+	public int getNumberOfPages() {
+		return this.numberOfPages;
+	}
+
 	public void setNumberOfPages(int numberOfPages) {
-		this.numberOfElements = numberOfPages;
+		this.numberOfPages = numberOfPages;
 	}
 
 	public int getPageNumber() {
