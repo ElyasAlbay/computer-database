@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.persistence.utility.CompanyMapper;
 import com.excilys.cdb.ui.Page;
 
 
@@ -19,9 +20,9 @@ public enum CompanyDaoImpl implements CompanyDao {
 	INSTANCE;
 	
 	private DbConnection dbConnection;
-	private final static String LIST = "SELECT * FROM company LIMIT ?, ?";
+	private final static String LIST = "SELECT * FROM company";
 	private final static String GET_BY_ID = "SELECT * FROM company WHERE id=?";
-	private final static String GET_NUMBER_OF_PAGES = "SELECT count(*) FROM company";
+	private final static String GET_NUMBER_OF_ELEMENTS = "SELECT count(*) FROM company";
 	
 	
 	/**
@@ -42,29 +43,19 @@ public enum CompanyDaoImpl implements CompanyDao {
 		ResultSet resultSet;
 		
 		try (Connection connection = dbConnection.openConnection()) {
-			/* Get list of companies in the database */
+			// Gets list of companies in the database
 			statement = connection.prepareStatement(LIST);
-			statement.setInt(1, (companyPage.getPageNumber()-1)*companyPage.getPageSize());
-			statement.setInt(2, companyPage.getPageSize());
 			
 			resultSet = statement.executeQuery();
 			companyPage.setElementList(CompanyMapper.getCompanies(resultSet));
 			
 			
-			/* Gets count of companies in the database */
-			statement = connection.prepareStatement(GET_NUMBER_OF_PAGES);
+			// Gets count of companies in the database
+			statement = connection.prepareStatement(GET_NUMBER_OF_ELEMENTS);
 			resultSet = statement.executeQuery();
 			
 			if(resultSet.next()) {
 				companyPage.setNumberOfElements(resultSet.getInt(1));
-				int numberOfPages = companyPage.getNumberOfElements()/companyPage.getPageSize();
-
-				// Rounds to the upper integer if the division has a remainder.
-				if((companyPage.getNumberOfElements() % companyPage.getPageSize()) != 0) {
-					companyPage.setNumberOfPages(numberOfPages+1);
-				} else {
-					companyPage.setNumberOfPages(numberOfPages);
-				}
 			}
 			
 			

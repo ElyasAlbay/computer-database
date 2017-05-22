@@ -10,15 +10,27 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+		<compilerVersion>3.6.1</compilerVersion>
+		<warVersion>3.0.0</warVersion>
+		<tomcatVersion>2.2</tomcatVersion>
+
+
 		<mysqlVersion>6.0.6</mysqlVersion>
+		<servletVersion>2.5</servletVersion>
+		<jspVersion>2.1.1</jspVersion>
+		<jstlVersion>1.2</jstlVersion>
+
+		<commonLangVersion>3.0</commonLangVersion>
+
+		<slf4jVersion>1.7.25</slf4jVersion>
+		<logbackVersion>1.0.7</logbackVersion>
+
+
 		<junitVersion>4.12</junitVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
-		<slf4jVersion>1.7.25</slf4jVersion>
 		<dbunitVersion>2.4.9</dbunitVersion>
 		<checkstyleVersion>2.17</checkstyleVersion>
-		<warVersion>3.0.0</warVersion>
-		<emmaVersion>2.1.5320</emmaVersion>
-		<tomcatVersion>2.2</tomcatVersion>
+
 	</properties>
 
 	<build>
@@ -26,7 +38,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.1</version>
+				<version>${compilerVersion}</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -56,58 +68,73 @@
 	</build>
 
 	<dependencies>
+		<!-- MySql connector dependency -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysqlVersion}</version>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>${junitVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-all</artifactId>
-			<version>${mockitoVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4jVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>${slf4jVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-			<version>${dbunitVersion}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-checkstyle-plugin</artifactId>
-			<version>${checkstyleVersion}</version>
-		</dependency>
+
+		<!-- Web ui and server dependencies -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<version>${servletVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet.jsp</groupId>
 			<artifactId>jsp-api</artifactId>
-			<version>2.1.1</version>
+			<version>${jspVersion}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
-			<version>1.2</version>
+			<version>${jstlVersion}</version>
+			<scope>provided</scope>
 		</dependency>
+
+		<!-- Utilities dependencies -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commonLangVersion}</version>
+		</dependency>
+
+		<!-- Sljf dependencies -->
+		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
+			<version>${slf4jVersion}</version> </dependency> <dependency> <groupId>ch.qos.logback</groupId> 
+			<artifactId>logback-classic</artifactId> <version>${logbackVersion}</version> 
+			</dependency> <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-core</artifactId> 
+			<version>${logbackVersion}</version> </dependency> -->
+
+		<!-- Tests dependencies -->
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junitVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>${mockitoVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.dbunit</groupId>
+			<artifactId>dbunit</artifactId>
+			<version>${dbunitVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-checkstyle-plugin</artifactId>
+			<version>${checkstyleVersion}</version>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 </project>

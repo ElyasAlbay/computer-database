@@ -2,9 +2,6 @@ package com.excilys.cdb.ui;
 
 import java.util.Scanner;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.excilys.cdb.exceptions.InvalidCommandException;
 
 /**
@@ -18,7 +15,6 @@ public enum UserInterface {
 
 	private Parser parser;
 	private Scanner scanner;
-	final static Logger LOGGER = LoggerFactory.getLogger(UserInterface.class);
 
 	/**
 	 * Private constructor for the User Interface.
@@ -42,7 +38,6 @@ public enum UserInterface {
 				parse = parser.parseLine(scanner.nextLine());
 			} catch (InvalidCommandException e) {
 				parse = false;
-				LOGGER.error(e.getMessage());
 			}
 		}
 	}

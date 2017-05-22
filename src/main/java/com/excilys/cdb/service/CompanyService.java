@@ -7,6 +7,6 @@ import com.excilys.cdb.model.Company;
  * @author Elyas Albay
  *
  */
-public interface CompanyService extends BaseService<Company> {
+public interface CompanyService extends CommonService<Company> {
 
 }

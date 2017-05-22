@@ -1,10 +1,10 @@
-package com.excilys.cdb.mapper;
+package com.excilys.cdb.webui.utility;
 
-import com.excilys.cdb.dto.ComputerDto;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.ui.Page;
+import com.excilys.cdb.webui.dto.ComputerDto;
 
-public class ComputerDtoMapper extends DtoMapper<ComputerDto, Computer>{
+public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{
 	private CompanyDtoMapper companyDtoMapper;
 
 	
@@ -16,20 +16,14 @@ public class ComputerDtoMapper extends DtoMapper<ComputerDto, Computer>{
 	}
 	
 	/**
-	 * Class constructor.
+	 * Class constructor with parameter.
 	 */
 	public ComputerDtoMapper(CompanyDtoMapper companyDtoMapper) {
 		this.companyDtoMapper = companyDtoMapper;
 	}
 
 	
-	/**
-	 * Converts a page of computers into a page of computer DTOs.
-	 * 
-	 * @param computerPage
-	 *            Page of computers to convert.
-	 * @return Page of computer DTOs.
-	 */
+	@Override
 	public Page<ComputerDto> createDtoPage(Page<Computer> computerPage) {
 		Page<ComputerDto> computerDtoPage = new Page<>();
 
@@ -42,13 +36,6 @@ public class ComputerDtoMapper extends DtoMapper<ComputerDto, Computer>{
 		return computerDtoPage;
 	}
 
-	/**
-	 * Converts a computer into a computer DTOs.
-	 * 
-	 * @param computer
-	 *            Computer to convert.
-	 * @return Computer DTO.
-	 */
 	@Override
 	public ComputerDto createDto(Computer computer) {
 		ComputerDto computerDto = new ComputerDto();

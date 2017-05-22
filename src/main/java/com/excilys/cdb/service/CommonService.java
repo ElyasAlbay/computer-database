@@ -7,7 +7,7 @@ import com.excilys.cdb.ui.Page;
  * @author Elyas Albay
  *
  */
-public interface BaseService<T> {
+public interface CommonService<T> {
 	
 	public Page<T> listRequest(Page<T> page);
 	public T getById(int id);

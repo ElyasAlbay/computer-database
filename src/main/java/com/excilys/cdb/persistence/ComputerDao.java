@@ -7,7 +7,7 @@ import com.excilys.cdb.model.Computer;
  * @author Elyas Albay
  *
  */
-public interface ComputerDao extends BaseDao<Computer> {
+public interface ComputerDao extends CommonDao<Computer> {
 	public Computer create(Computer computer);
 	
 	public Computer update(Computer computer);

@@ -8,7 +8,7 @@ import com.excilys.cdb.ui.Page;
  *
  * @param <T> Computer or Company class.
  */
-public interface BaseDao<T> {
+public interface CommonDao<T> {
 	
 	public Page<T> listRequest(Page<T> page);
 	public T getById(int id);

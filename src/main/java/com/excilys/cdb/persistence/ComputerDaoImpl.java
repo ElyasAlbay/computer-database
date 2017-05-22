@@ -5,8 +5,10 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.persistence.utility.ComputerMapper;
 import com.excilys.cdb.ui.Page;
 
 /**
@@ -50,7 +52,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		ResultSet resultSet;
 
 		try (Connection connection = dbConnection.openConnection()) {
-			// Get list of computers in the database */
+			// Get list of computers in the database
 			statement = connection.prepareStatement(LIST);
 			statement.setInt(1, (computerPage.getPageNumber() - 1) * computerPage.getPageSize());
 			statement.setInt(2, computerPage.getPageSize());
@@ -66,7 +68,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 				computerPage.setNumberOfElements(resultSet.getInt(1));
 				int numberOfPages = computerPage.getNumberOfElements()/computerPage.getPageSize();
 
-				// Rounds to the upper integer if the division has a remainder.
+				// Rounds to the upper integer if the division has a remainder
 				if((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
 					computerPage.setNumberOfPages(numberOfPages+1);
 				} else {
@@ -132,25 +134,27 @@ public enum ComputerDaoImpl implements ComputerDao {
 			statement.setString(1, computer.getName());
 
 			if (computer.getIntroduced() == null) {
-				statement.setNull(2, java.sql.Types.TIMESTAMP);
+				statement.setNull(2, Types.TIMESTAMP);
 			} else {
 				statement.setDate(2, Date.valueOf(computer.getIntroduced()));
 			}
 
 			if (computer.getDiscontinued() == null) {
-				statement.setNull(3, java.sql.Types.TIMESTAMP);
+				statement.setNull(3, Types.TIMESTAMP);
 			} else {
 				statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
 			}
 			
-			if (computer.getCompany() != null) {
-				statement.setInt(4, computer.getCompany().getId());
+			if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
+				statement.setLong(4, computer.getCompany().getId());
+			} else {
+				statement.setNull(4, Types.BIGINT);
 			}
 
 			statement.executeUpdate();
 			resultSet = statement.getGeneratedKeys();
 
-			// Gets returned generated key from statement.
+			// Gets returned generated key from statement
 			if (resultSet.next()) {
 				computer.setId(resultSet.getInt(1));
 			}

@@ -188,7 +188,7 @@ public class Parser {
 		System.out.println("Date discontinued (yyyy-mm-dd or null): ");
 		computer.setDiscontinued(getDate(scanner));
 
-		if(computer.getCompany() != null) {
+		if (computer.getCompany() != null) {
 			System.out.println("Company id: ");
 			computer.getCompany().setId(getInt(scanner));
 		}
@@ -271,6 +271,7 @@ public class Parser {
 		return null;
 	}
 
+	
 	/* Getters and setters */
 	public CompanyService getCompanyService() {
 		return this.companyService;

@@ -7,6 +7,6 @@ import com.excilys.cdb.model.Company;
  * @author Elyas Albay
  *
  */
-public interface CompanyDao extends BaseDao<Company> {
+public interface CompanyDao extends CommonDao<Company> {
 	
 }

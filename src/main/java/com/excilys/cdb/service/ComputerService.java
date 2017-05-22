@@ -7,7 +7,7 @@ import com.excilys.cdb.model.Computer;
  * @author Elyas Albay
  *
  */
-public interface ComputerService extends BaseService<Computer> {
+public interface ComputerService extends CommonService<Computer> {
 	public Computer create(Computer computer);
 	
 	public Computer update(Computer computer);

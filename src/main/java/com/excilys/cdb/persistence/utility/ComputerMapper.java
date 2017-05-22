@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence;
+package com.excilys.cdb.persistence.utility;
 
 import java.sql.Date;
 import java.sql.ResultSet;
