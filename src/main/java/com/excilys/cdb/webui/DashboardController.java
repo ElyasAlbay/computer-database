@@ -25,7 +25,7 @@ public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 6646407915881068151L;
 	private static final String view = "/WEB-INF/views/dashboard.jsp";
 
-	private ComputerService computerService = ComputerServiceImpl.INSTANCE;
+	private ComputerService computerService;
 	private ComputerDtoMapper computerDtoMapper;
 	private CompanyDtoMapper companyDtoMapper;
 
@@ -34,6 +34,8 @@ public class DashboardController extends HttpServlet {
 	 * Class constructor.
 	 */
 	public DashboardController() {
+		computerService = ComputerServiceImpl.INSTANCE;
+		
 		companyDtoMapper = new CompanyDtoMapper();
 		computerDtoMapper = new ComputerDtoMapper(companyDtoMapper);
 	}
@@ -45,15 +47,16 @@ public class DashboardController extends HttpServlet {
 		Page<Computer> computerPage = new Page<>();
 		Page<ComputerDto> computerDtoPage = new Page<>();
 
+		// Get parameters from GET request if exists
 		if (request.getParameter("page_number") != null) {
 			computerPage.setPageNumber(Integer.parseInt(request.getParameter("page_number")));
 		}
 		if (request.getParameter("page_size") != null) {
 			computerPage.setPageSize(Integer.parseInt(request.getParameter("page_size")));
 		}
-
-		computerDtoPage = computerDtoMapper.createDtoPage(computerService.listRequest(computerPage));
 		
+		// Creates a new computerDto page from computer page.
+		computerDtoPage = computerDtoMapper.createDtoPage(computerService.listRequest(computerPage));
 		request.setAttribute("computerPage", computerDtoPage);
 		
 		

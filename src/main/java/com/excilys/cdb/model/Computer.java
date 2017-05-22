@@ -23,6 +23,10 @@ public class Computer {
 	public Computer (int id, String name) {
 		setId(id);
 		setName(name);
+		
+		this.introduced = null;
+		this.discontinued = null;
+		this.company = null;
 	}
 	
 	
@@ -87,7 +91,23 @@ public class Computer {
 	@Override
 	public String toString() {
 		String delimit = " | ";
-		String string = this.getId() + delimit + this.getName() + delimit + this.getIntroduced() + delimit + this.getDiscontinued() + delimit + this.getCompany().toString();
+		String string = this.getId() + delimit + this.getName();
+		
+		if(this.getIntroduced() != null) {
+			string += delimit + this.getIntroduced();
+		} else {
+			string += delimit + "null";
+		}
+		if(this.getDiscontinued() != null) {
+			string += delimit + this.getDiscontinued();
+		} else {
+			string += delimit + "null";
+		}
+		if(this.getCompany() != null) {
+			string += delimit + this.getCompany().toString();
+		} else {
+			string += delimit + "null";
+		} 
 		
 		return string;
 	}

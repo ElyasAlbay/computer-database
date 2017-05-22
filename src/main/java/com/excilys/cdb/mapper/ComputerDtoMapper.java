@@ -34,6 +34,7 @@ public class ComputerDtoMapper extends DtoMapper<ComputerDto, Computer>{
 		Page<ComputerDto> computerDtoPage = new Page<>();
 
 		computerDtoPage.setElementList(createDtoList(computerPage.getElementList()));
+		computerDtoPage.setNumberOfElements(computerPage.getNumberOfElements());
 		computerDtoPage.setNumberOfPages(computerPage.getNumberOfPages());
 		computerDtoPage.setPageNumber(computerPage.getPageNumber());
 		computerDtoPage.setPageSize(computerPage.getPageSize());

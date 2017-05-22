@@ -16,20 +16,20 @@
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>AddComputerServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.webui.AddComputerServlet</servlet-class>
+		<servlet-name>AddComputerController</servlet-name>
+		<servlet-class>com.excilys.cdb.webui.AddComputerController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>AddComputerServlet</servlet-name>
+		<servlet-name>AddComputerController</servlet-name>
 		<url-pattern>/addComputer</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
-		<servlet-name>EditComputerServlet</servlet-name>
-		<servlet-class>com.excilys.cdb.webui.EditComputerServlet</servlet-class>
+		<servlet-name>EditComputerController</servlet-name>
+		<servlet-class>com.excilys.cdb.webui.EditComputerController</servlet-class>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>EditComputerServlet</servlet-name>
+		<servlet-name>EditComputerController</servlet-name>
 		<url-pattern>/editComputer</url-pattern>
 	</servlet-mapping>
 	

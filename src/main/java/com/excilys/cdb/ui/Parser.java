@@ -221,7 +221,7 @@ public class Parser {
 	 */
 	private LocalDate getDate(Scanner scanner) {
 		String date;
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyy-MM-dd");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		do {
 			date = scanner.next();
