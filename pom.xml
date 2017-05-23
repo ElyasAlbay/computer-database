@@ -75,6 +75,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysqlVersion}</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- Web ui and server dependencies -->
@@ -110,11 +111,11 @@
 		</dependency>
 
 		<!-- Sljf dependencies -->
-		<!-- <dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
+		<dependency> <groupId>org.slf4j</groupId> <artifactId>slf4j-api</artifactId> 
 			<version>${slf4jVersion}</version> </dependency> <dependency> <groupId>ch.qos.logback</groupId> 
 			<artifactId>logback-classic</artifactId> <version>${logbackVersion}</version> 
 			</dependency> <dependency> <groupId>ch.qos.logback</groupId> <artifactId>logback-core</artifactId> 
-			<version>${logbackVersion}</version> </dependency> -->
+			<version>${logbackVersion}</version> </dependency> 
 
 		<!-- Tests dependencies -->
 		<dependency>

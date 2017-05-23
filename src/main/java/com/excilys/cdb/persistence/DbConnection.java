@@ -14,6 +14,8 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 public enum DbConnection {
 	INSTANCE;
+	
+	private static final String PROP_FILE = "/hikari.properties";
 
 	private Connection connection;
 	private HikariConfig config;
@@ -26,10 +28,7 @@ public enum DbConnection {
 	private DbConnection () {
 		connection = null;
 		
-		config = new HikariConfig("/hikari.properties");
-		config.setMaximumPoolSize(10);
-		config.setLeakDetectionThreshold(300);
-		
+		config = new HikariConfig(PROP_FILE);		
 		dataSource = new HikariDataSource(config);
 	}
 	
@@ -37,9 +36,9 @@ public enum DbConnection {
 	/**
 	 * Opens connection to the database.
 	 */
-	public Connection openConnection () {
+	public Connection openConnection () {		
 		try {
-				connection = dataSource.getConnection();
+			connection = dataSource.getConnection();
 		} catch (SQLException e) {
 			throw new DatabaseConnectionException("Failed to open connection to the database: " + e.getMessage());
 		}
