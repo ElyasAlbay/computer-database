@@ -26,18 +26,7 @@ public enum DbConnection {
 	private DbConnection () {
 		connection = null;
 		
-		config = new HikariConfig();
-		config.setJdbcUrl("jdbc:mysql://localhost:3306/computer-database-db");
-		config.setUsername("admincdb");
-		config.setPassword("qwerty1234");
-		config.addDataSourceProperty("cachePrepStmts", "true");
-		config.addDataSourceProperty("prepStmtCacheSize", "250");
-		config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-		config.addDataSourceProperty("zeroDateTimeBehavior", "convertToNull");
-		config.addDataSourceProperty("useJDBCCompliantTimezoneShift", "true");
-		config.addDataSourceProperty("useLegacyDatetimeCode", "false");
-		config.addDataSourceProperty("serverTimezone", "Europe/Paris");
-		
+		config = new HikariConfig("/hikari.properties");
 		config.setMaximumPoolSize(10);
 		config.setLeakDetectionThreshold(300);
 		
@@ -49,12 +38,10 @@ public enum DbConnection {
 	 * Opens connection to the database.
 	 */
 	public Connection openConnection () {
-		if (connection == null) {
-			try {
-					connection = dataSource.getConnection();
-			} catch (SQLException e) {
-				throw new DatabaseConnectionException("Failed to open connection to the database: " + e.getMessage());
-			}
+		try {
+				connection = dataSource.getConnection();
+		} catch (SQLException e) {
+			throw new DatabaseConnectionException("Failed to open connection to the database: " + e.getMessage());
 		}
 		
 		return connection;
