@@ -1,7 +1,6 @@
 package com.excilys.cdb.webui;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -81,35 +80,33 @@ public class AddComputerController extends HttpServlet {
 		String companyId = request.getParameter(Field.COMPANY_ID);
 
 		
-		// Validate name
+		// Validate fields
 		try {
 			nameValidation(name);
 		} catch (Exception e) {
 			errors.put(Field.COMPUTER_NAME, e.getMessage());
 		}
 
-		// Validate introduced
 		try {
 			introducedValidation(introduced);
 		} catch (Exception e) {
 			errors.put(Field.INTRODUCED, e.getMessage());
 		}
 
-		// Validate discontinued
 		try {
 			discontinuedValidation(discontinued, introduced);
 		} catch (Exception e) {
 			errors.put(Field.DISCONTINUED, e.getMessage());
 		}
 
-		// Validate company id
 		try {
 			companyIdValidation(companyId);
 		} catch (Exception e) {
 			errors.put(Field.COMPANY_ID, e.getMessage());
 		}
 
-		// Initiates validation result.
+		
+		// Sens query if no errors, display error messages else
 		if (errors.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			
@@ -126,13 +123,12 @@ public class AddComputerController extends HttpServlet {
 			}
 			
 			computerService.create(computer);
-			
 		} else {
 			request.setAttribute(ERRORS, errors);
 			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		}
 
-		
+		// Redirects to the dashboard once add query is completed
 		response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
 	}
 	

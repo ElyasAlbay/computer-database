@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Elyas Albay
  *
  */
-public class UpdateComputerServlet extends HttpServlet {
+public class UpdateComputerController extends HttpServlet {
 	private static final long serialVersionUID = 8357518801832666376L;
 
 	@Override
