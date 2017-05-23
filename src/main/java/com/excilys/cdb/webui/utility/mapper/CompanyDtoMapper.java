@@ -1,4 +1,4 @@
-package com.excilys.cdb.webui.utility;
+package com.excilys.cdb.webui.utility.mapper;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.ui.Page;

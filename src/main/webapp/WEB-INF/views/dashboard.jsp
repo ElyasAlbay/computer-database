@@ -16,15 +16,15 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application -
-				Computer Database </a>
+			<a class="navbar-brand" href="dashboard"> Application - Computer
+				Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${computerPage.numberOfElements} Computers found
-			</h1>
+			<h1 id="homeTitle">${computerPage.numberOfElements} Computers
+				found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -38,7 +38,7 @@
 				<div class="pull-right">
 					<a class="btn btn-success" id="addComputer" href="addComputer">Add
 						Computer</a>
-						<a class="btn btn-default" id="editComputer" href="#"
+					<a class="btn btn-default" id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode();">Edit</a>
 				</div>
 			</div>
@@ -54,7 +54,6 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
@@ -77,7 +76,7 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="0"></td>
-							<td><a href="editComputer.html" onclick="">${computer.name}</a></td>
+							<td><a href=editComputer?computer_id=${computer.id} onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
 							<td>${computer.company.name}</td>
@@ -92,52 +91,62 @@
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
 			<ul class="pagination">
-			<c:if test="${computerPage.pageNumber > 1}">
-				<li><a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber -1} aria-label="Previous">
-					<span aria-hidden="true">&laquo;</span>
-				</a></li>
-			</c:if>
-			
-			<c:choose>
-				<c:when test="${computerPage.pageNumber < 4}">
-					<c:forEach var="i" begin="1" end="5">
-						<li>
-							<a href=${pageContext.request.contextPath}/dashboard?page_number=${i}>${i}</a>
-						</li>
-					</c:forEach>
-				</c:when>
-				<c:when test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
-					<c:forEach var="i" begin="1" end="5">
-						<li>
-							<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}>${computerPage.numberOfPages-5+i}</a>
-						</li>
-					</c:forEach>
-				</c:when>
-				<c:otherwise>
-					<c:forEach var="i" begin="1" end="5">
-						<li>
-							<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}>${computerPage.pageNumber-3+i}</a>
-						</li>
-					</c:forEach>
-				</c:otherwise>
-			</c:choose>
-			
-			<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
-				<li><a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1} aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
-			</c:if>
+				<c:if test="${computerPage.pageNumber > 1}">
+					<li><a
+						href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber
+						-1} aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					</a></li>
+				</c:if>
+
+				<c:choose>
+					<c:when test="${computerPage.pageNumber < 4}">
+						<c:forEach var="i" begin="1" end="5">
+							<li><a
+								href=${pageContext.request.contextPath}/dashboard?page_number=${i}>${i}</a>
+							</li>
+						</c:forEach>
+					</c:when>
+					<c:when
+						test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
+						<c:forEach var="i" begin="1" end="5">
+							<li><a
+								href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}>${computerPage.numberOfPages-5+i}</a>
+							</li>
+						</c:forEach>
+					</c:when>
+					<c:otherwise>
+						<c:forEach var="i" begin="1" end="5">
+							<li><a
+								href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}>${computerPage.pageNumber-3+i}</a>
+							</li>
+						</c:forEach>
+					</c:otherwise>
+				</c:choose>
+
+				<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
+					<li><a
+						href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1}
+						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+					</a></li>
+				</c:if>
 			</ul>
 
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
+				<a href=${pageContext.request.contextPath}/dashboard?page_size=10>
+					<button type="button" class="btn btn-default">10</button>
+				</a>
+				<a href=${pageContext.request.contextPath}/dashboard?page_size=50>
 				<button type="button" class="btn btn-default">50</button>
+				</a>
+				<a href=${pageContext.request.contextPath}/dashboard?page_size=100>
 				<button type="button" class="btn btn-default">100</button>
+				</a>
 			</div>
 	</footer>
-	<script src="../js/jquery.min.js"></script>
-	<script src="../js/bootstrap.min.js"></script>
-	<script src="../js/dashboard.js"></script>
+	<script src=${pageContext.request.contextPath}/js/jquery.min.js></script>
+	<script src=${pageContext.request.contextPath}/js/bootstrap.min.js></script>
+	<script src=${pageContext.request.contextPath}/js/dashboard.js></script>
 
 </body>
 </html>

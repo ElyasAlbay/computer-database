@@ -26,50 +26,58 @@ import com.excilys.cdb.webui.utility.Validator;
 import com.excilys.cdb.webui.utility.mapper.CompanyDtoMapper;
 
 /**
- * Servlet for addComputer web page.
- * 
+ * Servlet for updateComputer web page.
  * @author Elyas Albay
  *
  */
-public class AddComputerController extends HttpServlet {
-	private static final long serialVersionUID = 1921946279906681045L;
-	
-	private static final String VIEW = "/WEB-INF/views/addComputer.jsp";
+public class EditComputerController extends HttpServlet {
+	private static final long serialVersionUID = 8357518801832666376L;
+
+	private static final String VIEW = "/WEB-INF/views/editComputer.jsp";
+	private static final String ATT_COMPUTER = "computer";
 	private static final String ATT_COMPANY_PG = "companyPage";
+	private static final String COMPUTER_ID = "computer_id";
 	private static final String DASHBOARD = "/dashboard";
 	private static final String ERRORS = "errors";
-
+	
+	private Computer computer;
+	private Page<CompanyDto> companyDtoPage;
 	private ComputerService computerService;
 	private CompanyService companyService;
-	private Page<Company> companyPage;
-	private Page<CompanyDto> companyDtoPage;
-	private CompanyDtoMapper companyDtoMapper;
-
+	
 	
 	/**
 	 * Class constructor.
 	 */
-	public AddComputerController() {
+	public EditComputerController() {
 		computerService = ComputerServiceImpl.INSTANCE;
 		companyService = CompanyServiceImpl.INSTANCE;
-
-		companyPage = new Page<>();
+		computer = null;
 		companyDtoPage = new Page<>();
-		companyDtoMapper = new CompanyDtoMapper();
+		
+		Page<Company> companyPage = new Page<>();
+		CompanyDtoMapper companyDtoMapper = new CompanyDtoMapper();
 
 		companyDtoPage = companyDtoMapper.createDtoPage(companyService.listRequest(companyPage));
 	}
 	
-
+	
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if (request.getParameter(COMPUTER_ID) != null) {
+			int id = Integer.parseInt(request.getParameter(COMPUTER_ID));
+			
+			if (id > 0) {
+				computer = computerService.getById(id);
+			}
+		}
+		
 		request.setAttribute(ATT_COMPANY_PG, companyDtoPage);
-
+		request.setAttribute(ATT_COMPUTER, computer);
+		
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
-
+	
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -86,6 +94,7 @@ public class AddComputerController extends HttpServlet {
 		// Validate fields
 		try {
 			Validator.nameValidation(name);
+			System.out.println("test");
 		} catch (Exception e) {
 			errors.put(Field.COMPUTER_NAME, e.getMessage());
 		}
@@ -109,7 +118,7 @@ public class AddComputerController extends HttpServlet {
 		}
 
 		
-		// Sens query if no errors, display error messages else
+		// Sends query if no errors, display error messages else
 		if (errors.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			
@@ -125,14 +134,16 @@ public class AddComputerController extends HttpServlet {
 				computer.setCompany(companyService.getById(Integer.parseInt(companyId)));
 			}
 			
-			computerService.create(computer);
+			computerService.update(computer);
+			
+			// Redirects to the dashboard once update query is completed
+			//response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
 		} else {
 			request.setAttribute(ERRORS, errors);
+			
+			// Displays jsp with errors
 			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		}
-
-		// Redirects to the dashboard once add query is completed
-		response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
 	}
 	
 }

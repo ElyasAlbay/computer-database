@@ -1,4 +1,4 @@
-package com.excilys.cdb.webui.utility;
+package com.excilys.cdb.webui.utility.mapper;
 
 import java.util.ArrayList;
 import java.util.List;

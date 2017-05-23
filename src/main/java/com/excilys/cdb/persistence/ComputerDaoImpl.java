@@ -196,8 +196,10 @@ public enum ComputerDaoImpl implements ComputerDao {
 				statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
 			}
 			
-			if (computer.getCompany() != null) {
+			if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
 				statement.setInt(4, computer.getCompany().getId());
+			} else {
+				statement.setNull(4, Types.BIGINT);
 			}
 
 			statement.executeUpdate();

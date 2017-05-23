@@ -12,8 +12,8 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ComputerServiceImpl;
 import com.excilys.cdb.ui.Page;
 import com.excilys.cdb.webui.dto.ComputerDto;
-import com.excilys.cdb.webui.utility.CompanyDtoMapper;
-import com.excilys.cdb.webui.utility.ComputerDtoMapper;
+import com.excilys.cdb.webui.utility.mapper.CompanyDtoMapper;
+import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
 
 /**
  * Servlet for dashboard web page.
@@ -23,7 +23,9 @@ import com.excilys.cdb.webui.utility.ComputerDtoMapper;
  */
 public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 6646407915881068151L;
-	private static final String view = "/WEB-INF/views/dashboard.jsp";
+	
+	private static final String VIEW = "/WEB-INF/views/dashboard.jsp";
+	private static final String ATT_COMPUTER_PG = "computerPage";
 	private static final String PAGE_NUMBER = "page_number";
 	private static final String PAGE_SIZE = "page_size";
 
@@ -59,10 +61,10 @@ public class DashboardController extends HttpServlet {
 		
 		// Creates a new computerDto page from computer page.
 		computerDtoPage = computerDtoMapper.createDtoPage(computerService.listRequest(computerPage));
-		request.setAttribute("computerPage", computerDtoPage);
+		request.setAttribute(ATT_COMPUTER_PG, computerDtoPage);
 		
 		
-		this.getServletContext().getRequestDispatcher(view).forward(request, response);
+		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 
 }

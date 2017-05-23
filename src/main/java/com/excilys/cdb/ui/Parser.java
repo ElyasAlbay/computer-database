@@ -178,7 +178,7 @@ public class Parser {
 	 *            Computer instance. scanner Scanner instance to get user input.
 	 */
 	public void getComputerInfo(Computer computer, Scanner scanner) {
-
+		
 		System.out.println("Name: ");
 		computer.setName(getString(scanner));
 
@@ -188,10 +188,11 @@ public class Parser {
 		System.out.println("Date discontinued (yyyy-mm-dd or null): ");
 		computer.setDiscontinued(getDate(scanner));
 
-		if (computer.getCompany() != null) {
-			System.out.println("Company id: ");
-			computer.getCompany().setId(getInt(scanner));
-		}
+		Company company;
+		System.out.println("Company id: ");
+		int id = getInt(scanner);
+		company = companyService.getById(id);
+		computer.setCompany(company);
 	}
 
 	/**
