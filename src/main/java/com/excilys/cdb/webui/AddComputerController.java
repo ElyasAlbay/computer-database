@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
@@ -86,35 +87,31 @@ public class AddComputerController extends HttpServlet {
 		// Validate fields
 		try {
 			Validator.nameValidation(name);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.COMPUTER_NAME, e.getMessage());
 		}
-
 		try {
 			Validator.introducedValidation(introduced);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.INTRODUCED, e.getMessage());
 		}
-
 		try {
 			Validator.discontinuedValidation(discontinued, introduced);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.DISCONTINUED, e.getMessage());
 		}
-
 		try {
 			Validator.companyIdValidation(companyId);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.COMPANY_ID, e.getMessage());
 		}
 
 		
-		// Sens query if no errors, display error messages else
+		// Sends query if no errors, display error messages else
 		if (errors.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			
 			computer.setName(name);
-			
 			if (StringUtils.isNotBlank(introduced)) {
 				computer.setIntroduced(LocalDate.parse(introduced, formatter));
 			}
@@ -126,13 +123,15 @@ public class AddComputerController extends HttpServlet {
 			}
 			
 			computerService.create(computer);
+			
+			// Redirects to the dashboard once add query is completed
+			response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
 		} else {
 			request.setAttribute(ERRORS, errors);
+			
+			// Displays jsp with errors
 			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 		}
-
-		// Redirects to the dashboard once add query is completed
-		response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
 	}
 	
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.service.CompanyService;
@@ -85,6 +86,7 @@ public class EditComputerController extends HttpServlet {
 		Map<String, String> errors = new HashMap<String, String>();
 
 		// Get form fields
+		String id = request.getParameter(Field.ID);
 		String name = request.getParameter(Field.COMPUTER_NAME);
 		String introduced = request.getParameter(Field.INTRODUCED);
 		String discontinued = request.getParameter(Field.DISCONTINUED);
@@ -94,26 +96,22 @@ public class EditComputerController extends HttpServlet {
 		// Validate fields
 		try {
 			Validator.nameValidation(name);
-			System.out.println("test");
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.COMPUTER_NAME, e.getMessage());
 		}
-
 		try {
 			Validator.introducedValidation(introduced);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.INTRODUCED, e.getMessage());
 		}
-
 		try {
 			Validator.discontinuedValidation(discontinued, introduced);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.DISCONTINUED, e.getMessage());
 		}
-
 		try {
 			Validator.companyIdValidation(companyId);
-		} catch (Exception e) {
+		} catch (ValidationException e) {
 			errors.put(Field.COMPANY_ID, e.getMessage());
 		}
 
@@ -122,8 +120,8 @@ public class EditComputerController extends HttpServlet {
 		if (errors.isEmpty()) {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			
+			computer.setId(Integer.parseInt(id));
 			computer.setName(name);
-			
 			if (StringUtils.isNotBlank(introduced)) {
 				computer.setIntroduced(LocalDate.parse(introduced, formatter));
 			}
@@ -137,7 +135,7 @@ public class EditComputerController extends HttpServlet {
 			computerService.update(computer);
 			
 			// Redirects to the dashboard once update query is completed
-			//response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
+			response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
 		} else {
 			request.setAttribute(ERRORS, errors);
 			

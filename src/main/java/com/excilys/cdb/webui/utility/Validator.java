@@ -5,34 +5,38 @@ import java.time.format.DateTimeFormatter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.CompanyServiceImpl;
 
-
+/**
+ * Validates fields received from post request.
+ * 
+ * @author Elyas Albay
+ *
+ */
 public class Validator {
-	private static CompanyService companyService;
-	
-	
+
 	/**
 	 * Class constructor.
 	 */
-	public Validator() {
-		companyService = CompanyServiceImpl.INSTANCE;
+	private Validator() {
+
 	}
-	
+
 	
 	/**
 	 * Validates input name.
 	 * 
 	 * @param name
 	 *            Computer name.
-	 * @throws Exception
+	 * @throws ValidationException
 	 *             Thrown exception.
 	 */
-	public static void nameValidation(String name) throws Exception {
+	public static void nameValidation(String name) throws ValidationException {
 
 		if (StringUtils.isBlank(name)) {
-			throw new Exception("Name has to be specified.");
+			throw new ValidationException("Name has to be specified.");
 		}
 	}
 
@@ -41,14 +45,14 @@ public class Validator {
 	 * 
 	 * @param introduced
 	 *            Introduced date.
-	 * @throws Exception
-	 *             Thrown Exception.
+	 * @throws ValidationException
+	 *             Thrown ValidationException.
 	 */
-	public static void introducedValidation(String introduced) throws Exception {
+	public static void introducedValidation(String introduced) throws ValidationException {
 
 		if (StringUtils.isNotBlank(introduced)) {
 			if (!introduced.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				throw new Exception("Invalid introduced date format.");
+				throw new ValidationException("Invalid introduced date format.");
 			}
 		}
 	}
@@ -60,18 +64,18 @@ public class Validator {
 	 *            Discontinued date.
 	 * @param introduced
 	 *            Introduced date.
-	 * @throws Exception
+	 * @throws ValidationException
 	 *             Thrown exception.
 	 */
-	public static void discontinuedValidation(String discontinued, String introduced) throws Exception {
+	public static void discontinuedValidation(String discontinued, String introduced) throws ValidationException {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		if (StringUtils.isNotBlank(discontinued)) {
 			if (!discontinued.matches("\\d{4}-\\d{2}-\\d{2}")) {
-				throw new Exception("Invalid discontinued date format.");
+				throw new ValidationException("Invalid discontinued date format.");
 			} else if (introduced != null
 					&& LocalDate.parse(introduced, formatter).isAfter(LocalDate.parse(discontinued, formatter))) {
-				throw new Exception("Discontinued date should not be before introduced date.");
+				throw new ValidationException("Discontinued date should not be before introduced date.");
 			}
 		}
 	}
@@ -81,16 +85,17 @@ public class Validator {
 	 * 
 	 * @param companyId
 	 *            COmpany Id.
-	 * @throws Exception
-	 *             Thrown Exception.
+	 * @throws ValidationValidationException
+	 *             Thrown ValidationValidationException.
 	 */
-	public static void companyIdValidation(String companyId) throws Exception {
+	public static void companyIdValidation(String companyId) throws ValidationException {
 		int id = Integer.parseInt(companyId);
-		
+		CompanyService companyService = CompanyServiceImpl.INSTANCE;
+
 		if (id < 0) {
-			throw new Exception("Company Id cannot be negative.");
+			throw new ValidationException("Company Id cannot be negative.");
 		} else if (id != 0 && companyService.getById(id) == null) {
-			throw new Exception("This id does not exist in the database." + companyId);
+			throw new ValidationException("This id does not exist in the database." + companyId);
 		}
 	}
 

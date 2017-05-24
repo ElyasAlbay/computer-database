@@ -5,21 +5,13 @@ import com.excilys.cdb.ui.Page;
 import com.excilys.cdb.webui.dto.ComputerDto;
 
 public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{
-	private CompanyDtoMapper companyDtoMapper;
 
 	
 	/**
 	 * Class constructor.
 	 */
 	public ComputerDtoMapper() {
-		this(new CompanyDtoMapper());
-	}
-	
-	/**
-	 * Class constructor with parameter.
-	 */
-	public ComputerDtoMapper(CompanyDtoMapper companyDtoMapper) {
-		this.companyDtoMapper = companyDtoMapper;
+		
 	}
 
 	
@@ -38,6 +30,7 @@ public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{
 
 	@Override
 	public ComputerDto createDto(Computer computer) {
+		CompanyDtoMapper companyDtoMapper = new CompanyDtoMapper();
 		ComputerDto computerDto = new ComputerDto();
 
 		computerDto.setId(computer.getId());

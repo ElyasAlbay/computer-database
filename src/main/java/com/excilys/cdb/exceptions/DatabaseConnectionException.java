@@ -9,6 +9,7 @@ package com.excilys.cdb.exceptions;
 public class DatabaseConnectionException extends RuntimeException {
 	private static final long serialVersionUID = -7528518047881107912L;
 
+	
 	public DatabaseConnectionException() {
 		super();
 	}

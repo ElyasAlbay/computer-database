@@ -12,7 +12,6 @@ import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ComputerServiceImpl;
 import com.excilys.cdb.ui.Page;
 import com.excilys.cdb.webui.dto.ComputerDto;
-import com.excilys.cdb.webui.utility.mapper.CompanyDtoMapper;
 import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
 
 /**
@@ -31,7 +30,6 @@ public class DashboardController extends HttpServlet {
 
 	private ComputerService computerService;
 	private ComputerDtoMapper computerDtoMapper;
-	private CompanyDtoMapper companyDtoMapper;
 
 	
 	/**
@@ -40,8 +38,7 @@ public class DashboardController extends HttpServlet {
 	public DashboardController() {
 		computerService = ComputerServiceImpl.INSTANCE;
 		
-		companyDtoMapper = new CompanyDtoMapper();
-		computerDtoMapper = new ComputerDtoMapper(companyDtoMapper);
+		computerDtoMapper = new ComputerDtoMapper();
 	}
 
 	
