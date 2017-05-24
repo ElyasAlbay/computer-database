@@ -16,11 +16,11 @@ import org.apache.commons.lang3.StringUtils;
 import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.CompanyServiceImpl;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ComputerServiceImpl;
-import com.excilys.cdb.ui.Page;
 import com.excilys.cdb.webui.dto.CompanyDto;
 import com.excilys.cdb.webui.utility.Field;
 import com.excilys.cdb.webui.utility.Validator;
@@ -35,10 +35,10 @@ public class EditComputerController extends HttpServlet {
 	private static final long serialVersionUID = 8357518801832666376L;
 
 	private static final String VIEW = "/WEB-INF/views/editComputer.jsp";
+	private static final String DASHBOARD = "/dashboard";
 	private static final String ATT_COMPUTER = "computer";
 	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String COMPUTER_ID = "computer_id";
-	private static final String DASHBOARD = "/dashboard";
 	private static final String ERRORS = "errors";
 	
 	private Computer computer;

@@ -1,7 +1,7 @@
 package com.excilys.cdb.webui.utility.mapper;
 
 import com.excilys.cdb.model.Computer;
-import com.excilys.cdb.ui.Page;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.webui.dto.ComputerDto;
 
 public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{

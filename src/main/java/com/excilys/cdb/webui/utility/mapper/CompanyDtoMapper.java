@@ -1,7 +1,7 @@
 package com.excilys.cdb.webui.utility.mapper;
 
 import com.excilys.cdb.model.Company;
-import com.excilys.cdb.ui.Page;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.webui.dto.CompanyDto;
 
 public class CompanyDtoMapper extends AbstractDtoMapper<CompanyDto, Company> {

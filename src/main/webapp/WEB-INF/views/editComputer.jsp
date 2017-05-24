@@ -38,13 +38,13 @@
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="${computer.introduced}">
+									name="introduced" value="${computer.introduced}">
 							</div> ${errors["introduced"]}
 							
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="${computer.discontinued}">
+									name="discontinued" value="${computer.discontinued}">
 							</div> ${errors["discontinued"]}
 							
 							<div class="form-group">

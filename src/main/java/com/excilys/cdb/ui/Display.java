@@ -2,6 +2,7 @@ package com.excilys.cdb.ui;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 
 
 /**

@@ -6,8 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.excilys.cdb.model.Company;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.utility.CompanyMapper;
-import com.excilys.cdb.ui.Page;
 
 
 /**
@@ -20,6 +20,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 	INSTANCE;
 	
 	private DbConnection dbConnection;
+	
 	private final static String LIST = "SELECT * FROM company";
 	private final static String GET_BY_ID = "SELECT * FROM company WHERE id=?";
 	private final static String GET_NUMBER_OF_ELEMENTS = "SELECT count(*) FROM company";
@@ -33,10 +34,6 @@ public enum CompanyDaoImpl implements CompanyDao {
 	}
 	
 	
-	/**
-	 * Sends a request to the database to get a complete list of companies.
-	 * @return Page of companies.
-	 */
 	@Override
 	public Page<Company> listRequest(Page<Company> companyPage) {
 		PreparedStatement statement;
@@ -58,7 +55,6 @@ public enum CompanyDaoImpl implements CompanyDao {
 				companyPage.setNumberOfElements(resultSet.getInt(1));
 			}
 			
-			
 			resultSet.close();
 			statement.close();
 		} catch (SQLException e) {
@@ -68,12 +64,6 @@ public enum CompanyDaoImpl implements CompanyDao {
 		return companyPage;
 	}
 
-	/**
-	 * Sends a request to the database to get a unique instance of Company
-	 * corresponding to the given id.
-	 * @param id Identifier of the company in the dabatase.
-	 * @return Instance of company.
-	 */
 	@Override
 	public Company getById(int id) {
 		PreparedStatement statement;
@@ -95,5 +85,6 @@ public enum CompanyDaoImpl implements CompanyDao {
 		
 		return company;
 	}
+	
 	
 }

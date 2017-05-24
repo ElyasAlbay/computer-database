@@ -27,11 +27,12 @@
 				found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
-					<form id="searchForm" action="#" method="GET" class="form-inline">
+					<form id="searchForm" action=${pageContext.request.contextPath}/dashboard?page_size=${computerPage.pageSize}&search=${search}
+					 method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="Search name" value="${search}"/>
+						<input type="submit" id="searchsubmit" value="Filter by name"
 							class="btn btn-primary" />
 					</form>
 				</div>
@@ -44,7 +45,7 @@
 			</div>
 		</div>
 
-		<form id="deleteForm" action="#" method="POST">
+		<form id="deleteForm" action=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize} method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
 
@@ -53,15 +54,17 @@
 				<thead>
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
+						<th class="editMode" style="width: 60px; height: 22px;">
+						<input type="checkbox" id="selectall" />
+							<span style="vertical-align: top;"> - <a href="#"
+								id="deleteSelected" onclick="$.fn.deleteSelected();">
+								<i class="fa fa-trash-o fa-lg"></i>
+								</a>
+							</span>
+						</th>
 						<!-- Table header for Computer Name -->
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
 						<th>Computer name</th>
+						<!-- Table header for Introduced Date -->
 						<th>Introduced date</th>
 						<!-- Table header for Discontinued Date -->
 						<th>Discontinued date</th>
@@ -75,7 +78,7 @@
 					<c:forEach items="${computerPage.elementList}" var="computer">
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="0"></td>
+								class="cb" value="${computer.id}"></td>
 							<td><a href=editComputer?computer_id=${computer.id} onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
@@ -92,40 +95,40 @@
 		<div class="container text-center">
 			<ul class="pagination">
 				<c:if test="${computerPage.pageNumber > 1}">
-					<li><a
-						href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber
-						-1} aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					<li>
+						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search} 
+						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
 
 				<c:choose>
 					<c:when test="${computerPage.pageNumber < 4}">
 						<c:forEach var="i" begin="1" end="5">
-							<li><a
-								href=${pageContext.request.contextPath}/dashboard?page_number=${i}>${i}</a>
+							<li>
+								<a href=${pageContext.request.contextPath}/dashboard?page_number=${i}&page_size=${computerPage.pageSize}&search=${search}>${i}</a>
 							</li>
 						</c:forEach>
 					</c:when>
 					<c:when
 						test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
 						<c:forEach var="i" begin="1" end="5">
-							<li><a
-								href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}>${computerPage.numberOfPages-5+i}</a>
+							<li>
+								<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}&page_size=${computerPage.pageSize}&search=${search}>${computerPage.numberOfPages-5+i}</a>
 							</li>
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="i" begin="1" end="5">
-							<li><a
-								href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}>${computerPage.pageNumber-3+i}</a>
+							<li>
+								<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}&page_size=${computerPage.pageSize}&search=${search}>${computerPage.pageNumber-3+i}</a>
 							</li>
 						</c:forEach>
 					</c:otherwise>
 				</c:choose>
 
 				<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
-					<li><a
-						href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1}
+					<li>
+						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1}&page_size=${computerPage.pageSize}&search=${search}
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>

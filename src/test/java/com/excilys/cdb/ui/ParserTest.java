@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import com.excilys.cdb.exceptions.InvalidCommandException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 

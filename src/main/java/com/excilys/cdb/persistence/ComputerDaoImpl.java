@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.sql.Types;
 
 import com.excilys.cdb.model.Computer;
+import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.utility.ComputerMapper;
-import com.excilys.cdb.ui.Page;
 
 /**
  * Implementation of ComputerDao, sends requests to the database and gets an
@@ -21,16 +21,20 @@ import com.excilys.cdb.ui.Page;
 public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 
-	DbConnection dbConnection;
+	private DbConnection dbConnection;
 
 	private final static String LIST = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id LIMIT ?, ?";
 	private final static String GET_BY_ID = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id WHERE computer.id=?";
+	private final static String SEARCH_BY_NAME = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
+			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? LIMIT ?, ?";
 	private final static String CREATE = "INSERT INTO computer SET name=?, introduced=?, discontinued =?, company_id =?";
 	private final static String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued =?, company_id =? WHERE id=?";
 	private final static String DELETE = "DELETE FROM computer WHERE id=?";
 	private final static String GET_NUMBER_OF_ELEMENTS = "SELECT count(*) FROM computer";
+	private final static String GET_SEARCH_ELEMENTS = "SELECT count(*) FROM computer LEFT JOIN company "
+			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 
 	
 	/**
@@ -41,11 +45,6 @@ public enum ComputerDaoImpl implements ComputerDao {
 	}
 
 	
-	/**
-	 * Sends a request to the database to get a complete list of computers.
-	 * 
-	 * @return Page of computers.
-	 */
 	@Override
 	public Page<Computer> listRequest(Page<Computer> computerPage) {
 		PreparedStatement statement;
@@ -80,20 +79,11 @@ public enum ComputerDaoImpl implements ComputerDao {
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		} finally {
-			dbConnection.closeConnection();
 		}
 
 		return computerPage;
 	}
 
-	/**
-	 * Sends a request to the database to get an instance of Computer.
-	 * 
-	 * @param id
-	 *            Identifier of the computer in the database.
-	 * @return Instance of Computer.
-	 */
 	@Override
 	public Computer getById(int id) {
 		PreparedStatement statement;
@@ -116,14 +106,49 @@ public enum ComputerDaoImpl implements ComputerDao {
 		return computer;
 	}
 
-	/**
-	 * Sends a request to the database to get a unique instance of Computer
-	 * corresponding to the given name.
-	 * 
-	 * @param name
-	 *            Name of the computer in the dabatase.
-	 * @return Instance of computer.
-	 */
+	@Override
+	public Page<Computer> searchByName(Page<Computer> computerPage, String name) {
+		PreparedStatement statement;
+		ResultSet resultSet;
+
+		try (Connection connection = dbConnection.openConnection()) {
+			// Get list of computers in the database
+			statement = connection.prepareStatement(SEARCH_BY_NAME);
+			statement.setString(1, '%'+name+'%');
+			statement.setString(2, '%'+name+'%');
+			statement.setInt(3, (computerPage.getPageNumber() - 1) * computerPage.getPageSize());
+			statement.setInt(4, computerPage.getPageSize());
+
+			resultSet = statement.executeQuery();
+			computerPage.setElementList(ComputerMapper.getComputers(resultSet));
+
+			// Gets count of computers in the database 
+			statement = connection.prepareStatement(GET_SEARCH_ELEMENTS);
+			statement.setString(1, '%'+name+'%');
+			statement.setString(2, '%'+name+'%');
+			resultSet = statement.executeQuery();
+
+			if (resultSet.next()) {
+				computerPage.setNumberOfElements(resultSet.getInt(1));
+				int numberOfPages = computerPage.getNumberOfElements()/computerPage.getPageSize();
+
+				// Rounds to the upper integer if the division has a remainder
+				if((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
+					computerPage.setNumberOfPages(numberOfPages+1);
+				} else {
+					computerPage.setNumberOfPages(numberOfPages);
+				}
+			}
+
+			resultSet.close();
+			statement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return computerPage;
+	}
+	
 	@Override
 	public Computer create(Computer computer) {
 		PreparedStatement statement;
@@ -168,13 +193,6 @@ public enum ComputerDaoImpl implements ComputerDao {
 		return computer;
 	}
 
-	/**
-	 * Sends a request to the database to update a given entry of the Computer
-	 * table in the database.
-	 * 
-	 * @param computer
-	 *            Instance of Computer to update.
-	 */
 	@Override
 	public Computer update(Computer computer) {
 		PreparedStatement statement;
@@ -211,13 +229,6 @@ public enum ComputerDaoImpl implements ComputerDao {
 		return computer;
 	}
 
-	/**
-	 * Sends a request to the database to delete a given entry of the Computer
-	 * table in the database.
-	 * 
-	 * @param id
-	 *            Identifier of the computer in the database.
-	 */
 	@Override
 	public void delete(int id) {
 		PreparedStatement statement;

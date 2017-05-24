@@ -3,7 +3,7 @@ package com.excilys.cdb.webui.utility.mapper;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.ui.Page;
+import com.excilys.cdb.model.Page;
 
 public abstract class AbstractDtoMapper<DTO,T> {
 	
