@@ -29,6 +29,7 @@ public class DashboardController extends HttpServlet {
 	private static final String PAGE_NUMBER = "page_number";
 	private static final String PAGE_SIZE = "page_size";
 	private static final String SEARCH = "search";
+	private static final String SELECTION = "selection";
 
 	private ComputerService computerService;
 	private ComputerDtoMapper computerDtoMapper;
@@ -56,7 +57,11 @@ public class DashboardController extends HttpServlet {
 			computerPage.setPageNumber(Integer.parseInt(request.getParameter(PAGE_NUMBER)));
 		}
 		if (request.getParameter(PAGE_SIZE) != null) {
-			computerPage.setPageSize(Integer.parseInt(request.getParameter(PAGE_SIZE)));
+			int pageSize = Integer.parseInt(request.getParameter(PAGE_SIZE));
+			computerPage.setPageSize(pageSize);
+		}
+		if (request.getParameter("order") != null) {
+			computerPage.setOrder(request.getParameter("order"));
 		}
 		
 		// Creates a new computerDto page from computer page.
@@ -75,7 +80,7 @@ public class DashboardController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Get computer id selection from POST request
-		String selection = request.getParameter("selection");   
+		String selection = request.getParameter(SELECTION);   
 		String linkParams = "";
 		
 		// Get page parameters

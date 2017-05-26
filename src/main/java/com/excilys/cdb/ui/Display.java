@@ -51,7 +51,9 @@ public class Display {
 	public void displayShow(Computer computer) {
 		if (computer != null) {
 			System.out.println(computer.toString());
-		}		
+		} else {
+			System.out.println("Computer not found.");
+		}
 	}
 	
 	/**

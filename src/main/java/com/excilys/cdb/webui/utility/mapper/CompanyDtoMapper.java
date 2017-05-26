@@ -23,6 +23,7 @@ public class CompanyDtoMapper extends AbstractDtoMapper<CompanyDto, Company> {
 		companyDtoPage.setNumberOfPages(companyPage.getNumberOfPages());
 		companyDtoPage.setPageNumber(companyPage.getPageNumber());
 		companyDtoPage.setPageSize(companyPage.getPageSize());
+		companyDtoPage.setOrder(companyPage.getOrder());
 
 		return companyDtoPage;
 	}

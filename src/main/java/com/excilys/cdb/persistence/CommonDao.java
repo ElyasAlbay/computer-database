@@ -28,4 +28,18 @@ public interface CommonDao<T> {
 	 * @return Element.
 	 */
 	public T getById(int id);
+
+	/**
+	 * Sends a request to the database to delete a given entry of the element
+	 * table in the database.
+	 * 
+	 * <i> For a company deletion, uses a transaction system to ensure all
+	 * related computers (i.e. which foreign id identifies the company) are
+	 * safely deleted before comitting changes.
+	 * 
+	 * 
+	 * @param id
+	 *            Identifier of the element in the database.
+	 */
+	public void delete(int id);
 }

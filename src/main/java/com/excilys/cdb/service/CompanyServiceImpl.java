@@ -39,4 +39,9 @@ public enum CompanyServiceImpl implements CompanyService {
 		return companyDao.getById(id);
 	}
 	
+	@Override
+	public void delete(int id) {
+		
+		companyDao.delete(id);
+	}
 }

@@ -21,13 +21,21 @@ public interface CommonService<T> {
 	public Page<T> listRequest(Page<T> page);
 
 	/**
-	 * Calls corresponding method of DAO instance to get an alement by its id in
+	 * Calls corresponding method of DAO instance to get an element by its id in
 	 * the dabatase.
 	 * 
 	 * @param id
 	 *            Identifier of the element in the database.
-	 * @return Instance of Company.
+	 * @return Instance of element.
 	 */
 	public T getById(int id);
 
+	/**
+	 * Calls corresponding method of DAO instance to delete an element by its id in
+	 * the dabatase.
+	 * 
+	 * @param id
+	 *            Identifier of the element in the database.
+	 */
+	public void delete(int id);
 }

@@ -30,15 +30,6 @@ public interface ComputerService extends CommonService<Computer> {
 	 * @return Instance of Computer.
 	 */
 	public Computer update(Computer computer);
-
-	/**
-	 * Calls corresponding method of DAO instance to delete a computer in the
-	 * database.
-	 * 
-	 * @param computer
-	 *            Instance of Computer to delete.
-	 */
-	public void delete(int id);
 	
 	/**
 	 * Calls corresponding method of DAO instance to get a page of computers

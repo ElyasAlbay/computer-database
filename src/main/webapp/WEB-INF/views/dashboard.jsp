@@ -63,13 +63,21 @@
 							</span>
 						</th>
 						<!-- Table header for Computer Name -->
-						<th>Computer name</th>
+						<th><a id="orderByName" 
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=computer.name">
+							Computer name </a></th>
 						<!-- Table header for Introduced Date -->
-						<th>Introduced date</th>
+						<th><a id="orderByName" 
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=introduced">
+							Introduced date</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th>Discontinued date</th>
+						<th><a id="orderByName" 
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=discontinued">
+							Discontinued date</a></th>
 						<!-- Table header for Company -->
-						<th>Company</th>
+						<th><a id="orderByName" 
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=company_name">
+							Company</a></th>
 
 					</tr>
 				</thead>
@@ -96,7 +104,7 @@
 			<ul class="pagination">
 				<c:if test="${computerPage.pageNumber > 1}">
 					<li>
-						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search} 
+						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} 
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
@@ -105,7 +113,7 @@
 					<c:when test="${computerPage.pageNumber < 4}">
 						<c:forEach var="i" begin="1" end="5">
 							<li>
-								<a href=${pageContext.request.contextPath}/dashboard?page_number=${i}&page_size=${computerPage.pageSize}&search=${search}>${i}</a>
+								<a href=${pageContext.request.contextPath}/dashboard?page_number=${i}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} >${i}</a>
 							</li>
 						</c:forEach>
 					</c:when>
@@ -113,14 +121,14 @@
 						test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
 						<c:forEach var="i" begin="1" end="5">
 							<li>
-								<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}&page_size=${computerPage.pageSize}&search=${search}>${computerPage.numberOfPages-5+i}</a>
+								<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} >${computerPage.numberOfPages-5+i}</a>
 							</li>
 						</c:forEach>
 					</c:when>
 					<c:otherwise>
 						<c:forEach var="i" begin="1" end="5">
 							<li>
-								<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}&page_size=${computerPage.pageSize}&search=${search}>${computerPage.pageNumber-3+i}</a>
+								<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} >${computerPage.pageNumber-3+i}</a>
 							</li>
 						</c:forEach>
 					</c:otherwise>
@@ -128,7 +136,7 @@
 
 				<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
 					<li>
-						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1}&page_size=${computerPage.pageSize}&search=${search}
+						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} 
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
@@ -136,13 +144,13 @@
 
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
-				<a href=${pageContext.request.contextPath}/dashboard?page_size=10>
+				<a href=${pageContext.request.contextPath}/dashboard?page_size=10&search=${search}&order=${computerPage.order}>
 					<button type="button" class="btn btn-default">10</button>
 				</a>
-				<a href=${pageContext.request.contextPath}/dashboard?page_size=50>
+				<a href=${pageContext.request.contextPath}/dashboard?page_size=50&search=${search}&order=${computerPage.order}>
 				<button type="button" class="btn btn-default">50</button>
 				</a>
-				<a href=${pageContext.request.contextPath}/dashboard?page_size=100>
+				<a href=${pageContext.request.contextPath}/dashboard?page_size=100&search=${search}&order=${computerPage.order}>
 				<button type="button" class="btn btn-default">100</button>
 				</a>
 			</div>

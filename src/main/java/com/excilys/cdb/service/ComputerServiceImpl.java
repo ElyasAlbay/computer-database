@@ -58,8 +58,8 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void delete(int id) {
+		
 		computerDao.delete(id);
-
 	}
 
 }

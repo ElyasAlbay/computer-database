@@ -86,7 +86,7 @@ public class EditComputerController extends HttpServlet {
 		Map<String, String> errors = new HashMap<String, String>();
 
 		// Get form fields
-		String id = request.getParameter(Field.ID);
+		String id = request.getParameter(Field.COMPUTER_ID);
 		String name = request.getParameter(Field.COMPUTER_NAME);
 		String introduced = request.getParameter(Field.INTRODUCED);
 		String discontinued = request.getParameter(Field.DISCONTINUED);

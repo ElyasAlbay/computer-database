@@ -111,7 +111,7 @@ public class Parser {
 
 		} else {
 			scanner.close();
-			throw new InvalidCommandException("Unknown table");
+			throw new InvalidCommandException("Unknown table.");
 		}
 
 	}
@@ -169,7 +169,19 @@ public class Parser {
 	 *            Input id.
 	 */
 	private void parseDelete(String token) {
-		computerService.delete(Integer.parseInt(token));
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Id: ");
+		
+		if (token.equals("company")) {
+			companyService.delete(getInt(scanner));
+
+		} else if (token.equals("computer")) {
+			computerService.delete(getInt(scanner));
+
+		} else {
+			scanner.close();
+			throw new InvalidCommandException("Unknown table.");
+		}
 	}
 
 	/**

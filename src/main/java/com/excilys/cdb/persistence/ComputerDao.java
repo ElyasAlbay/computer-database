@@ -29,15 +29,6 @@ public interface ComputerDao extends CommonDao<Computer> {
 	 *            Instance of Computer to update.
 	 */
 	public Computer update(Computer computer);
-
-	/**
-	 * Sends a request to the database to delete a given entry of the Computer
-	 * table in the database.
-	 * 
-	 * @param id
-	 *            Identifier of the computer in the database.
-	 */
-	public void delete(int id);
 	
 	/**
 	 * Sends a request to the database to get a page of computers where computer name

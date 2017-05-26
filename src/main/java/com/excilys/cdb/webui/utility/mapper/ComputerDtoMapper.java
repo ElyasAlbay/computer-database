@@ -24,6 +24,7 @@ public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{
 		computerDtoPage.setNumberOfPages(computerPage.getNumberOfPages());
 		computerDtoPage.setPageNumber(computerPage.getPageNumber());
 		computerDtoPage.setPageSize(computerPage.getPageSize());
+		computerDtoPage.setOrder(computerPage.getOrder());
 
 		return computerDtoPage;
 	}
