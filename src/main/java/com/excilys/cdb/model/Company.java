@@ -2,27 +2,39 @@ package com.excilys.cdb.model;
 
 /**
  * Model for a company.
+ * 
  * @author Elyas Albay
  *
  */
 public class Company {
 	private int id;
 	private String name;
-	
+
 	
 	/**
-	 * Constructor using identifier and name of the company.
-	 * @param id Unique identifier for the company.
-	 * @param pName Company name.
+	 * Class default constructor.
 	 */
-	public Company (int id, String name) {
+	public Company() {
+
+	}
+
+	/**
+	 * Constructor using identifier and name of the company.
+	 * 
+	 * @param id
+	 *            Unique identifier for the company.
+	 * @param pName
+	 *            Company name.
+	 */
+	public Company(int id, String name) {
 		setId(id);
 		setName(name);
 	}
-	
+
 	
 	/**
 	 * Returns Company instance hash code.
+	 * 
 	 * @return result Generated Hash Code.
 	 */
 	@Override
@@ -33,10 +45,12 @@ public class Company {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-	
+
 	/**
 	 * Returns true if instance is equal to the paramater. False else.
-	 * @param obj Object to compare.
+	 * 
+	 * @param obj
+	 *            Object to compare.
 	 * @return boolean
 	 */
 	@Override
@@ -56,8 +70,8 @@ public class Company {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
-	}	
-	
+	}
+
 	/**
 	 * Converts company to a string detailing its fields.
 	 */
@@ -65,29 +79,28 @@ public class Company {
 	public String toString() {
 		String delimit = " | ";
 		String string = this.getId() + delimit + this.getName();
-		
+
 		return string;
 	}
 
-
 	/* Getters and setters */
-	public int getId () {
+	public int getId() {
 		return this.id;
 	}
 
-	public void setId (int id) {
-		if(id >= 0) {
+	public void setId(int id) {
+		if (id >= 0) {
 			this.id = id;
 		} else {
 			System.err.println("Error in Company : Incorrect Id");
 		}
 	}
-	
-	public String getName () {
+
+	public String getName() {
 		return this.name;
 	}
-	
-	public void setName (String name) {
+
+	public void setName(String name) {
 		this.name = name;
 	}
 }

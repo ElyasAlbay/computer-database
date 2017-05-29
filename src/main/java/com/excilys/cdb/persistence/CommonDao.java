@@ -17,7 +17,7 @@ public interface CommonDao<T> {
 	 * 
 	 * @return Page of elements.
 	 */
-	public Page<T> listRequest(Page<T> page);
+	public Page<T> getAll(Page<T> page);
 
 	/**
 	 * Sends a request to the database to get a unique element identified by the

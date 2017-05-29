@@ -18,7 +18,7 @@ public interface CommonService<T> {
 	 * 
 	 * @return List of elements.
 	 */
-	public Page<T> listRequest(Page<T> page);
+	public Page<T> getAll(Page<T> page);
 
 	/**
 	 * Calls corresponding method of DAO instance to get an element by its id in

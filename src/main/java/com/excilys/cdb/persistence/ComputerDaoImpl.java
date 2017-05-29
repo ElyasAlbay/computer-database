@@ -47,7 +47,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 
 	
 	@Override
-	public Page<Computer> listRequest(Page<Computer> computerPage) {
+	public Page<Computer> getAll(Page<Computer> computerPage) {
 		ResultSet resultSet;
 		String query = String.format(LIST, computerPage.getOrder(), computerPage.getOrder());
 		

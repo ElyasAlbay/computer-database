@@ -28,9 +28,9 @@ public enum CompanyServiceImpl implements CompanyService {
 	
 	
 	@Override
-	public Page<Company> listRequest(Page<Company> companyPage) {
+	public Page<Company> getAll(Page<Company> companyPage) {
 		
-		return companyDao.listRequest(companyPage);
+		return companyDao.getAll(companyPage);
 	}
 
 	@Override

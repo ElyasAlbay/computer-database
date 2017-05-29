@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 /**
  * Model for a computer.
+ * 
  * @author excilys
  *
  */
@@ -13,25 +14,52 @@ public class Computer {
 	private LocalDate introduced;
 	private LocalDate discontinued;
 	private Company company;
-	
+
 	
 	/**
-	 * Constructor using identifier and name of the computer.
-	 * @param pId Unique identifier for the computer.
-	 * @param pName Name of the computer.
+	 * Default class constructor.
 	 */
-	public Computer (int id, String name) {
-		setId(id);
-		setName(name);
-		
+	public Computer() {
 		this.introduced = null;
 		this.discontinued = null;
 		this.company = null;
 	}
-	
+
+	/**
+	 * Constructor using identifier of the computer.
+	 * 
+	 * @param id
+	 *            Unique identifier for the computer.
+	 */
+	public Computer(int id) {
+		setId(id);
+
+		this.introduced = null;
+		this.discontinued = null;
+		this.company = null;
+	}
+
+	/**
+	 * Constructor using identifier and name of the computer.
+	 * 
+	 * @param id
+	 *            Unique identifier for the computer.
+	 * @param name
+	 *            Name of the computer.
+	 */
+	public Computer(int id, String name) {
+		setId(id);
+		setName(name);
+
+		this.introduced = null;
+		this.discontinued = null;
+		this.company = null;
+	}
+
 	
 	/**
 	 * Returns Computer instance hash code.
+	 * 
 	 * @return result Generated Hash Code.
 	 */
 	@Override
@@ -48,7 +76,9 @@ public class Computer {
 
 	/**
 	 * Returns true if instance is equal to the paramater. False else.
-	 * @param obj Object to compare.
+	 * 
+	 * @param obj
+	 *            Object to compare.
 	 * @return boolean
 	 */
 	@Override
@@ -92,45 +122,44 @@ public class Computer {
 	public String toString() {
 		String delimit = " | ";
 		String string = this.getId() + delimit + this.getName();
-		
-		if(this.getIntroduced() != null) {
+
+		if (this.getIntroduced() != null) {
 			string += delimit + this.getIntroduced();
 		} else {
 			string += delimit + "null";
 		}
-		if(this.getDiscontinued() != null) {
+		if (this.getDiscontinued() != null) {
 			string += delimit + this.getDiscontinued();
 		} else {
 			string += delimit + "null";
 		}
-		if(this.getCompany() != null) {
+		if (this.getCompany() != null) {
 			string += delimit + this.getCompany().toString();
 		} else {
 			string += delimit + "null";
-		} 
-		
+		}
+
 		return string;
 	}
-	
-	
+
 	/* Getters and setters */
-	public int getId () {
+	public int getId() {
 		return this.id;
 	}
-	
-	public void setId (int id) {
-		if(id >= 0) {
+
+	public void setId(int id) {
+		if (id >= 0) {
 			this.id = id;
 		} else {
 			System.err.println("Error in Computer : Incorrect Id");
 		}
 	}
-	
-	public String getName () {
+
+	public String getName() {
 		return this.name;
 	}
-	
-	public void setName (String name) {
+
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -146,10 +175,10 @@ public class Computer {
 		return discontinued;
 	}
 
-	public void setDiscontinued(LocalDate discontinued) {		
-		if(discontinued != null) {
+	public void setDiscontinued(LocalDate discontinued) {
+		if (discontinued != null) {
 			this.discontinued = discontinued;
-			
+
 			if (this.getIntroduced() != null && discontinued.compareTo(this.getIntroduced()) < 0) {
 				this.discontinued = null;
 				System.err.println("Error in Computer " + getId() + ": Incorrect Discontinued date");

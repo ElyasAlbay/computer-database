@@ -59,7 +59,7 @@ public class EditComputerController extends HttpServlet {
 		Page<Company> companyPage = new Page<>();
 		CompanyDtoMapper companyDtoMapper = new CompanyDtoMapper();
 
-		companyDtoPage = companyDtoMapper.createDtoPage(companyService.listRequest(companyPage));
+		companyDtoPage = companyDtoMapper.createDtoPage(companyService.getAll(companyPage));
 	}
 	
 	

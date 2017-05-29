@@ -70,7 +70,7 @@ public class DashboardController extends HttpServlet {
 			request.setAttribute(SEARCH, request.getParameter(SEARCH));
 			computerDtoPage = computerDtoMapper.createDtoPage(computerService.searchByName((computerPage), request.getParameter(SEARCH)));
 		} else {
-			computerDtoPage = computerDtoMapper.createDtoPage(computerService.listRequest(computerPage));
+			computerDtoPage = computerDtoMapper.createDtoPage(computerService.getAll(computerPage));
 		}
 		request.setAttribute(ATT_COMPUTER_PG, computerDtoPage);
 		

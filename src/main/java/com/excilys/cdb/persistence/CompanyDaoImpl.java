@@ -38,7 +38,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 
 	
 	@Override
-	public Page<Company> listRequest(Page<Company> companyPage) {
+	public Page<Company> getAll(Page<Company> companyPage) {
 		ResultSet resultSet;
 
 		try (Connection connection = dbConnection.openConnection();

@@ -27,9 +27,9 @@ public enum ComputerServiceImpl implements ComputerService {
 	
 	
 	@Override
-	public Page<Computer> listRequest(Page<Computer> computerPage) {
+	public Page<Computer> getAll(Page<Computer> computerPage) {
 		
-		return computerDao.listRequest(computerPage);
+		return computerDao.getAll(computerPage);
 	}
 
 	@Override

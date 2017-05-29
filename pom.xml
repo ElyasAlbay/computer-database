@@ -4,13 +4,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>1.0</version>
+	<version>1.2</version>
 	<packaging>war</packaging>
 
+	<!-- Properties -->
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<compilerVersion>3.6.1</compilerVersion>
+		<compilerConfig>1.8</compilerConfig>
 		<warVersion>3.0.0</warVersion>
 		<tomcatVersion>2.2</tomcatVersion>
 
@@ -32,18 +34,19 @@
 		<dbunitVersion>2.4.9</dbunitVersion>
 		<checkstyleVersion>2.17</checkstyleVersion>
 		<seleniumVersion>3.4.0</seleniumVersion>
-
 	</properties>
 
+
 	<build>
+		<!-- Plugins -->
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>${compilerVersion}</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${compilerConfig}</source>
+					<target>${compilerConfig}</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -110,16 +113,17 @@
 			<version>${commonLangVersion}</version>
 		</dependency>
 
-		<!-- Sljf dependencies -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4jVersion}</version>
-		</dependency>
+		<!-- Slj4f dependencies -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logbackVersion}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 
 		<!-- Tests dependencies -->
@@ -140,17 +144,38 @@
 			<artifactId>dbunit</artifactId>
 			<version>${dbunitVersion}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven.plugins</groupId>
 			<artifactId>maven-checkstyle-plugin</artifactId>
 			<version>${checkstyleVersion}</version>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-nop</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-jdk14</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
 			<version>${seleniumVersion}</version>
+			<scope>test</scope>
 		</dependency>
 
 	</dependencies>

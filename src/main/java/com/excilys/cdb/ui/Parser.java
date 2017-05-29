@@ -99,14 +99,14 @@ public class Parser {
 			Page<Company> companyPage = new Page<>();
 			getPageInfo(companyPage, scanner);
 
-			companyPage = companyService.listRequest(companyPage);
+			companyPage = companyService.getAll(companyPage);
 			display.displayListCompany(companyPage);
 
 		} else if (token.equals("computer")) {
 			Page<Computer> computerPage = new Page<>();
 			getPageInfo(computerPage, scanner);
 
-			computerPage = computerService.listRequest(computerPage);
+			computerPage = computerService.getAll(computerPage);
 			display.displayListComputer(computerPage);
 
 		} else {
@@ -135,7 +135,7 @@ public class Parser {
 	 *            Input name.
 	 */
 	private void parseCreate() {
-		Computer computer = new Computer(0, "placeholder");
+		Computer computer = new Computer();
 		Scanner scanner = new Scanner(System.in);
 
 		getComputerInfo(computer, scanner);
@@ -152,7 +152,7 @@ public class Parser {
 	 *            Input id.
 	 */
 	private void parseUpdate(String token) {
-		Computer computer = new Computer(Integer.parseInt(token), "placeholder");
+		Computer computer = new Computer(Integer.parseInt(token));
 		Scanner scanner = new Scanner(System.in);
 
 		getComputerInfo(computer, scanner);
@@ -203,8 +203,7 @@ public class Parser {
 
 		Company company;
 		System.out.println("Company id: ");
-		int id = getInt(scanner);
-		company = companyService.getById(id);
+		company = companyService.getById(getInt(scanner));
 		computer.setCompany(company);
 	}
 

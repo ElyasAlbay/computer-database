@@ -53,8 +53,8 @@ public class ParserTest {
 		
 		
 		// Moking methods
-		Mockito.when(companyServiceMock.listRequest(companyPage)).thenReturn(companyPage);
-		Mockito.when(computerServiceMock.listRequest(computerPage)).thenReturn(computerPage);
+		Mockito.when(companyServiceMock.getAll(companyPage)).thenReturn(companyPage);
+		Mockito.when(computerServiceMock.getAll(computerPage)).thenReturn(computerPage);
 		Mockito.when(computerServiceMock.getById(5)).thenReturn(cmptr);
 		Mockito.when(computerServiceMock.create(cmptr)).thenReturn(cmptr);
 		Mockito.when(computerServiceMock.update(cmptr)).thenReturn(cmptr);

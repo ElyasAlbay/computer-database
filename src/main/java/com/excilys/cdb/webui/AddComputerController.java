@@ -58,7 +58,7 @@ public class AddComputerController extends HttpServlet {
 		companyDtoPage = new Page<>();
 		companyDtoMapper = new CompanyDtoMapper();
 
-		companyDtoPage = companyDtoMapper.createDtoPage(companyService.listRequest(companyPage));
+		companyDtoPage = companyDtoMapper.createDtoPage(companyService.getAll(companyPage));
 	}
 	
 

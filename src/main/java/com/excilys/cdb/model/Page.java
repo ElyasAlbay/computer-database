@@ -23,11 +23,11 @@ public class Page<T> {
 	 * Constructor for Page class.
 	 */
 	public Page() {
-		pageNumber = PAGE_NUMBER;
-		pageSize = PAGE_SIZE;
-		order = ORDER;
+		this.pageNumber = PAGE_NUMBER;
+		this.pageSize = PAGE_SIZE;
+		this.order = ORDER;
 		
-		elementList = new ArrayList<>();
+		this.elementList = new ArrayList<>();
 	}
 	
 
