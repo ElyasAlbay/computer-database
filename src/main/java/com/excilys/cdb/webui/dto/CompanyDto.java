@@ -1,6 +1,7 @@
 package com.excilys.cdb.webui.dto;
 
 /**
+ * Dto for Company object.
  * 
  * @author Elyas Albay
  *
@@ -8,8 +9,16 @@ package com.excilys.cdb.webui.dto;
 public class CompanyDto {
 	private int id;
 	private String name;
+
 	
+	/**
+	 * Class constructor.
+	 */
+	public CompanyDto() {
+
+	}
 	
+
 	/* Getters and setters */
 	public int getId() {
 		return this.id;

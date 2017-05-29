@@ -60,7 +60,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			resultSet = statement.executeQuery();
 			computerPage.setElementList(ComputerMapper.getComputers(resultSet));
 
-			// Gets count of computers in the database 
+			// Get count of computers in the database 
 			getNumberOfElements(computerPage);
 		} catch (SQLException e) {
 			throw new DaoException("Computer list request has failed: " + e.getMessage());
@@ -172,10 +172,12 @@ public enum ComputerDaoImpl implements ComputerDao {
 			}
 			
 			if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
-				statement.setInt(4, computer.getCompany().getId());
+				statement.setLong(4, computer.getCompany().getId());
 			} else {
 				statement.setNull(4, Types.BIGINT);
 			}
+			
+			statement.executeUpdate();
 		} catch (SQLException e) {
 			throw new DaoException("Computer update has failed: " + e.getMessage());
 		}

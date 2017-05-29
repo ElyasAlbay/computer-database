@@ -28,6 +28,7 @@ public class DashboardController extends HttpServlet {
 	private static final String ATT_COMPUTER_PG = "computerPage";
 	private static final String PAGE_NUMBER = "page_number";
 	private static final String PAGE_SIZE = "page_size";
+	private static final String ORDER = "order";
 	private static final String SEARCH = "search";
 	private static final String SELECTION = "selection";
 
@@ -60,8 +61,8 @@ public class DashboardController extends HttpServlet {
 			int pageSize = Integer.parseInt(request.getParameter(PAGE_SIZE));
 			computerPage.setPageSize(pageSize);
 		}
-		if (request.getParameter("order") != null) {
-			computerPage.setOrder(request.getParameter("order"));
+		if (request.getParameter(ORDER) != null) {
+			computerPage.setOrder(request.getParameter(ORDER));
 		}
 		
 		// Creates a new computerDto page from computer page.

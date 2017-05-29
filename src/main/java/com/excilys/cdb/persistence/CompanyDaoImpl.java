@@ -43,11 +43,11 @@ public enum CompanyDaoImpl implements CompanyDao {
 
 		try (Connection connection = dbConnection.openConnection();
 				PreparedStatement statement = connection.prepareStatement(LIST)) {
-			// Gets list of companies in the database
+			// Get list of companies in the database
 			resultSet = statement.executeQuery();
 			companyPage.setElementList(CompanyMapper.getCompanies(resultSet));
 
-			// Gets count of companies in the database
+			// Get count of companies in the database
 			getNumberOfElements(companyPage);
 
 		} catch (SQLException e) {
@@ -85,10 +85,10 @@ public enum CompanyDaoImpl implements CompanyDao {
 			// Start transaction
 			dbConnection.startTransaction(connection);
 
-			// Sends query to delete computers
+			// Send query to delete computers
 			deleteComputersByCompanyId(id);
 
-			// Sends query to delete company
+			// Send query to delete company
 			statement.setInt(1, id);
 
 			try {
@@ -98,7 +98,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 				throw new SQLException(e.getMessage());
 			}
 
-			// Ends transaction
+			// End transaction
 			dbConnection.commitTransaction(connection);
 		} catch (SQLException e) {
 			throw new DaoException("Company deletion has failed: " + e.getMessage());
