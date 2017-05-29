@@ -5,10 +5,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.exceptions.DaoException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.persistence.utility.CompanyMapper;
+import com.excilys.cdb.persistence.utility.DbConnection;
+import com.excilys.cdb.persistence.utility.mapper.CompanyMapper;
 
 /**
  * Implementation of CompanyDao, sends requests to the database and gets an
@@ -21,12 +25,12 @@ public enum CompanyDaoImpl implements CompanyDao {
 	INSTANCE;
 
 	private DbConnection dbConnection;
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
 	private final static String LIST = "SELECT * FROM company";
 	private final static String GET_BY_ID = "SELECT * FROM company WHERE id=?";
 	private final static String DELETE = "DELETE FROM company WHERE id=?";
-	private final static String COMPUTERS_BY_COMPANYID = "SELECT * FROM computer WHERE company_id=?";
-	private final static String GET_NUMBER_OF_ELEMENTS = "SELECT count(*) FROM company";
+	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM company";
 
 	
 	/**
@@ -51,6 +55,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 			getNumberOfElements(companyPage);
 
 		} catch (SQLException e) {
+			LOG.error("CompanyDao getAll(): SQLException. " + e.getMessage());
 			throw new DaoException("Company list request has failed: " + e.getMessage());
 		}
 
@@ -70,6 +75,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 			company = CompanyMapper.getCompany(resultSet);
 
 		} catch (SQLException e) {
+			LOG.error("CompanyDao getById("+id+"): SQLException. " + e.getMessage());
 			throw new DaoException("Company get by id request has failed: " + e.getMessage());
 		}
 
@@ -77,30 +83,13 @@ public enum CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public void delete(int id) {
-
-		try (Connection connection = dbConnection.openConnection();
-				PreparedStatement statement = connection.prepareStatement(DELETE)) {
-
-			// Start transaction
-			dbConnection.startTransaction(connection);
-
-			// Send query to delete computers
-			deleteComputersByCompanyId(id);
-
-			// Send query to delete company
+	public void delete(int id, Connection connection) {
+		try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, id);
 
-			try {
-				statement.executeUpdate();
-			} catch (SQLException e) {
-				dbConnection.rollbackTransaction(connection);
-				throw new SQLException(e.getMessage());
-			}
-
-			// End transaction
-			dbConnection.commitTransaction(connection);
+			statement.executeUpdate();
 		} catch (SQLException e) {
+			LOG.error("CompanyDao delete("+id+"): SQLException. " + e.getMessage());
 			throw new DaoException("Company deletion has failed: " + e.getMessage());
 		}
 	}
@@ -114,7 +103,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 		ResultSet resultSet;
 
 		try (Connection connection = dbConnection.openConnection();
-				PreparedStatement statement = connection.prepareStatement(GET_NUMBER_OF_ELEMENTS)) {
+				PreparedStatement statement = connection.prepareStatement(NUMBER_OF_ELEMENTS)) {
 
 			resultSet = statement.executeQuery();
 
@@ -122,33 +111,9 @@ public enum CompanyDaoImpl implements CompanyDao {
 				companyPage.setNumberOfElements(resultSet.getInt(1));
 			}
 		} catch (SQLException e) {
+			LOG.error("CompanyDao getNumberOfElements(): SQLException. " + e.getMessage());
 			throw new DaoException("Count of companies has failed: " + e.getMessage());
-		}
-
-	}
-
-	/**
-	 * Deletes computers where company_id is equal to the parameter.
-	 * 
-	 * @param id
-	 *            Company identifier.
-	 */
-	private void deleteComputersByCompanyId(int id) {
-		ComputerDao computerDao = ComputerDaoImpl.INSTANCE;
-		ResultSet resultSet;
-
-		try (Connection connection = dbConnection.openConnection();
-				PreparedStatement statement = connection.prepareStatement(COMPUTERS_BY_COMPANYID)) {
-			statement.setInt(1, id);
-
-			resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				computerDao.delete(resultSet.getInt("id"));
-			}
-
-		} catch (SQLException e) {
-			throw new DaoException("Computer deletion has failed: " + e.getMessage());
-		}
+		} 
 	}
 
 }

@@ -7,11 +7,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.ComputerService;
 import com.excilys.cdb.service.ComputerServiceImpl;
 import com.excilys.cdb.webui.dto.ComputerDto;
+import com.excilys.cdb.webui.utility.Field;
 import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
 
 /**
@@ -33,7 +36,6 @@ public class DashboardController extends HttpServlet {
 	private static final String SELECTION = "selection";
 
 	private ComputerService computerService;
-	private ComputerDtoMapper computerDtoMapper;
 
 	
 	/**
@@ -41,8 +43,6 @@ public class DashboardController extends HttpServlet {
 	 */
 	public DashboardController() {
 		computerService = ComputerServiceImpl.INSTANCE;
-		
-		computerDtoMapper = new ComputerDtoMapper();
 	}
 
 	
@@ -52,28 +52,43 @@ public class DashboardController extends HttpServlet {
 		Page<Computer> computerPage = new Page<>();
 		Page<ComputerDto> computerDtoPage = new Page<>();
 
+		String pageNumber = request.getParameter(PAGE_NUMBER);
+		String pageSize = request.getParameter(PAGE_SIZE);
+		String order = request.getParameter(ORDER);
+		String search = request.getParameter(SEARCH);
+		
 		
 		// Get parameters from GET request if exists
-		if (request.getParameter(PAGE_NUMBER) != null) {
-			computerPage.setPageNumber(Integer.parseInt(request.getParameter(PAGE_NUMBER)));
+		if (StringUtils.isNotBlank(pageNumber)) {
+			int number = Integer.parseInt(pageNumber);
+			
+			if (number > 0) {
+				computerPage.setPageNumber(number);
+			}
 		}
-		if (request.getParameter(PAGE_SIZE) != null) {
-			int pageSize = Integer.parseInt(request.getParameter(PAGE_SIZE));
-			computerPage.setPageSize(pageSize);
+		if (StringUtils.isNotBlank(pageSize)) {
+			int size = Integer.parseInt(pageSize);
+			
+			if(size == 10 || size == 50 || size == 100) {
+				computerPage.setPageSize(size);
+			}
 		}
-		if (request.getParameter(ORDER) != null) {
-			computerPage.setOrder(request.getParameter(ORDER));
+		if (StringUtils.isNotBlank(order)) {
+			if (Field.contains(order)) {
+				computerPage.setOrder(order);
+			}
 		}
+		
 		
 		// Creates a new computerDto page from computer page.
-		if (request.getParameter(SEARCH) != null) {
-			request.setAttribute(SEARCH, request.getParameter(SEARCH));
-			computerDtoPage = computerDtoMapper.createDtoPage(computerService.searchByName((computerPage), request.getParameter(SEARCH)));
+		if (StringUtils.isNotBlank(search)) {
+			request.setAttribute(SEARCH, search);
+			computerDtoPage = ComputerDtoMapper.createDtoPage(computerService.searchByName(computerPage, search));
 		} else {
-			computerDtoPage = computerDtoMapper.createDtoPage(computerService.getAll(computerPage));
+			computerDtoPage = ComputerDtoMapper.createDtoPage(computerService.getAll(computerPage));
 		}
-		request.setAttribute(ATT_COMPUTER_PG, computerDtoPage);
 		
+		request.setAttribute(ATT_COMPUTER_PG, computerDtoPage);
 		
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
@@ -81,16 +96,16 @@ public class DashboardController extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Get computer id selection from POST request
-		String selection = request.getParameter(SELECTION);   
+		String selection = request.getParameter(SELECTION);  
+		String pageNumber = request.getParameter(PAGE_NUMBER);
+		String pageSize = request.getParameter(PAGE_SIZE);
 		String linkParams = "";
 		
 		// Get page parameters
-		if (request.getParameter(PAGE_NUMBER) != null) {
-			int pageNb = Integer.parseInt(request.getParameter(PAGE_NUMBER));
-			linkParams += "?"+PAGE_NUMBER+"="+pageNb;
+		if (StringUtils.isNotBlank(pageNumber)) {
+			linkParams += "?"+PAGE_NUMBER+"="+pageNumber;
 		}
-		if (request.getParameter(PAGE_SIZE) != null) {
-			int pageSize = Integer.parseInt(request.getParameter(PAGE_SIZE));
+		if (StringUtils.isNotBlank(pageSize)) {
 			linkParams += "&"+PAGE_SIZE+"="+pageSize;
 		}
 		 

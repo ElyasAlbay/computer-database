@@ -7,10 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.cdb.exceptions.DaoException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.persistence.utility.ComputerMapper;
+import com.excilys.cdb.persistence.utility.DbConnection;
+import com.excilys.cdb.persistence.utility.mapper.ComputerMapper;
 
 /**
  * Implementation of ComputerDao, sends requests to the database and gets an
@@ -23,6 +27,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	INSTANCE;
 
 	private DbConnection dbConnection;
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
 	private final static String LIST = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id ORDER BY ISNULL(%s), %s LIMIT ?, ?";
@@ -36,6 +41,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM computer";
 	private final static String NB_SEARCH_ELEMENTS = "SELECT count(*) FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
+	private final static String COMPUTERS_BY_COMPANYID = "SELECT * FROM computer WHERE company_id=?";
 
 	
 	/**
@@ -47,7 +53,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 
 	
 	@Override
-	public Page<Computer> getAll(Page<Computer> computerPage) {
+	public Page<Computer> getAll(Page<Computer> computerPage) {		
 		ResultSet resultSet;
 		String query = String.format(LIST, computerPage.getOrder(), computerPage.getOrder());
 		
@@ -63,6 +69,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			// Get count of computers in the database 
 			getNumberOfElements(computerPage);
 		} catch (SQLException e) {
+			LOG.error("ComputerDao getAll(): SQLException. " + e.getMessage());
 			throw new DaoException("Computer list request has failed: " + e.getMessage());
 		}
 
@@ -81,6 +88,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			resultSet = statement.executeQuery();
 			computer = ComputerMapper.getComputer(resultSet);
 		} catch (SQLException e) {
+			LOG.error("ComputerDao getById("+id+"): SQLException. " + e.getMessage());
 			throw new DaoException("Computer get by id request has failed: " + e.getMessage());
 		}
 
@@ -106,6 +114,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			// Gets count of computers in the database 
 			getNbSearchElements(computerPage, name);
 		} catch (SQLException e) {
+			LOG.error("ComputerDao searchByName("+name+"): SQLException. " + e.getMessage());
 			throw new DaoException("Computer search has failed: " + e.getMessage());
 		}
 		
@@ -142,13 +151,14 @@ public enum ComputerDaoImpl implements ComputerDao {
 			resultSet = statement.getGeneratedKeys();
 
 			// Get returned generated key from statement
-			if (resultSet.next()) {
+			if (resultSet.next() && resultSet.getInt(1) > 0) {
 				computer.setId(resultSet.getInt(1));
 			}
 		} catch (SQLException e) {
+			LOG.error("ComputerDao create(): SQLException. " + e.getMessage());
 			throw new DaoException("Computer creation has failed: " + e.getMessage());
 		}
-
+		
 		return computer;
 	}
 
@@ -179,6 +189,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 			
 			statement.executeUpdate();
 		} catch (SQLException e) {
+			LOG.error("ComputerDao update(): SQLException. " + e.getMessage());
 			throw new DaoException("Computer update has failed: " + e.getMessage());
 		}
 
@@ -186,16 +197,34 @@ public enum ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public void delete(int id) {
-		try (Connection connection = dbConnection.openConnection();
-				PreparedStatement statement = connection.prepareStatement(DELETE)) {
+	public void delete(int id, Connection connection) {
+		try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, id);
 
 			statement.executeUpdate();
 		} catch (SQLException e) {
+			LOG.error("ComputerDao update("+id+"): SQLException. " + e.getMessage());
 			throw new DaoException("Computer deletion has failed: " + e.getMessage());
 		}
 
+	}
+	
+	@Override
+	public void deleteComputersByCompanyId(int id, Connection connection) {
+		ResultSet resultSet;
+
+		try (PreparedStatement statement = connection.prepareStatement(COMPUTERS_BY_COMPANYID)) {
+			statement.setInt(1, id);
+
+			resultSet = statement.executeQuery();
+			while (resultSet.next()) {
+				delete(resultSet.getInt("id"), connection);
+			}
+
+		} catch (SQLException e) {
+			LOG.info("ComputerDao ("+id+"): SQLException. " + e.getMessage());
+			throw new DaoException("Computer deletion has failed: " + e.getMessage());
+		}
 	}
 	
 	
@@ -224,6 +253,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 				}
 			}
 		} catch (SQLException e) {
+			LOG.error("ComputerDao getNumberOfElements(): SQLException. " + e.getMessage());
 			throw new DaoException("Count of computers has failed: " + e.getMessage());
 		}
 
@@ -255,9 +285,8 @@ public enum ComputerDaoImpl implements ComputerDao {
 				}
 			}
 		} catch (SQLException e) {
+			LOG.error("ComputerDao getNbSearchElements("+name+"): SQLException. " + e.getMessage());
 			throw new DaoException("Count of search query has failed: " + e.getMessage());
-		}
-
+		} 
 	}
-
 }

@@ -89,13 +89,16 @@ public class Validator {
 	 *             Thrown ValidationValidationException.
 	 */
 	public static void companyIdValidation(String companyId) throws ValidationException {
-		int id = Integer.parseInt(companyId);
 		CompanyService companyService = CompanyServiceImpl.INSTANCE;
-
-		if (id < 0) {
-			throw new ValidationException("Company Id cannot be negative.");
-		} else if (id != 0 && companyService.getById(id) == null) {
-			throw new ValidationException("This id does not exist in the database." + companyId);
+		
+		if (StringUtils.isNotBlank(companyId)) {
+			int id = Integer.parseInt(companyId);
+			
+			if (id < 0) {
+				throw new ValidationException("Company Id cannot be negative.");
+			} else if (id != 0 && companyService.getById(id) == null) {
+				throw new ValidationException("This id does not exist in the database." + companyId);
+			}
 		}
 	}
 

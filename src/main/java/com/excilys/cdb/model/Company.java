@@ -19,6 +19,16 @@ public class Company {
 	}
 
 	/**
+	 * Constructor using identifier of the company.
+	 * 
+	 * @param id
+	 *            Unique identifier for the company.
+	 */
+	public Company(int id) {
+		this.id = id;
+	}
+	
+	/**
 	 * Constructor using identifier and name of the company.
 	 * 
 	 * @param id
@@ -27,8 +37,8 @@ public class Company {
 	 *            Company name.
 	 */
 	public Company(int id, String name) {
-		setId(id);
-		setName(name);
+		this.id = id;
+		this.name = name;
 	}
 
 	
@@ -89,11 +99,7 @@ public class Company {
 	}
 
 	public void setId(int id) {
-		if (id >= 0) {
-			this.id = id;
-		} else {
-			System.err.println("Error in Company : Incorrect Id");
-		}
+		this.id = id;
 	}
 
 	public String getName() {

@@ -1,5 +1,7 @@
 package com.excilys.cdb.persistence;
 
+import java.sql.Connection;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 
@@ -41,4 +43,13 @@ public interface ComputerDao extends CommonDao<Computer> {
 	 * @return Page of computers.
 	 */
 	public Page<Computer> searchByName(Page<Computer> page, String name);
+	
+	
+	/**
+	 * Deletes computers where company_id is equal to the parameter.
+	 * 
+	 * @param id
+	 *            Company identifier.
+	 */
+	public void deleteComputersByCompanyId(int companyId, Connection connection);
 }

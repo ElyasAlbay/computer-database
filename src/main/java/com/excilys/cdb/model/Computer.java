@@ -14,7 +14,7 @@ public class Computer {
 	private LocalDate introduced;
 	private LocalDate discontinued;
 	private Company company;
-
+	
 	
 	/**
 	 * Default class constructor.
@@ -32,7 +32,7 @@ public class Computer {
 	 *            Unique identifier for the computer.
 	 */
 	public Computer(int id) {
-		setId(id);
+		this.id = id;
 
 		this.introduced = null;
 		this.discontinued = null;
@@ -48,8 +48,8 @@ public class Computer {
 	 *            Name of the computer.
 	 */
 	public Computer(int id, String name) {
-		setId(id);
-		setName(name);
+		this.id = id;
+		this.name = name;
 
 		this.introduced = null;
 		this.discontinued = null;
@@ -148,11 +148,7 @@ public class Computer {
 	}
 
 	public void setId(int id) {
-		if (id >= 0) {
-			this.id = id;
-		} else {
-			System.err.println("Error in Computer : Incorrect Id");
-		}
+		this.id = id;
 	}
 
 	public String getName() {
@@ -176,14 +172,7 @@ public class Computer {
 	}
 
 	public void setDiscontinued(LocalDate discontinued) {
-		if (discontinued != null) {
-			this.discontinued = discontinued;
-
-			if (this.getIntroduced() != null && discontinued.compareTo(this.getIntroduced()) < 0) {
-				this.discontinued = null;
-				System.err.println("Error in Computer " + getId() + ": Incorrect Discontinued date");
-			}
-		}
+		this.discontinued = discontinued;
 	}
 
 	public Company getCompany() {

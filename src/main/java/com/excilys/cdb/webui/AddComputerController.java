@@ -42,9 +42,6 @@ public class AddComputerController extends HttpServlet {
 
 	private ComputerService computerService;
 	private CompanyService companyService;
-	private Page<Company> companyPage;
-	private Page<CompanyDto> companyDtoPage;
-	private CompanyDtoMapper companyDtoMapper;
 
 	
 	/**
@@ -53,19 +50,15 @@ public class AddComputerController extends HttpServlet {
 	public AddComputerController() {
 		computerService = ComputerServiceImpl.INSTANCE;
 		companyService = CompanyServiceImpl.INSTANCE;
-
-		companyPage = new Page<>();
-		companyDtoPage = new Page<>();
-		companyDtoMapper = new CompanyDtoMapper();
-
-		companyDtoPage = companyDtoMapper.createDtoPage(companyService.getAll(companyPage));
 	}
 	
 
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		Page<Company> companyPage = new Page<>();
+		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(companyPage));
+		
 		request.setAttribute(ATT_COMPANY_PG, companyDtoPage);
 
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
@@ -74,7 +67,7 @@ public class AddComputerController extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Computer computer = new Computer(0, "placeholder");
+		Computer computer = new Computer();
 		Map<String, String> errors = new HashMap<String, String>();
 
 		// Get form fields

@@ -41,8 +41,6 @@ public class EditComputerController extends HttpServlet {
 	private static final String COMPUTER_ID = "computer_id";
 	private static final String ERRORS = "errors";
 	
-	private Computer computer;
-	private Page<CompanyDto> companyDtoPage;
 	private ComputerService computerService;
 	private CompanyService companyService;
 	
@@ -53,20 +51,19 @@ public class EditComputerController extends HttpServlet {
 	public EditComputerController() {
 		computerService = ComputerServiceImpl.INSTANCE;
 		companyService = CompanyServiceImpl.INSTANCE;
-		computer = null;
-		companyDtoPage = new Page<>();
-		
-		Page<Company> companyPage = new Page<>();
-		CompanyDtoMapper companyDtoMapper = new CompanyDtoMapper();
-
-		companyDtoPage = companyDtoMapper.createDtoPage(companyService.getAll(companyPage));
 	}
 	
 	
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getParameter(COMPUTER_ID) != null) {
-			int id = Integer.parseInt(request.getParameter(COMPUTER_ID));
+		Computer computer = null;
+		Page<Company> companyPage = new Page<>();
+		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(companyPage));
+
+		String computerId = request.getParameter(COMPUTER_ID);
+		
+		if (StringUtils.isNotBlank(computerId)) {
+			int id = Integer.parseInt(computerId);
 			
 			if (id > 0) {
 				computer = computerService.getById(id);
@@ -82,7 +79,7 @@ public class EditComputerController extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		Computer computer = new Computer(0, "placeholder");
+		Computer computer = new Computer();
 		Map<String, String> errors = new HashMap<String, String>();
 
 		// Get form fields

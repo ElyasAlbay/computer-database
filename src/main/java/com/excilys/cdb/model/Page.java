@@ -3,8 +3,6 @@ package com.excilys.cdb.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.excilys.cdb.webui.utility.Field;
-
 public class Page<T> {
 	private int numberOfElements;
 	private int numberOfPages;
@@ -16,7 +14,7 @@ public class Page<T> {
 	/* Default values for fields. */
 	private final static int PAGE_NUMBER = 1;
 	private final static int PAGE_SIZE = 10;
-	private final static String ORDER = Field.COMPUTER_ID;
+	private final static String ORDER = "computer.id";
 
 	
 	/**
@@ -26,11 +24,11 @@ public class Page<T> {
 		this.pageNumber = PAGE_NUMBER;
 		this.pageSize = PAGE_SIZE;
 		this.order = ORDER;
-		
+
 		this.elementList = new ArrayList<>();
 	}
-	
 
+	
 	/* Getters and setters */
 	public int getNumberOfElements() {
 		return this.numberOfElements;
@@ -39,7 +37,7 @@ public class Page<T> {
 	public void setNumberOfElements(int numberOfElements) {
 		this.numberOfElements = numberOfElements;
 	}
-	
+
 	public int getNumberOfPages() {
 		return this.numberOfPages;
 	}
@@ -53,9 +51,7 @@ public class Page<T> {
 	}
 
 	public void setPageNumber(int pageNumber) {
-		if (pageNumber > 0) {
-			this.pageNumber = pageNumber;
-		}
+		this.pageNumber = pageNumber;
 	}
 
 	public int getPageSize() {
@@ -63,21 +59,17 @@ public class Page<T> {
 	}
 
 	public void setPageSize(int pageSize) {
-		if (pageSize == 10 || pageSize == 50 || pageSize <= 100) {
-			this.pageSize = pageSize;
-		}
+		this.pageSize = pageSize;
 	}
-	
+
 	public String getOrder() {
 		return this.order;
 	}
 
 	public void setOrder(String order) {
-		if (Field.contains(order)) {
-			this.order = order;
-		}
+		this.order = order;
 	}
-	
+
 	public List<T> getElementList() {
 		return this.elementList;
 	}

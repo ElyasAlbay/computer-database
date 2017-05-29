@@ -1,22 +1,23 @@
 package com.excilys.cdb.webui.utility.mapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.webui.dto.ComputerDto;
 
-public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{
-
+public class ComputerDtoMapper {
+	
 	
 	/**
-	 * Class constructor.
+	 * Converts a page of computers into a list of computer DTOs.
+	 * 
+	 * @param Page
+	 *            Page of computers to convert.
+	 * @return Page of computer DTOs.
 	 */
-	public ComputerDtoMapper() {
-		
-	}
-
-	
-	@Override
-	public Page<ComputerDto> createDtoPage(Page<Computer> computerPage) {
+	public static Page<ComputerDto> createDtoPage(Page<Computer> computerPage) {
 		Page<ComputerDto> computerDtoPage = new Page<>();
 
 		computerDtoPage.setElementList(createDtoList(computerPage.getElementList()));
@@ -28,10 +29,34 @@ public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{
 
 		return computerDtoPage;
 	}
+	
+	/**
+	 * Converts a list of computers into a list of computer DTOs.
+	 * 
+	 * @param List
+	 *            List of computers to convert.
+	 * @return List of computer DTOs.
+	 */
+	public static List<ComputerDto> createDtoList(List<Computer> list) {
+		List<ComputerDto> dtoList = new ArrayList<>();
 
-	@Override
-	public ComputerDto createDto(Computer computer) {
-		CompanyDtoMapper companyDtoMapper = new CompanyDtoMapper();
+		for (Computer c : list) {
+			if (c != null) {
+				dtoList.add(createDto(c));
+			}
+		}
+
+		return dtoList;
+	}
+
+	/**
+	 * Converts a computer into a computer DTO.
+	 * 
+	 * @param c
+	 *            Computer to convert.
+	 * @return Computer DTO.
+	 */
+	public static ComputerDto createDto(Computer computer) {
 		ComputerDto computerDto = new ComputerDto();
 
 		computerDto.setId(computer.getId());
@@ -43,7 +68,7 @@ public class ComputerDtoMapper extends AbstractDtoMapper<ComputerDto, Computer>{
 			computerDto.setDiscontinued(computer.getDiscontinued().toString());
 		}
 		if (computer.getCompany() != null) {
-			computerDto.setCompany(companyDtoMapper.createDto(computer.getCompany()));
+			computerDto.setCompany(CompanyDtoMapper.createDto(computer.getCompany()));
 		}
 
 		return computerDto;

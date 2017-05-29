@@ -1,5 +1,7 @@
 package com.excilys.cdb.persistence;
 
+import java.sql.Connection;
+
 import com.excilys.cdb.model.Page;
 
 /**
@@ -41,5 +43,5 @@ public interface CommonDao<T> {
 	 * @param id
 	 *            Identifier of the element in the database.
 	 */
-	public void delete(int id);
+	public void delete(int id, Connection connection);
 }

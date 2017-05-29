@@ -1,8 +1,11 @@
-package com.excilys.cdb.persistence;
+package com.excilys.cdb.persistence.utility;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.excilys.cdb.exceptions.DatabaseConnectionException;
 import com.zaxxer.hikari.HikariConfig;
@@ -16,23 +19,24 @@ import com.zaxxer.hikari.HikariDataSource;
 public enum DbConnection {
 	INSTANCE;
 	
+	private static final Logger LOG = LoggerFactory.getLogger(DbConnection.class);
+	
 	private static final String PROP_FILE = "/hikari.properties";
 	private static final String START_TRANSACTION = "START TRANSACTION";
 	private static final String COMMIT = "COMMIT";
 	private static final String ROLLBACK = "ROLLBACK";
 
-	private Connection connection;
-	private HikariConfig config;
+	
 	private HikariDataSource dataSource;
+	private static ThreadLocal<Connection> threadConnection = new ThreadLocal<>();
 
 	
 	/**
 	 * Private constructor for CbConnection class.
 	 */
 	private DbConnection () {
-		connection = null;
+		HikariConfig config = new HikariConfig(PROP_FILE);
 		
-		config = new HikariConfig(PROP_FILE);		
 		dataSource = new HikariDataSource(config);
 	}
 	
@@ -41,25 +45,34 @@ public enum DbConnection {
 	 * Opens connection to the database.
 	 */
 	public Connection openConnection () {		
+		LOG.info("Openning connection...");
+		
+		Connection connection = null;
+		
 		try {
 			connection = dataSource.getConnection();
+			threadConnection.set(connection);
 		} catch (SQLException e) {
+			LOG.error("Connection could not be opened. " + e.getMessage());
 			throw new DatabaseConnectionException("Failed to open connection to the database: " + e.getMessage());
 		}
 		
-		return connection;
+		return threadConnection.get();
 	}
 	
 	/**
 	 * Closes connection to the database.
 	 */
 	public void closeConnection () {
-		if (connection != null) {
+		LOG.info("Closing connection...");
+		if (threadConnection.get() != null) {
 			try {
-				if (!connection.isClosed()) {
-					connection.close();
+				if (!threadConnection.get().isClosed()) {
+					threadConnection.get().close();
+					threadConnection.remove();
 				}
 			} catch (SQLException e) {
+				LOG.error("Connection could not be close. " + e.getMessage());
 				throw new DatabaseConnectionException("Failed to close connection to the database: " + e.getMessage());
 			}
 		}
