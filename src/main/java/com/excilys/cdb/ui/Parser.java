@@ -25,7 +25,9 @@ public class Parser {
 	private CompanyService companyService;
 	private ComputerService computerService;
 	private Display display;
+	private Scanner scanner;
 
+	
 	/**
 	 * Class constructor. Instantiates services.
 	 */
@@ -35,6 +37,7 @@ public class Parser {
 		display = new Display();
 	}
 
+	
 	/**
 	 * Parses a complete input line.
 	 * 
@@ -44,30 +47,29 @@ public class Parser {
 	 * @throws InvalidCommandException
 	 */
 	public boolean parseLine(String line) throws InvalidCommandException {
-		Scanner scanLine;
 		boolean loop = true;
 
 		if (line == null || line.isEmpty()) {
 			return loop;
 		}
 
-		scanLine = new Scanner(line);
-		String token = scanLine.next();
+		scanner = new Scanner(line);
+		String token = scanner.next();
 
 		if (token.equals(Command.LIST.toString())) {
-			parseList(scanLine.next());
+			parseList(scanner.next());
 
 		} else if (token.equals(Command.SHOW.toString())) {
-			parseShow(scanLine.next());
+			parseShow(scanner.next());
 
 		} else if (token.equals(Command.CREATE.toString())) {
 			parseCreate();
 
 		} else if (token.equals(Command.UPDATE.toString())) {
-			parseUpdate(scanLine.next());
+			parseUpdate(scanner.next());
 
 		} else if (token.equals(Command.DELETE.toString())) {
-			parseDelete(scanLine.next());
+			parseDelete(scanner.next());
 
 		} else if (token.equals(Command.HELP.toString())) {
 			display.displayHelp();
@@ -76,11 +78,9 @@ public class Parser {
 			loop = false;
 
 		} else {
-			scanLine.close();
+			scanner.close();
 			throw new InvalidCommandException("Unknown command");
 		}
-
-		scanLine.close();
 
 		return loop;
 	}
@@ -93,7 +93,7 @@ public class Parser {
 	 * @throws InvalidCommandException
 	 */
 	private void parseList(String token) throws InvalidCommandException {
-		Scanner scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in);
 
 		if (token.equals("company")) {
 			Page<Company> companyPage = new Page<>();
@@ -136,7 +136,7 @@ public class Parser {
 	 */
 	private void parseCreate() {
 		Computer computer = new Computer();
-		Scanner scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in);
 
 		getComputerInfo(computer, scanner);
 
@@ -153,7 +153,7 @@ public class Parser {
 	 */
 	private void parseUpdate(String token) {
 		Computer computer = new Computer(Integer.parseInt(token));
-		Scanner scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in);
 
 		getComputerInfo(computer, scanner);
 
@@ -169,9 +169,9 @@ public class Parser {
 	 *            Input id.
 	 */
 	private void parseDelete(String token) {
-		Scanner scanner = new Scanner(System.in);
+		scanner = new Scanner(System.in);
 		System.out.println("Id: ");
-		
+
 		if (token.equals("company")) {
 			companyService.delete(getInt(scanner));
 
@@ -180,7 +180,7 @@ public class Parser {
 
 		} else {
 			scanner.close();
-			throw new InvalidCommandException("Unknown table.");
+			throw new InvalidCommandException("Unknown id.");
 		}
 	}
 
@@ -191,7 +191,7 @@ public class Parser {
 	 *            Computer instance. scanner Scanner instance to get user input.
 	 */
 	public void getComputerInfo(Computer computer, Scanner scanner) {
-		
+
 		System.out.println("Name: ");
 		computer.setName(getString(scanner));
 
@@ -284,7 +284,6 @@ public class Parser {
 		return null;
 	}
 
-	
 	/* Getters and setters */
 	public CompanyService getCompanyService() {
 		return this.companyService;
@@ -308,6 +307,14 @@ public class Parser {
 
 	public void setDisplay(Display display) {
 		this.display = display;
+	}
+	
+	public Scanner getScanner() {
+		return this.scanner;
+	}
+
+	public void setScanner(Scanner scanner) {
+		this.scanner = scanner;
 	}
 
 }

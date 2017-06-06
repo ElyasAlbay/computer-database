@@ -37,18 +37,10 @@ public enum UserInterface {
 			try {
 				parse = parser.parseLine(scanner.nextLine());
 			} catch (InvalidCommandException e) {
+				System.out.println(e.getMessage());
 				parse = false;
 			}
 		}
-	}
-
-	/* Getters and setters */
-	public Parser getParser() {
-		return parser;
-	}
-
-	public void setParser(Parser parser) {
-		this.parser = parser;
 	}
 
 }
