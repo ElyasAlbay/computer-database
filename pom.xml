@@ -38,6 +38,7 @@
 
 
 	<build>
+	<finalName>cdb</finalName>
 		<!-- Plugins -->
 		<plugins>
 			<plugin>

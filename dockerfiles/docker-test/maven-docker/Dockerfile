@@ -4,4 +4,4 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 CMD id
-CMD mvn clean install
+CMD mvn clean package
