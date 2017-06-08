@@ -5,14 +5,14 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.excilys.cdb.exceptions.InvalidCommandException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.CompanyServiceImpl;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ComputerServiceImpl;
 
 /**
  * Parser for user input. This class parses the input and does appropriate
@@ -22,8 +22,11 @@ import com.excilys.cdb.service.ComputerServiceImpl;
  *
  */
 public class Parser {
+	@Autowired
 	private CompanyService companyService;
+	@Autowired
 	private ComputerService computerService;
+	
 	private Display display;
 	private Scanner scanner;
 
@@ -31,10 +34,10 @@ public class Parser {
 	/**
 	 * Class constructor. Instantiates services.
 	 */
-	public Parser() {
-		companyService = CompanyServiceImpl.INSTANCE;
-		computerService = ComputerServiceImpl.INSTANCE;
+	public Parser(ComputerService computerService, CompanyService companyService) {
 		display = new Display();
+		this.computerService = computerService;
+		this.companyService = companyService;
 	}
 
 	
@@ -182,6 +185,8 @@ public class Parser {
 			scanner.close();
 			throw new InvalidCommandException("Unknown id.");
 		}
+		
+		System.out.println("Deletion successful.");
 	}
 
 	/**

@@ -7,12 +7,14 @@ import java.sql.SQLException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.exceptions.DaoException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.persistence.utility.DbConnection;
 import com.excilys.cdb.persistence.utility.mapper.CompanyMapper;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Implementation of CompanyDao, sends requests to the database and gets an
@@ -21,12 +23,13 @@ import com.excilys.cdb.persistence.utility.mapper.CompanyMapper;
  * @author Elyas Albay
  *
  */
-public enum CompanyDaoImpl implements CompanyDao {
-	INSTANCE;
-
-	private DbConnection dbConnection;
+@Repository("companyDao")
+public class CompanyDaoImpl implements CompanyDao {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
-
+	
+	@Autowired
+	private HikariDataSource dataSource;
+	
 	private final static String LIST = "SELECT * FROM company";
 	private final static String GET_BY_ID = "SELECT * FROM company WHERE id=?";
 	private final static String DELETE = "DELETE FROM company WHERE id=?";
@@ -37,7 +40,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 	 * Class constructor. Initiates connection to the database.
 	 */
 	private CompanyDaoImpl() {
-		dbConnection = DbConnection.INSTANCE;
+		
 	}
 
 	
@@ -45,7 +48,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 	public Page<Company> getAll(Page<Company> companyPage) {
 		ResultSet resultSet;
 
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(LIST)) {
 			// Get list of companies in the database
 			resultSet = statement.executeQuery();
@@ -67,7 +70,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 		ResultSet resultSet;
 		Company company = null;
 
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(GET_BY_ID);) {
 			statement.setInt(1, id);
 
@@ -83,8 +86,9 @@ public enum CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public void delete(int id, Connection connection) {
-		try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
+	public void delete(int id) throws DaoException {
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, id);
 
 			statement.executeUpdate();
@@ -102,7 +106,7 @@ public enum CompanyDaoImpl implements CompanyDao {
 	private void getNumberOfElements(Page<Company> companyPage) {
 		ResultSet resultSet;
 
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(NUMBER_OF_ELEMENTS)) {
 
 			resultSet = statement.executeQuery();

@@ -11,6 +11,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
+		<springVersion>4.3.8.RELEASE</springVersion>
 		<compilerVersion>3.6.1</compilerVersion>
 		<compilerConfig>1.8</compilerConfig>
 		<warVersion>3.0.0</warVersion>
@@ -18,7 +19,7 @@
 
 
 		<mysqlVersion>6.0.6</mysqlVersion>
-		<servletVersion>2.5</servletVersion>
+		<servletVersion>3.1.0</servletVersion>
 		<jspVersion>2.1.1</jspVersion>
 		<jstlVersion>1.2</jstlVersion>
 		<hikariVersion>2.6.1</hikariVersion>
@@ -38,7 +39,7 @@
 
 
 	<build>
-	<finalName>cdb</finalName>
+		<finalName>cdb</finalName>
 		<!-- Plugins -->
 		<plugins>
 			<plugin>
@@ -66,6 +67,38 @@
 	</build>
 
 	<dependencies>
+		<!-- Spring dependencies -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-tx</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
+
 		<!-- MySql connector dependency -->
 		<dependency>
 			<groupId>mysql</groupId>
@@ -77,7 +110,7 @@
 		<!-- Web ui and server dependencies -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
+			<artifactId>javax.servlet-api</artifactId>
 			<version>${servletVersion}</version>
 			<scope>provided</scope>
 		</dependency>

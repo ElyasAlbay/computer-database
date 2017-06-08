@@ -1,12 +1,17 @@
 package com.excilys.cdb.service;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ComputerDao;
-import com.excilys.cdb.persistence.ComputerDaoImpl;
-import com.excilys.cdb.persistence.utility.DbConnection;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * This class is the intermediary between user interface and Computer DAO.
@@ -15,21 +20,24 @@ import com.excilys.cdb.persistence.utility.DbConnection;
  * @author Elyas Albay
  *
  */
-public enum ComputerServiceImpl implements ComputerService {
-	INSTANCE;
+@Service("computerService")
+public class ComputerServiceImpl implements ComputerService {
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerServiceImpl.class);
 
-	DbConnection dbConnection;
+	@Autowired
+	HikariDataSource dataSource;
+	@Autowired
 	ComputerDao computerDao;
 
 	
 	/**
 	 * Class constructor. Instantiates DAO.
 	 */
-	private ComputerServiceImpl() {
-		computerDao = ComputerDaoImpl.INSTANCE;
-	}
-	
+	public ComputerServiceImpl() {
 
+	}
+
+	
 	@Override
 	public Page<Computer> getAll(Page<Computer> computerPage) {
 
@@ -62,9 +70,12 @@ public enum ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public void delete(int id) {
-		Connection connection = dbConnection.openConnection();
-		
-		computerDao.delete(id, connection);
-	}
+		try (Connection connection = dataSource.getConnection()) {
 
+			computerDao.delete(id);
+		} catch (SQLException e) {
+			LOG.error("Delete("+id+") SQLException:" + e.getMessage());
+		}
+
+	}
 }

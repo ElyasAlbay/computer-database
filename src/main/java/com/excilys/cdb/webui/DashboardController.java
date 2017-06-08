@@ -2,17 +2,21 @@ package com.excilys.cdb.webui;
 
 import java.io.IOException;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ComputerServiceImpl;
 import com.excilys.cdb.webui.dto.ComputerDto;
 import com.excilys.cdb.webui.utility.Field;
 import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
@@ -25,7 +29,8 @@ import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
  */
 public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 6646407915881068151L;
-	
+	private static final Logger LOG = LoggerFactory.getLogger(DashboardController.class);
+
 	private static final String VIEW = "/WEB-INF/views/dashboard.jsp";
 	private static final String DASHBOARD = "/dashboard";
 	private static final String ATT_COMPUTER_PG = "computerPage";
@@ -35,17 +40,23 @@ public class DashboardController extends HttpServlet {
 	private static final String SEARCH = "search";
 	private static final String SELECTION = "selection";
 
+	@Autowired
 	private ComputerService computerService;
 
-	
 	/**
 	 * Class constructor.
 	 */
 	public DashboardController() {
-		computerService = ComputerServiceImpl.INSTANCE;
+		
 	}
 
-	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		LOG.info("Context init");
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	}
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
@@ -56,20 +67,19 @@ public class DashboardController extends HttpServlet {
 		String pageSize = request.getParameter(PAGE_SIZE);
 		String order = request.getParameter(ORDER);
 		String search = request.getParameter(SEARCH);
-		
-		
+
 		// Get parameters from GET request if exists
 		if (StringUtils.isNotBlank(pageNumber)) {
 			int number = Integer.parseInt(pageNumber);
-			
+
 			if (number > 0) {
 				computerPage.setPageNumber(number);
 			}
 		}
 		if (StringUtils.isNotBlank(pageSize)) {
 			int size = Integer.parseInt(pageSize);
-			
-			if(size == 10 || size == 50 || size == 100) {
+
+			if (size == 10 || size == 50 || size == 100) {
 				computerPage.setPageSize(size);
 			}
 		}
@@ -78,8 +88,7 @@ public class DashboardController extends HttpServlet {
 				computerPage.setOrder(order);
 			}
 		}
-		
-		
+
 		// Creates a new computerDto page from computer page.
 		if (StringUtils.isNotBlank(search)) {
 			request.setAttribute(SEARCH, search);
@@ -87,33 +96,34 @@ public class DashboardController extends HttpServlet {
 		} else {
 			computerDtoPage = ComputerDtoMapper.createDtoPage(computerService.getAll(computerPage));
 		}
-		
+
 		request.setAttribute(ATT_COMPUTER_PG, computerDtoPage);
-		
+
 		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
 	}
 
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// Get computer id selection from POST request
-		String selection = request.getParameter(SELECTION);  
+		String selection = request.getParameter(SELECTION);
 		String pageNumber = request.getParameter(PAGE_NUMBER);
 		String pageSize = request.getParameter(PAGE_SIZE);
 		String linkParams = "";
-		
+
 		// Get page parameters
 		if (StringUtils.isNotBlank(pageNumber)) {
-			linkParams += "?"+PAGE_NUMBER+"="+pageNumber;
+			linkParams += "?" + PAGE_NUMBER + "=" + pageNumber;
 		}
 		if (StringUtils.isNotBlank(pageSize)) {
-			linkParams += "&"+PAGE_SIZE+"="+pageSize;
+			linkParams += "&" + PAGE_SIZE + "=" + pageSize;
 		}
-		 
+
 		// Delete computers from received identifiers
-		for (String id: selection.split(",")) {
-				computerService.delete(Integer.parseInt(id));
+		for (String id : selection.split(",")) {
+			computerService.delete(Integer.parseInt(id));
 		}
-		
+
 		// Redirects to the GET request.
 		response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD + linkParams);
 	}

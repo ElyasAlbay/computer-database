@@ -9,12 +9,14 @@ import java.sql.Types;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.cdb.exceptions.DaoException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.persistence.utility.DbConnection;
 import com.excilys.cdb.persistence.utility.mapper.ComputerMapper;
+import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Implementation of ComputerDao, sends requests to the database and gets an
@@ -23,11 +25,12 @@ import com.excilys.cdb.persistence.utility.mapper.ComputerMapper;
  * @author Elyas Albay
  *
  */
-public enum ComputerDaoImpl implements ComputerDao {
-	INSTANCE;
-
-	private DbConnection dbConnection;
+@Repository("computerDao")
+public class ComputerDaoImpl implements ComputerDao {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
+	
+	@Autowired
+	private HikariDataSource dataSource;
 
 	private final static String LIST = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id ORDER BY ISNULL(%s), %s LIMIT ?, ?";
@@ -48,7 +51,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	 * Class constructor. Initiates connection to the database.
 	 */
 	private ComputerDaoImpl() {
-		dbConnection = DbConnection.INSTANCE;
+		
 	}
 
 	
@@ -57,7 +60,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		ResultSet resultSet;
 		String query = String.format(LIST, computerPage.getOrder(), computerPage.getOrder());
 		
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query);) {
 			// Get list of computers in the database
 			statement.setInt(1, (computerPage.getPageNumber() - 1) * computerPage.getPageSize());
@@ -81,7 +84,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		ResultSet resultSet;
 		Computer computer = null;
 
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(GET_BY_ID)) {
 			statement.setInt(1, id);
 
@@ -100,7 +103,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 		ResultSet resultSet;
 		String query = String.format(SEARCH_BY_NAME, computerPage.getOrder(), computerPage.getOrder());
 		
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(query)) {
 			// Get list of computers in the database
 			statement.setString(1, '%'+name+'%');
@@ -125,7 +128,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	public Computer create(Computer computer) {
 		ResultSet resultSet;
 
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(CREATE, PreparedStatement.RETURN_GENERATED_KEYS);) {
 			statement.setString(1, computer.getName());
 
@@ -164,7 +167,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 
 	@Override
 	public Computer update(Computer computer) {
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(UPDATE)) {
 			statement.setInt(5, computer.getId());
 			statement.setString(1, computer.getName());
@@ -197,8 +200,9 @@ public enum ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public void delete(int id, Connection connection) {
-		try (PreparedStatement statement = connection.prepareStatement(DELETE)) {
+	public void delete(int id) {
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, id);
 
 			statement.executeUpdate();
@@ -210,17 +214,17 @@ public enum ComputerDaoImpl implements ComputerDao {
 	}
 	
 	@Override
-	public void deleteComputersByCompanyId(int id, Connection connection) {
+	public void deleteComputersByCompanyId(int id) throws DaoException {
 		ResultSet resultSet;
 
-		try (PreparedStatement statement = connection.prepareStatement(COMPUTERS_BY_COMPANYID)) {
+		try (Connection connection = dataSource.getConnection();
+				PreparedStatement statement = connection.prepareStatement(COMPUTERS_BY_COMPANYID)) {
 			statement.setInt(1, id);
 
 			resultSet = statement.executeQuery();
 			while (resultSet.next()) {
-				delete(resultSet.getInt("id"), connection);
+				delete(resultSet.getInt("id"));
 			}
-
 		} catch (SQLException e) {
 			LOG.info("ComputerDao ("+id+"): SQLException. " + e.getMessage());
 			throw new DaoException("Computer deletion has failed: " + e.getMessage());
@@ -236,7 +240,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	private void getNumberOfElements(Page<Computer> computerPage) {
 		ResultSet resultSet;
 
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(NUMBER_OF_ELEMENTS)) {
 
 			resultSet = statement.executeQuery();
@@ -267,7 +271,7 @@ public enum ComputerDaoImpl implements ComputerDao {
 	private void getNbSearchElements(Page<Computer> computerPage, String name) {
 		ResultSet resultSet;
 
-		try (Connection connection = dbConnection.openConnection();
+		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(NB_SEARCH_ELEMENTS)) {
 			statement.setString(1, '%'+name+'%');
 			statement.setString(2, '%'+name+'%');

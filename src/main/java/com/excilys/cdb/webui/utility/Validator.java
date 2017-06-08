@@ -6,8 +6,6 @@ import java.time.format.DateTimeFormatter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.excilys.cdb.exceptions.ValidationException;
-import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.CompanyServiceImpl;
 
 /**
  * Validates fields received from post request.
@@ -46,7 +44,7 @@ public class Validator {
 	 * @param introduced
 	 *            Introduced date.
 	 * @throws ValidationException
-	 *             Thrown ValidationException.
+	 *             Thrown exception.
 	 */
 	public static void introducedValidation(String introduced) throws ValidationException {
 
@@ -84,20 +82,16 @@ public class Validator {
 	 * Validates input company id.
 	 * 
 	 * @param companyId
-	 *            COmpany Id.
-	 * @throws ValidationValidationException
-	 *             Thrown ValidationValidationException.
+	 *            Company Id.
+	 * @throws ValidationException
+	 *             Thrown exception.
 	 */
-	public static void companyIdValidation(String companyId) throws ValidationException {
-		CompanyService companyService = CompanyServiceImpl.INSTANCE;
-		
+	public static void companyIdValidation(String companyId) throws ValidationException {		
 		if (StringUtils.isNotBlank(companyId)) {
 			int id = Integer.parseInt(companyId);
 			
 			if (id < 0) {
 				throw new ValidationException("Company Id cannot be negative.");
-			} else if (id != 0 && companyService.getById(id) == null) {
-				throw new ValidationException("This id does not exist in the database." + companyId);
 			}
 		}
 	}

@@ -3,6 +3,8 @@ package com.excilys.cdb.ui;
 import java.util.Scanner;
 
 import com.excilys.cdb.exceptions.InvalidCommandException;
+import com.excilys.cdb.service.CompanyService;
+import com.excilys.cdb.service.ComputerService;
 
 /**
  * Command Line Interface class. Using Singleton pattern.
@@ -10,17 +12,15 @@ import com.excilys.cdb.exceptions.InvalidCommandException;
  * @author Elyas Albay
  *
  */
-public enum UserInterface {
-	INSTANCE;
-
+public class UserInterface {
 	private Parser parser;
 	private Scanner scanner;
 
 	/**
 	 * Private constructor for the User Interface.
 	 */
-	private UserInterface() {
-		parser = new Parser();
+	public UserInterface(ComputerService computerService, CompanyService companyService) {
+		parser = new Parser(computerService, companyService);
 		scanner = new Scanner(System.in);
 	}
 

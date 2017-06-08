@@ -16,18 +16,20 @@ public class Field {
 
 
 	public static boolean contains(String field) {
+		boolean contains = false;
+		
 		if (field.equals(COMPUTER_ID)) {
-			return true;
+			contains = true;
 		} else if (field.equals(COMPUTER_NAME)) {
-			return true;
+			contains =  true;
 		} else if (field.equals(INTRODUCED)) {
-			return true;
+			contains =  true;
 		} else if (field.equals(DISCONTINUED)) {
-			return true;
+			contains =  true;
 		} else if (field.equals(COMPANY_NAME)) {
-			return true;
+			contains =  true;
 		}
 
-		return false;
+		return contains;
 	}
 }

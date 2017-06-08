@@ -12,15 +12,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.service.CompanyService;
-import com.excilys.cdb.service.CompanyServiceImpl;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.service.ComputerServiceImpl;
 import com.excilys.cdb.webui.dto.CompanyDto;
 import com.excilys.cdb.webui.utility.Field;
 import com.excilys.cdb.webui.utility.Validator;
@@ -41,7 +41,9 @@ public class EditComputerController extends HttpServlet {
 	private static final String COMPUTER_ID = "computer_id";
 	private static final String ERRORS = "errors";
 	
+	@Autowired @Qualifier("computerService")
 	private ComputerService computerService;
+	@Autowired @Qualifier("companyService")
 	private CompanyService companyService;
 	
 	
@@ -49,8 +51,7 @@ public class EditComputerController extends HttpServlet {
 	 * Class constructor.
 	 */
 	public EditComputerController() {
-		computerService = ComputerServiceImpl.INSTANCE;
-		companyService = CompanyServiceImpl.INSTANCE;
+
 	}
 	
 	

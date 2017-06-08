@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href=${pageContext.request.contextPath}/css/main.css
+<link href="resources/css/main.css"
 	rel="stylesheet" type="text/css" media="screen" />
-<link href=${pageContext.request.contextPath}/css/bootstrap.min.css
+<link href="resources/css/bootstrap.min.css"
 	rel="stylesheet" type="text/css" media="screen" />
-<link href=${pageContext.request.contextPath}/css/font-awesome.css
+<link href="resources/css/font-awesome.css"
 	rel="stylesheet" type="text/css" media="screen" />
 </head>
 
@@ -64,7 +64,7 @@
 						</th>
 						<!-- Table header for Computer Name -->
 						<th><a id="orderByName" 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=computer.name">
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=computerName">
 							Computer name </a></th>
 						<!-- Table header for Introduced Date -->
 						<th><a id="orderByName" 
@@ -76,7 +76,7 @@
 							Discontinued date</a></th>
 						<!-- Table header for Company -->
 						<th><a id="orderByName" 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=company_name">
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=companyName">
 							Company</a></th>
 
 					</tr>
@@ -104,7 +104,7 @@
 			<ul class="pagination">
 				<c:if test="${computerPage.pageNumber > 1}">
 					<li>
-						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} 
+						<a href=${pageContext.request.contextPath}/dashboard?page_number=1&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} 
 						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 					</a></li>
 				</c:if>
@@ -136,7 +136,7 @@
 
 				<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
 					<li>
-						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber+1}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} 
+						<a href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order} 
 						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 					</a></li>
 				</c:if>
