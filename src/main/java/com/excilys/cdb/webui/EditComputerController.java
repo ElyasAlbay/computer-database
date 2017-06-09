@@ -6,14 +6,17 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.model.Company;
@@ -33,7 +36,8 @@ import com.excilys.cdb.webui.utility.mapper.CompanyDtoMapper;
  */
 public class EditComputerController extends HttpServlet {
 	private static final long serialVersionUID = 8357518801832666376L;
-
+	private static final Logger LOG = LoggerFactory.getLogger(EditComputerController.class);
+	
 	private static final String VIEW = "/WEB-INF/views/editComputer.jsp";
 	private static final String DASHBOARD = "/dashboard";
 	private static final String ATT_COMPUTER = "computer";
@@ -41,9 +45,9 @@ public class EditComputerController extends HttpServlet {
 	private static final String COMPUTER_ID = "computer_id";
 	private static final String ERRORS = "errors";
 	
-	@Autowired @Qualifier("computerService")
+	@Autowired
 	private ComputerService computerService;
-	@Autowired @Qualifier("companyService")
+	@Autowired
 	private CompanyService companyService;
 	
 	
@@ -55,6 +59,13 @@ public class EditComputerController extends HttpServlet {
 	}
 	
 	
+	@Override
+	public void init(ServletConfig config) throws ServletException {
+		LOG.info("Context init");
+		super.init(config);
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
+	}
+
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		Computer computer = null;

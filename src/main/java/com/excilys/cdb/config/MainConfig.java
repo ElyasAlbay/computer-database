@@ -9,6 +9,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -20,6 +21,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableTransactionManagement
+@EnableWebMvc
 @ComponentScan("com.excilys.cdb")
 public class MainConfig extends WebMvcConfigurerAdapter {
 	private static final Logger LOG = LoggerFactory.getLogger(MainConfig.class);
@@ -45,7 +47,7 @@ public class MainConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public PlatformTransactionManager transactionManager() {
-		LOG.info("new TransactionManager");
+		LOG.info("TransactionManager init");
 		return new DataSourceTransactionManager(dataSource());
 	}
 	
@@ -53,7 +55,7 @@ public class MainConfig extends WebMvcConfigurerAdapter {
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		LOG.info("ResourceHandler init");
-		registry.addResourceHandler("resources/css/**").addResourceLocations("resources/css/");
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 
 	@Override

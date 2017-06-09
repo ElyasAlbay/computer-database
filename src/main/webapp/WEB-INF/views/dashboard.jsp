@@ -155,9 +155,9 @@
 				</a>
 			</div>
 	</footer>
-	<script src=${pageContext.request.contextPath}/js/jquery.min.js></script>
-	<script src=${pageContext.request.contextPath}/js/bootstrap.min.js></script>
-	<script src=${pageContext.request.contextPath}/js/dashboard.js></script>
+	<script src=resources/js/jquery.min.js></script>
+	<script src=resources/js/bootstrap.min.js></script>
+	<script src=resources/js/dashboard.js></script>
 
 </body>
 </html>

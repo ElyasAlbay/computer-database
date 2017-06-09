@@ -214,7 +214,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 	
 	@Override
-	public void deleteComputersByCompanyId(int id) throws DaoException {
+	public void deleteComputersByCompanyId(int id) {
 		ResultSet resultSet;
 
 		try (Connection connection = dataSource.getConnection();
@@ -225,6 +225,7 @@ public class ComputerDaoImpl implements ComputerDao {
 			while (resultSet.next()) {
 				delete(resultSet.getInt("id"));
 			}
+			throw new DaoException();
 		} catch (SQLException e) {
 			LOG.info("ComputerDao ("+id+"): SQLException. " + e.getMessage());
 			throw new DaoException("Computer deletion has failed: " + e.getMessage());

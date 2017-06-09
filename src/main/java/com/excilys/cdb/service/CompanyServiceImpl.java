@@ -1,7 +1,10 @@
 package com.excilys.cdb.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.model.Company;
@@ -19,6 +22,8 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 @Service("companyService")
 public class CompanyServiceImpl implements CompanyService {
+	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceImpl.class);
+
 	@Autowired
 	HikariDataSource dataSource;
 	@Autowired
@@ -46,11 +51,13 @@ public class CompanyServiceImpl implements CompanyService {
 
 		return companyDao.getById(id);
 	}
-	
+
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 	public void delete(int id) {
+		LOG.info("Company deletion...");
 		computerDao.deleteComputersByCompanyId(id);
 		companyDao.delete(id);
+		
 	}
 }

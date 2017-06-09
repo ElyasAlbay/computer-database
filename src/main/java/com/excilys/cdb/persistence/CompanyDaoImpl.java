@@ -86,7 +86,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public void delete(int id) throws DaoException {
+	public void delete(int id) {
 		try (Connection connection = dataSource.getConnection();
 				PreparedStatement statement = connection.prepareStatement(DELETE)) {
 			statement.setInt(1, id);
