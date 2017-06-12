@@ -25,7 +25,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author Elyas Albay
  *
  */
-@Repository("computerDao")
+@Repository
 public class ComputerDaoImpl implements ComputerDao {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
 	
@@ -225,7 +225,6 @@ public class ComputerDaoImpl implements ComputerDao {
 			while (resultSet.next()) {
 				delete(resultSet.getInt("id"));
 			}
-			throw new DaoException();
 		} catch (SQLException e) {
 			LOG.info("ComputerDao ("+id+"): SQLException. " + e.getMessage());
 			throw new DaoException("Computer deletion has failed: " + e.getMessage());

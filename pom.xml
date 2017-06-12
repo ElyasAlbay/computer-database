@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.excilys.cdb</groupId>
 	<artifactId>computer-database</artifactId>
-	<version>1.2</version>
+	<version>1.3.RELEASE</version>
 	<packaging>war</packaging>
 
 	<!-- Properties -->
@@ -32,9 +32,10 @@
 
 		<junitVersion>4.12</junitVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
-		<dbunitVersion>2.4.9</dbunitVersion>
+		<dbunitVersion>2.5.0</dbunitVersion>
 		<checkstyleVersion>2.17</checkstyleVersion>
 		<seleniumVersion>3.4.0</seleniumVersion>
+		<springDbunitVersion>1.4.0</springDbunitVersion>
 	</properties>
 
 
@@ -140,6 +141,12 @@
 
 		<!-- Slj4f dependencies -->
 		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4jVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>${logbackVersion}</version>
@@ -176,7 +183,26 @@
 			<version>${seleniumVersion}</version>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${springVersion}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.excilys.ebi.spring-dbunit</groupId>
+			<artifactId>spring-dbunit-test</artifactId>
+			<version>${springDbunitVersion}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+
+
+	<repositories>
+		<repository>
+			<id>excilys-release</id>
+			<url>http://repository.excilys.com/content/repositories/releases</url>
+		</repository>
+	</repositories>
 
 </project>

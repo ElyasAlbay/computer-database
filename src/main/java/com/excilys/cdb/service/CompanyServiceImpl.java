@@ -4,14 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.CompanyDao;
 import com.excilys.cdb.persistence.ComputerDao;
-import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * This class is the intermediary between user interface and Company DAO.
@@ -20,12 +18,10 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author Elyas Albay
  *
  */
-@Service("companyService")
+@Service
 public class CompanyServiceImpl implements CompanyService {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceImpl.class);
-
-	@Autowired
-	HikariDataSource dataSource;
+	
 	@Autowired
 	CompanyDao companyDao;
 	@Autowired
@@ -53,11 +49,11 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	@Transactional
 	public void delete(int id) {
 		LOG.info("Company deletion...");
+		
 		computerDao.deleteComputersByCompanyId(id);
 		companyDao.delete(id);
-		
 	}
 }

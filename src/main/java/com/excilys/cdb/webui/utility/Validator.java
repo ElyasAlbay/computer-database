@@ -73,7 +73,7 @@ public class Validator {
 				throw new ValidationException("Invalid discontinued date format.");
 			} else if (introduced != null
 					&& LocalDate.parse(introduced, formatter).isAfter(LocalDate.parse(discontinued, formatter))) {
-				throw new ValidationException("Discontinued date should not be before introduced date.");
+				throw new ValidationException("Discontinued date cannot be before introduced date.");
 			}
 		}
 	}

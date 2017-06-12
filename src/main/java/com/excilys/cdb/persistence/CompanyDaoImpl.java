@@ -23,7 +23,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author Elyas Albay
  *
  */
-@Repository("companyDao")
+@Repository
 public class CompanyDaoImpl implements CompanyDao {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 	

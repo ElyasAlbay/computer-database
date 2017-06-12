@@ -20,7 +20,7 @@ import com.zaxxer.hikari.HikariDataSource;
  * @author Elyas Albay
  *
  */
-@Service("computerService")
+@Service
 public class ComputerServiceImpl implements ComputerService {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerServiceImpl.class);
 
