@@ -3,38 +3,6 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 	version="3.0">
 
-	<!-- Servlet configuration -->	
-	<servlet>
-		<servlet-name>DashboardController</servlet-name>
-		<servlet-class>com.excilys.cdb.webui.DashboardController</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>DashboardController</servlet-name>
-		<url-pattern>/dashboard</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>AddComputerController</servlet-name>
-		<servlet-class>com.excilys.cdb.webui.AddComputerController</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>AddComputerController</servlet-name>
-		<url-pattern>/addComputer</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>EditComputerController</servlet-name>
-		<servlet-class>com.excilys.cdb.webui.EditComputerController</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>EditComputerController</servlet-name>
-		<url-pattern>/editComputer</url-pattern>
-	</servlet-mapping>
-
-	<!-- Error pages configuration -->
-
-	
-	
 	<!-- JSP configuration -->
 	<jsp-config>
 		<jsp-property-group>

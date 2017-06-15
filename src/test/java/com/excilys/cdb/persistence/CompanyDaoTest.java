@@ -1,7 +1,5 @@
 package com.excilys.cdb.persistence;
 
-import static org.junit.Assert.assertNotNull;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,9 +10,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
 
 import com.excilys.cdb.config.PersistenceConfig;
-import com.excilys.cdb.model.Company;
-import com.excilys.cdb.model.Page;
-import com.excilys.ebi.spring.dbunit.test.DataSet;
 import com.excilys.ebi.spring.dbunit.test.DataSetTestExecutionListener;
 
 @RunWith(SpringJUnit4ClassRunner.class)

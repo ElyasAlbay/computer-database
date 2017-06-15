@@ -6,7 +6,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +15,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.model.Company;
@@ -35,11 +37,13 @@ import com.excilys.cdb.webui.utility.mapper.CompanyDtoMapper;
  * @author Elyas Albay
  *
  */
+@Controller
+@RequestMapping("/addComputer")
 public class AddComputerController extends HttpServlet {
 	private static final long serialVersionUID = 1921946279906681045L;
 	private static final Logger LOG = LoggerFactory.getLogger(AddComputerController.class);
 	
-	private static final String VIEW = "/WEB-INF/views/addComputer.jsp";
+	private static final String VIEW = "/WEB-INF/views/addComputer";
 	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String DASHBOARD = "/dashboard";
 	private static final String ERRORS = "errors";
@@ -48,32 +52,18 @@ public class AddComputerController extends HttpServlet {
 	private ComputerService computerService;
 	@Autowired
 	private CompanyService companyService;
-
 	
-	/**
-	 * Class constructor.
-	 */
-	public AddComputerController() {
 
-	}
-	
-	
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		LOG.info("Context init");
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-	}
-
-	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	public ModelAndView get() {
+		LOG.info("Get request.");
+		ModelAndView modelView = new ModelAndView(VIEW);
 		Page<Company> companyPage = new Page<>();
 		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(companyPage));
 		
-		request.setAttribute(ATT_COMPANY_PG, companyDtoPage);
+		modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
 
-		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+		// Redirects to dashboard page with new parameters
+		return modelView;
 	}
 
 	@Override
@@ -123,7 +113,7 @@ public class AddComputerController extends HttpServlet {
 			if (StringUtils.isNotBlank(discontinued)) {
 				computer.setDiscontinued(LocalDate.parse(discontinued, formatter));
 			}
-			if (StringUtils.isNotBlank(companyId)) {
+			if (StringUtils.isNotBlank(companyId) && !companyId.equals("0")) {
 				computer.setCompany(companyService.getById(Integer.parseInt(companyId)));
 			}
 			

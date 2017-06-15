@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -26,6 +27,13 @@ public class PersistenceConfig {
 		HikariConfig config = new HikariConfig(PROP_FILE);
 
 		return new HikariDataSource(config);
+	}
+	
+	@Bean
+	public JdbcTemplate jdbcTemplate(HikariDataSource dataSource) {
+		LOG.info("JdbcTemplate init");
+		
+		return new JdbcTemplate(dataSource());
 	}
 	
 	@Bean

@@ -1,18 +1,19 @@
 package com.excilys.cdb.webui;
 
-import java.io.IOException;
+import java.util.Map;
 
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -27,12 +28,14 @@ import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
  * @author Elyas Albay
  *
  */
+@Controller
+@RequestMapping("/dashboard")
 public class DashboardController extends HttpServlet {
 	private static final long serialVersionUID = 6646407915881068151L;
 	private static final Logger LOG = LoggerFactory.getLogger(DashboardController.class);
 
-	private static final String VIEW = "/WEB-INF/views/dashboard.jsp";
-	private static final String DASHBOARD = "/dashboard";
+	private static final String VIEW = "/WEB-INF/views/dashboard";
+	private static final String DASHBOARD = "redirect:/dashboard";
 	private static final String ATT_COMPUTER_PG = "computerPage";
 	private static final String PAGE_NUMBER = "page_number";
 	private static final String PAGE_SIZE = "page_size";
@@ -43,32 +46,21 @@ public class DashboardController extends HttpServlet {
 	@Autowired
 	private ComputerService computerService;
 
-	/**
-	 * Class constructor.
-	 */
-	public DashboardController() {
-		
-	}
 
-	@Override
-	public void init(ServletConfig config) throws ServletException {
-		LOG.info("Context init");
-		super.init(config);
-		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
-	}
-
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@GetMapping
+	public ModelAndView get(@RequestParam Map<String, String> params) {
+		LOG.info("Get request.");
+		ModelAndView modelView = new ModelAndView(VIEW);
 		Page<Computer> computerPage = new Page<>();
 		Page<ComputerDto> computerDtoPage = new Page<>();
 
-		String pageNumber = request.getParameter(PAGE_NUMBER);
-		String pageSize = request.getParameter(PAGE_SIZE);
-		String order = request.getParameter(ORDER);
-		String search = request.getParameter(SEARCH);
-
+		
 		// Get parameters from GET request if exists
+		String pageNumber = params.get(PAGE_NUMBER);
+		String pageSize = params.get(PAGE_SIZE);
+		String order = params.get(ORDER);
+		String search = params.get(SEARCH);
+		
 		if (StringUtils.isNotBlank(pageNumber)) {
 			int number = Integer.parseInt(pageNumber);
 
@@ -91,24 +83,26 @@ public class DashboardController extends HttpServlet {
 
 		// Creates a new computerDto page from computer page.
 		if (StringUtils.isNotBlank(search)) {
-			request.setAttribute(SEARCH, search);
+			modelView.addObject(SEARCH, search);
 			computerDtoPage = ComputerDtoMapper.createDtoPage(computerService.searchByName(computerPage, search));
 		} else {
 			computerDtoPage = ComputerDtoMapper.createDtoPage(computerService.getAll(computerPage));
 		}
-
-		request.setAttribute(ATT_COMPUTER_PG, computerDtoPage);
-
-		this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+		
+		modelView.addObject(ATT_COMPUTER_PG, computerDtoPage);
+		
+		// Redirects to dashboard page with new parameters
+		return modelView;
 	}
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	@PostMapping
+	public String doPost(@RequestParam Map<String, String> params) {
+		LOG.info("Post request.");
+		
 		// Get computer id selection from POST request
-		String selection = request.getParameter(SELECTION);
-		String pageNumber = request.getParameter(PAGE_NUMBER);
-		String pageSize = request.getParameter(PAGE_SIZE);
+		String selection = params.get(SELECTION);
+		String pageNumber = params.get(PAGE_NUMBER);
+		String pageSize = params.get(PAGE_SIZE);
 		String linkParams = "";
 
 		// Get page parameters
@@ -125,6 +119,6 @@ public class DashboardController extends HttpServlet {
 		}
 
 		// Redirects to the GET request.
-		response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD + linkParams);
+		return DASHBOARD+linkParams;
 	}
 }

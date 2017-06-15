@@ -3,20 +3,23 @@ package com.excilys.cdb.persistence;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import com.excilys.cdb.exceptions.DaoException;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.utility.mapper.ComputerMapper;
-import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * Implementation of ComputerDao, sends requests to the database and gets an
@@ -28,9 +31,9 @@ import com.zaxxer.hikari.HikariDataSource;
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
 	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
-	
+
 	@Autowired
-	private HikariDataSource dataSource;
+	private JdbcTemplate jdbcTemplate;
 
 	private final static String LIST = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id ORDER BY ISNULL(%s), %s LIMIT ?, ?";
@@ -38,259 +41,202 @@ public class ComputerDaoImpl implements ComputerDao {
 			+ "ON computer.company_id = company.id WHERE computer.id=?";
 	private final static String SEARCH_BY_NAME = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY ISNULL(%s), %s LIMIT ?, ?";
-	private final static String CREATE = "INSERT INTO computer SET name=?, introduced=?, discontinued =?, company_id =?";
-	private final static String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued =?, company_id =? WHERE id=?";
+	private final static String CREATE = "INSERT INTO computer SET name=?, introduced=?, discontinued=?, company_id=?";
+	private final static String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
 	private final static String DELETE = "DELETE FROM computer WHERE id=?";
 	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM computer";
 	private final static String NB_SEARCH_ELEMENTS = "SELECT count(*) FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
-	private final static String COMPUTERS_BY_COMPANYID = "SELECT * FROM computer WHERE company_id=?";
+	private final static String DELETE_COMPUTERS_BY_COMPANYID = "DELETE FROM computer WHERE company_id=?";
 
-	
 	/**
 	 * Class constructor. Initiates connection to the database.
 	 */
-	private ComputerDaoImpl() {
-		
+	public ComputerDaoImpl() {
+
 	}
 
-	
 	@Override
-	public Page<Computer> getAll(Page<Computer> computerPage) {		
-		ResultSet resultSet;
-		String query = String.format(LIST, computerPage.getOrder(), computerPage.getOrder());
+	public Page<Computer> getAll(Page<Computer> computerPage) {
+		LOG.info("getAll request.");
 		
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(query);) {
-			// Get list of computers in the database
-			statement.setInt(1, (computerPage.getPageNumber() - 1) * computerPage.getPageSize());
-			statement.setInt(2, computerPage.getPageSize());
-
-			resultSet = statement.executeQuery();
-			computerPage.setElementList(ComputerMapper.getComputers(resultSet));
-
-			// Get count of computers in the database 
-			getNumberOfElements(computerPage);
-		} catch (SQLException e) {
-			LOG.error("ComputerDao getAll(): SQLException. " + e.getMessage());
-			throw new DaoException("Computer list request has failed: " + e.getMessage());
+		String order;
+		if (computerPage.getOrder().equals("computerName")) {
+			order = "computer.name";
+		} else if (computerPage.getOrder().equals("companyName")) {
+			order = "company.name";
+		} else {
+			order = computerPage.getOrder();
 		}
+		
+		String query = String.format(LIST, order, order);
+		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
+		List<Computer> computerList = this.jdbcTemplate.query(query, new ComputerMapper(), pageOffset,
+				computerPage.getPageSize());
+
+		computerPage.setElementList(computerList);
+		getNumberOfElements(computerPage);
 
 		return computerPage;
 	}
 
 	@Override
 	public Computer getById(int id) {
-		ResultSet resultSet;
-		Computer computer = null;
+		LOG.info("getById request.");
 
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(GET_BY_ID)) {
-			statement.setInt(1, id);
-
-			resultSet = statement.executeQuery();
-			computer = ComputerMapper.getComputer(resultSet);
-		} catch (SQLException e) {
-			LOG.error("ComputerDao getById("+id+"): SQLException. " + e.getMessage());
-			throw new DaoException("Computer get by id request has failed: " + e.getMessage());
-		}
+		Computer computer = this.jdbcTemplate.queryForObject(GET_BY_ID, new Object[] { id }, new ComputerMapper());
 
 		return computer;
 	}
 
 	@Override
 	public Page<Computer> searchByName(Page<Computer> computerPage, String name) {
-		ResultSet resultSet;
-		String query = String.format(SEARCH_BY_NAME, computerPage.getOrder(), computerPage.getOrder());
+		LOG.info("searchByName request.");
 		
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(query)) {
-			// Get list of computers in the database
-			statement.setString(1, '%'+name+'%');
-			statement.setString(2, '%'+name+'%');
-			statement.setInt(3, (computerPage.getPageNumber() - 1) * computerPage.getPageSize());
-			statement.setInt(4, computerPage.getPageSize());
-
-			resultSet = statement.executeQuery();
-			computerPage.setElementList(ComputerMapper.getComputers(resultSet));
-
-			// Gets count of computers in the database 
-			getNbSearchElements(computerPage, name);
-		} catch (SQLException e) {
-			LOG.error("ComputerDao searchByName("+name+"): SQLException. " + e.getMessage());
-			throw new DaoException("Computer search has failed: " + e.getMessage());
+		String order;
+		if (computerPage.getOrder().equals("computerName")) {
+			order = "computer.name";
+		} else if (computerPage.getOrder().equals("companyName")) {
+			order = "company.name";
+		} else {
+			order = computerPage.getOrder();
 		}
-		
+
+		String query = String.format(SEARCH_BY_NAME, order, order);
+		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
+		List<Computer> computerList = this.jdbcTemplate.query(query, new ComputerMapper(), name + '%', name + '%',
+				pageOffset, computerPage.getPageSize());
+
+		computerPage.setElementList(computerList);
+		getNbSearchElements(computerPage, name);
+
 		return computerPage;
 	}
-	
+
 	@Override
 	public Computer create(Computer computer) {
-		ResultSet resultSet;
+		LOG.info("create request.");
 
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(CREATE, PreparedStatement.RETURN_GENERATED_KEYS);) {
-			statement.setString(1, computer.getName());
+		KeyHolder holder = new GeneratedKeyHolder();
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			// Create prepared statement in which query variables are set
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
+				statement.setString(1, computer.getName());
 
-			if (computer.getIntroduced() != null) {
-				statement.setDate(2, Date.valueOf(computer.getIntroduced()));
-			} else {
-				statement.setNull(2, Types.TIMESTAMP);
+				if (computer.getIntroduced() != null) {
+					statement.setDate(2, Date.valueOf(computer.getIntroduced()));
+				} else {
+					statement.setNull(2, Types.TIMESTAMP);
+				}
+				if (computer.getDiscontinued() != null) {
+					statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
+				} else {
+					statement.setNull(3, Types.TIMESTAMP);
+				}
+				if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
+					statement.setLong(4, computer.getCompany().getId());
+				} else {
+					statement.setNull(4, Types.BIGINT);
+				}
+				return statement;
 			}
+		}, holder);
 
-			if (computer.getDiscontinued() != null) {
-				statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
-			} else {
-				statement.setNull(3, Types.TIMESTAMP);
-			}
-			
-			if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
-				statement.setLong(4, computer.getCompany().getId());
-			} else {
-				statement.setNull(4, Types.BIGINT);
-			}
+		computer.setId(holder.getKey().intValue());
 
-			statement.executeUpdate();
-			resultSet = statement.getGeneratedKeys();
-
-			// Get returned generated key from statement
-			if (resultSet.next() && resultSet.getInt(1) > 0) {
-				computer.setId(resultSet.getInt(1));
-			}
-		} catch (SQLException e) {
-			LOG.error("ComputerDao create(): SQLException. " + e.getMessage());
-			throw new DaoException("Computer creation has failed: " + e.getMessage());
-		}
-		
 		return computer;
 	}
 
 	@Override
 	public Computer update(Computer computer) {
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(UPDATE)) {
-			statement.setInt(5, computer.getId());
-			statement.setString(1, computer.getName());
+		LOG.info("update request.");
 
-			if (computer.getIntroduced() != null) {
-				statement.setDate(2, Date.valueOf(computer.getIntroduced()));
-			} else {
-				statement.setNull(2, java.sql.Types.TIMESTAMP);
-			}
+		jdbcTemplate.update(new PreparedStatementCreator() {
+			// Create prepared statement in which query variables are set
+			@Override
+			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
+				PreparedStatement statement = connection.prepareStatement(UPDATE);
+				statement.setInt(5, computer.getId());
+				statement.setString(1, computer.getName());
 
-			if (computer.getDiscontinued() != null) {
-				statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
-			} else {
-				statement.setNull(3, java.sql.Types.TIMESTAMP);
+				if (computer.getIntroduced() != null) {
+					statement.setDate(2, Date.valueOf(computer.getIntroduced()));
+				} else {
+					statement.setNull(2, Types.TIMESTAMP);
+				}
+				if (computer.getDiscontinued() != null) {
+					statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
+				} else {
+					statement.setNull(3, Types.TIMESTAMP);
+				}
+				if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
+					statement.setLong(4, computer.getCompany().getId());
+				} else {
+					statement.setNull(4, Types.BIGINT);
+				}
+				return statement;
 			}
-			
-			if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
-				statement.setLong(4, computer.getCompany().getId());
-			} else {
-				statement.setNull(4, Types.BIGINT);
-			}
-			
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			LOG.error("ComputerDao update(): SQLException. " + e.getMessage());
-			throw new DaoException("Computer update has failed: " + e.getMessage());
-		}
+		});
 
 		return computer;
 	}
 
 	@Override
 	public void delete(int id) {
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(DELETE)) {
-			statement.setInt(1, id);
+		LOG.info("delete request.");
 
-			statement.executeUpdate();
-		} catch (SQLException e) {
-			LOG.error("ComputerDao update("+id+"): SQLException. " + e.getMessage());
-			throw new DaoException("Computer deletion has failed: " + e.getMessage());
-		}
-
+		this.jdbcTemplate.update(DELETE, id);
 	}
-	
+
 	@Override
-	public void deleteComputersByCompanyId(int id) {
-		ResultSet resultSet;
+	public void deleteComputersByCompanyId(int companyId) {
+		LOG.info("deleteComputerByCompanyId request.");
 
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(COMPUTERS_BY_COMPANYID)) {
-			statement.setInt(1, id);
-
-			resultSet = statement.executeQuery();
-			while (resultSet.next()) {
-				delete(resultSet.getInt("id"));
-			}
-		} catch (SQLException e) {
-			LOG.info("ComputerDao ("+id+"): SQLException. " + e.getMessage());
-			throw new DaoException("Computer deletion has failed: " + e.getMessage());
-		}
+		this.jdbcTemplate.update(DELETE_COMPUTERS_BY_COMPANYID, companyId);
 	}
-	
-	
+
 	/**
 	 * Gets number of computers in the database.
 	 * 
 	 * @return Count of computers.
 	 */
 	private void getNumberOfElements(Page<Computer> computerPage) {
-		ResultSet resultSet;
+		LOG.info("getNumberOfElements request.");
 
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(NUMBER_OF_ELEMENTS)) {
+		computerPage.setNumberOfElements(this.jdbcTemplate.queryForObject(NUMBER_OF_ELEMENTS, Integer.class));
 
-			resultSet = statement.executeQuery();
+		// Set number of pages and rounds to the upper integer if the division
+		// has a remainder
+		int numberOfPages = computerPage.getNumberOfElements() / computerPage.getPageSize();
 
-			if (resultSet.next()) {
-				computerPage.setNumberOfElements(resultSet.getInt(1));
-				int numberOfPages = computerPage.getNumberOfElements()/computerPage.getPageSize();
-
-				// Rounds to the upper integer if the division has a remainder
-				if((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
-					computerPage.setNumberOfPages(numberOfPages+1);
-				} else {
-					computerPage.setNumberOfPages(numberOfPages);
-				}
-			}
-		} catch (SQLException e) {
-			LOG.error("ComputerDao getNumberOfElements(): SQLException. " + e.getMessage());
-			throw new DaoException("Count of computers has failed: " + e.getMessage());
+		if ((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
+			computerPage.setNumberOfPages(numberOfPages + 1);
+		} else {
+			computerPage.setNumberOfPages(numberOfPages);
 		}
-
 	}
-	
+
 	/**
 	 * Gets number of computers in search query.
 	 * 
 	 * @return Count of computers.
 	 */
 	private void getNbSearchElements(Page<Computer> computerPage, String name) {
-		ResultSet resultSet;
+		LOG.info("getNbSearchElements request.");
 
-		try (Connection connection = dataSource.getConnection();
-				PreparedStatement statement = connection.prepareStatement(NB_SEARCH_ELEMENTS)) {
-			statement.setString(1, '%'+name+'%');
-			statement.setString(2, '%'+name+'%');
-			resultSet = statement.executeQuery();
+		computerPage.setNumberOfElements(
+				this.jdbcTemplate.queryForObject(NB_SEARCH_ELEMENTS, Integer.class, name + '%', name + '%'));
 
-			if (resultSet.next()) {
-				computerPage.setNumberOfElements(resultSet.getInt(1));
-				int numberOfPages = computerPage.getNumberOfElements()/computerPage.getPageSize();
+		// set number of elements in search query and rounds to the upper
+		// integer if the division has a remainder
+		int numberOfPages = computerPage.getNumberOfElements() / computerPage.getPageSize();
 
-				// Rounds to the upper integer if the division has a remainder
-				if((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
-					computerPage.setNumberOfPages(numberOfPages+1);
-				} else {
-					computerPage.setNumberOfPages(numberOfPages);
-				}
-			}
-		} catch (SQLException e) {
-			LOG.error("ComputerDao getNbSearchElements("+name+"): SQLException. " + e.getMessage());
-			throw new DaoException("Count of search query has failed: " + e.getMessage());
-		} 
+		if ((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
+			computerPage.setNumberOfPages(numberOfPages + 1);
+		} else {
+			computerPage.setNumberOfPages(numberOfPages);
+		}
 	}
 }

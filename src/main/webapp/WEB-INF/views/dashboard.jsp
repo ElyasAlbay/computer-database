@@ -64,19 +64,19 @@
 						</th>
 						<!-- Table header for Computer Name -->
 						<th><a id="orderByName" 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=computerName">
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=computerName">
 							Computer name </a></th>
 						<!-- Table header for Introduced Date -->
 						<th><a id="orderByName" 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=introduced">
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=introduced">
 							Introduced date</a></th>
 						<!-- Table header for Discontinued Date -->
 						<th><a id="orderByName" 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=discontinued">
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=discontinued">
 							Discontinued date</a></th>
 						<!-- Table header for Company -->
 						<th><a id="orderByName" 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-1}&page_size=${computerPage.pageSize}&search=${search}&order=companyName">
+							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=companyName">
 							Company</a></th>
 
 					</tr>

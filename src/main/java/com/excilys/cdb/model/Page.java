@@ -67,13 +67,7 @@ public class Page<T> {
 	}
 
 	public void setOrder(String order) {
-		if (order.equals("computerName")) {
-			this.order = "computer.name";
-		} else if (order.equals("companyName")) {
-			this.order = "company.name";
-		} else {
-			this.order = order;
-		}
+		this.order = order;
 	}
 
 	public List<T> getElementList() {

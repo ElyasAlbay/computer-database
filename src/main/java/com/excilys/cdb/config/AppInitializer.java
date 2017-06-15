@@ -1,21 +1,26 @@
 package com.excilys.cdb.config;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import org.springframework.web.WebApplicationInitializer;
-import org.springframework.web.context.ContextLoaderListener;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+public class AppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
-public class AppInitializer implements WebApplicationInitializer {
+	@Override
+	protected Class<?>[] getRootConfigClasses() {
+		
+		return new Class[] { AppConfig.class };
+	}
 
-    @Override
-    public void onStartup(ServletContext context) throws ServletException {
-        AnnotationConfigWebApplicationContext rootContext = new AnnotationConfigWebApplicationContext();
-        rootContext.register(ServiceConfig.class);
-        rootContext.register(PersistenceConfig.class);
-        rootContext.register(WebConfig.class);
+	@Override
+	protected Class<?>[] getServletConfigClasses() {
+		
+		return new Class[] { WebConfig.class };
+	}
 
-        context.addListener(new ContextLoaderListener(rootContext));
-    }
+	@Override
+	protected String[] getServletMappings() {
+		
+		return new String[] { "/" };
+	}
+
+
 }
