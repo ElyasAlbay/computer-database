@@ -4,11 +4,11 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href=resources/css/bootstrap.min.css
+<link href="resources/css/bootstrap.min.css"
 	rel="stylesheet" type="text/css" media="screen" />
-<link href=resources/css/font-awesome.css
+<link href="resources/css/font-awesome.css"
 	rel="stylesheet" type="text/css" media="screen" />
-<link href=resources/css/main.css
+<link href="resources/css/main.css"
 	rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
@@ -27,26 +27,23 @@
 					<h1>Edit Computer</h1>
 
 					<form action="editComputer" method="POST">
-						<input type="hidden" value="${computer.id}" id="computerId" name="computerId" />
+						<input type="hidden" value="${computer.id}" id="id" name="id" />
 						<fieldset>
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName" value="${computer.name}">
-							</div> ${errors["computerName"]}
-							
+								<label for="name">Computer name</label> <input
+									type="text" class="form-control" id="name"
+									name="name" value="${computer.name}"> ${errors["name"]}
+							</div>
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" value="${computer.introduced}">
-							</div> ${errors["introduced"]}
-							
+									name="introduced" value="${computer.introduced}">  ${errors["introduced"]}
+							</div>
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									name="discontinued" value="${computer.discontinued}">
-							</div> ${errors["discontinued"]}
-							
+									name="discontinued" value="${computer.discontinued}"> ${errors["discontinued"]}
+							</div> 
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
 									class="form-control" id="companyId" name="companyId">
@@ -57,7 +54,7 @@
 										</c:if> >${company.name}</option>
 									</c:forEach>
 								</select>
-							</div> ${errors["companyId"]}
+							</div>
 						</fieldset>
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">

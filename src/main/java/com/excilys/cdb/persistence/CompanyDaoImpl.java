@@ -31,14 +31,6 @@ public class CompanyDaoImpl implements CompanyDao {
 	private final static String DELETE = "DELETE FROM company WHERE id=?";
 	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM company";
 
-	
-	/**
-	 * Class constructor. Initiates connection to the database.
-	 */
-	public CompanyDaoImpl() {
-
-	}
-	
 
 	@Override
 	public Page<Company> getAll(Page<Company> companyPage) {

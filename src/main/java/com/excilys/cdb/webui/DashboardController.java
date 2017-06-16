@@ -2,8 +2,6 @@ package com.excilys.cdb.webui;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,21 +15,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
+import com.excilys.cdb.model.dto.ComputerDto;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.webui.dto.ComputerDto;
 import com.excilys.cdb.webui.utility.Field;
 import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
 
 /**
- * Servlet for dashboard web page.
+ * Controller for dashboard web page.
  * 
  * @author Elyas Albay
  *
  */
 @Controller
 @RequestMapping("/dashboard")
-public class DashboardController extends HttpServlet {
-	private static final long serialVersionUID = 6646407915881068151L;
+public class DashboardController {
 	private static final Logger LOG = LoggerFactory.getLogger(DashboardController.class);
 
 	private static final String VIEW = "/WEB-INF/views/dashboard";
@@ -76,7 +73,7 @@ public class DashboardController extends HttpServlet {
 			}
 		}
 		if (StringUtils.isNotBlank(order)) {
-			if (Field.contains(order)) {
+			if (Field.isValidOrder(order)) {
 				computerPage.setOrder(order);
 			}
 		}

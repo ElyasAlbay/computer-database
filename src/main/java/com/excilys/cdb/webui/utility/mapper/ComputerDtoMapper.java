@@ -1,11 +1,15 @@
 package com.excilys.cdb.webui.utility.mapper;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.webui.dto.ComputerDto;
+import com.excilys.cdb.model.dto.ComputerDto;
 
 public class ComputerDtoMapper {
 	
@@ -13,7 +17,7 @@ public class ComputerDtoMapper {
 	/**
 	 * Converts a page of computers into a list of computer DTOs.
 	 * 
-	 * @param Page
+	 * @param computerPage
 	 *            Page of computers to convert.
 	 * @return Page of computer DTOs.
 	 */
@@ -33,7 +37,7 @@ public class ComputerDtoMapper {
 	/**
 	 * Converts a list of computers into a list of computer DTOs.
 	 * 
-	 * @param List
+	 * @param list
 	 *            List of computers to convert.
 	 * @return List of computer DTOs.
 	 */
@@ -52,7 +56,7 @@ public class ComputerDtoMapper {
 	/**
 	 * Converts a computer into a computer DTO.
 	 * 
-	 * @param c
+	 * @param computer
 	 *            Computer to convert.
 	 * @return Computer DTO.
 	 */
@@ -72,6 +76,32 @@ public class ComputerDtoMapper {
 		}
 
 		return computerDto;
+	}
+	
+	/**
+	 * Converts a computer Dto into a computer.
+	 * 
+	 * @param computerDto
+	 *            ComputerDto to convert.
+	 * @return Computer.
+	 */
+	public static Computer createObject(ComputerDto computerDto) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		Computer computer = new Computer();
+
+		computer.setId(computerDto.getId());
+		computer.setName(computerDto.getName());
+		if (StringUtils.isNotBlank(computerDto.getIntroduced())) {
+			computer.setIntroduced(LocalDate.parse(computerDto.getIntroduced().toString(), formatter));
+		}
+		if (StringUtils.isNotBlank(computerDto.getDiscontinued())) {
+			computer.setDiscontinued(LocalDate.parse(computer.getDiscontinued().toString(), formatter));
+		}
+		if (computerDto.getCompany() != null) {
+			computer.setCompany(CompanyDtoMapper.createObject(computerDto.getCompany()));
+		}
+
+		return computer;
 	}
 
 }

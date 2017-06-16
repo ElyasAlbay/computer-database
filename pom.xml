@@ -17,7 +17,6 @@
 		<warVersion>3.0.0</warVersion>
 		<tomcatVersion>2.2</tomcatVersion>
 
-
 		<mysqlVersion>6.0.6</mysqlVersion>
 		<servletVersion>3.1.0</servletVersion>
 		<jspVersion>2.1.1</jspVersion>
@@ -25,10 +24,11 @@
 		<hikariVersion>2.6.1</hikariVersion>
 
 		<commonLangVersion>3.0</commonLangVersion>
+		<javaxValidationVersion>1.1.0.Final</javaxValidationVersion>
+		<hibernateValidatorVersion>4.1.0.Final</hibernateValidatorVersion>
 
 		<slf4jVersion>1.7.25</slf4jVersion>
 		<logbackVersion>1.0.7</logbackVersion>
-
 
 		<junitVersion>4.12</junitVersion>
 		<mockitoVersion>1.10.19</mockitoVersion>
@@ -138,13 +138,18 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>${commonLangVersion}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernateValidatorVersion}</version>
+		</dependency>
+
 
 		<!-- Slj4f dependencies -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4jVersion}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>

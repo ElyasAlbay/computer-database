@@ -5,14 +5,14 @@ import java.util.List;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.webui.dto.CompanyDto;
+import com.excilys.cdb.model.dto.CompanyDto;
 
 public class CompanyDtoMapper {	
 	
 	/**
 	 * Converts a page of companies into a list of company DTOs.
 	 * 
-	 * @param Page
+	 * @param companyPage
 	 *            Page of companies to convert.
 	 * @return Page of company DTOs.
 	 */
@@ -32,7 +32,7 @@ public class CompanyDtoMapper {
 	/**
 	 * Converts a list of companies into a list of company DTOs.
 	 * 
-	 * @param List
+	 * @param list
 	 *            List of companies to convert.
 	 * @return List of company DTOs.
 	 */
@@ -51,7 +51,7 @@ public class CompanyDtoMapper {
 	/**
 	 * Converts a company into a company DTO.
 	 * 
-	 * @param c
+	 * @param company
 	 *            Company to convert.
 	 * @return Company DTO.
 	 */
@@ -62,5 +62,21 @@ public class CompanyDtoMapper {
 		companyDto.setName(company.getName());
 
 		return companyDto;
+	}
+	
+	/**
+	 * Converts a company DTO into a company.
+	 * 
+	 * @param companyDto
+	 *            Company Dto to convert.
+	 * @return Company.
+	 */
+	public static Company createObject(CompanyDto companyDto) {
+		Company company = new Company();
+
+		company.setId(companyDto.getId());
+		company.setName(companyDto.getName());
+
+		return company;
 	}
 }

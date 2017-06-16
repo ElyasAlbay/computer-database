@@ -4,11 +4,11 @@
 <title>Computer Database</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href=resources/css/main.css
+<link href="resources/css/main.css"
 	rel="stylesheet" type="text/css" media="screen" />
-<link href=resources/css/bootstrap.min.css
+<link href="resources/css/bootstrap.min.css"
 	rel="stylesheet" type="text/css" media="screen" />
-<link href=resources/css/font-awesome.css
+<link href="resources/css/font-awesome.css"
 	rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
@@ -28,22 +28,22 @@
 						<fieldset>
 
 							<div class="form-group">
-								<label for="computerName">Computer name</label> <input
-									type="text" class="form-control" id="computerName"
-									name="computerName" placeholder="Computer name">
-							</div>${errors["computerName"]}
+								<label for="name">Computer name</label> <input
+									type="text" class="form-control" id="name"
+									name="name" placeholder="Computer name"> ${errors["name"]}
+							</div>
 
 							<div class="form-group">
 								<label for="introduced">Introduced date</label> <input
 									type="date" class="form-control" id="introduced"
-									name="introduced" placeholder="Introduced date">
-							</div>${errors["introduced"]}
+									name="introduced" placeholder="Introduced date"> ${errors["introduced"]}
+							</div>
 
 							<div class="form-group">
 								<label for="discontinued">Discontinued date</label> <input
 									type="date" class="form-control" id="discontinued"
-									name="discontinued" placeholder="Discontinued date">
-							</div>${errors["discontinued"]}
+									name="discontinued" placeholder="Discontinued date"> ${errors["discontinued"]}
+							</div>
 
 							<div class="form-group">
 								<label for="companyId">Company</label> <select
@@ -53,7 +53,7 @@
 										<option value="${company.id}">${company.name}</option>
 									</c:forEach>
 								</select>
-							</div>${errors["companyId"]}
+							</div>
 
 						</fieldset>
 						<div class="actions pull-right">

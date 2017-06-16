@@ -49,26 +49,12 @@ public class ComputerDaoImpl implements ComputerDao {
 			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 	private final static String DELETE_COMPUTERS_BY_COMPANYID = "DELETE FROM computer WHERE company_id=?";
 
-	/**
-	 * Class constructor. Initiates connection to the database.
-	 */
-	public ComputerDaoImpl() {
-
-	}
 
 	@Override
 	public Page<Computer> getAll(Page<Computer> computerPage) {
 		LOG.info("getAll request.");
 		
-		String order;
-		if (computerPage.getOrder().equals("computerName")) {
-			order = "computer.name";
-		} else if (computerPage.getOrder().equals("companyName")) {
-			order = "company.name";
-		} else {
-			order = computerPage.getOrder();
-		}
-		
+		String order = computerPage.getOrder().equals("name") ? "computer.name" : computerPage.getOrder();
 		String query = String.format(LIST, order, order);
 		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
 		List<Computer> computerList = this.jdbcTemplate.query(query, new ComputerMapper(), pageOffset,
@@ -93,15 +79,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	public Page<Computer> searchByName(Page<Computer> computerPage, String name) {
 		LOG.info("searchByName request.");
 		
-		String order;
-		if (computerPage.getOrder().equals("computerName")) {
-			order = "computer.name";
-		} else if (computerPage.getOrder().equals("companyName")) {
-			order = "company.name";
-		} else {
-			order = computerPage.getOrder();
-		}
-
+		String order = computerPage.getOrder().equals("name") ? "computer.name" : computerPage.getOrder();
 		String query = String.format(SEARCH_BY_NAME, order, order);
 		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
 		List<Computer> computerList = this.jdbcTemplate.query(query, new ComputerMapper(), name + '%', name + '%',

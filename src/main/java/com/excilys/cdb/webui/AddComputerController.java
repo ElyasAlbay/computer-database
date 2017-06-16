@@ -1,132 +1,120 @@
 package com.excilys.cdb.webui;
 
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.cdb.exceptions.ValidationException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
+import com.excilys.cdb.model.dto.CompanyDto;
+import com.excilys.cdb.model.dto.ComputerDto;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
-import com.excilys.cdb.webui.dto.CompanyDto;
 import com.excilys.cdb.webui.utility.Field;
-import com.excilys.cdb.webui.utility.Validator;
 import com.excilys.cdb.webui.utility.mapper.CompanyDtoMapper;
+import com.excilys.cdb.webui.utility.mapper.ComputerDtoMapper;
 
 /**
- * Servlet for addComputer web page.
+ * Controller for addComputer web page.
  * 
  * @author Elyas Albay
  *
  */
 @Controller
 @RequestMapping("/addComputer")
-public class AddComputerController extends HttpServlet {
-	private static final long serialVersionUID = 1921946279906681045L;
+public class AddComputerController {
 	private static final Logger LOG = LoggerFactory.getLogger(AddComputerController.class);
-	
+
 	private static final String VIEW = "/WEB-INF/views/addComputer";
-	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String DASHBOARD = "/dashboard";
+	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String ERRORS = "errors";
 
 	@Autowired
 	private ComputerService computerService;
 	@Autowired
 	private CompanyService companyService;
-	
 
+	@GetMapping
 	public ModelAndView get() {
 		LOG.info("Get request.");
+
 		ModelAndView modelView = new ModelAndView(VIEW);
-		Page<Company> companyPage = new Page<>();
-		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(companyPage));
-		
+		//Page<Company> companyPage = new Page<>();
+		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));
+
 		modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
 
 		// Redirects to dashboard page with new parameters
 		return modelView;
 	}
 
-	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		Computer computer = new Computer();
-		Map<String, String> errors = new HashMap<String, String>();
+	@PostMapping
+	public ModelAndView doPost(@RequestParam Map<String, String> params, @Valid @ModelAttribute ComputerDto computerDto,
+			BindingResult bindingResult) {
+		LOG.info("Post request.");
+
+		ModelAndView modelView = new ModelAndView(VIEW);
 
 		// Get form fields
-		String name = request.getParameter(Field.COMPUTER_NAME);
-		String introduced = request.getParameter(Field.INTRODUCED);
-		String discontinued = request.getParameter(Field.DISCONTINUED);
-		String companyId = request.getParameter(Field.COMPANY_ID);
+		String name = params.get(Field.COMPUTER_NAME);
+		String introduced = params.get(Field.INTRODUCED);
+		String discontinued = params.get(Field.DISCONTINUED);
+		String companyId = params.get(Field.COMPANY_ID);
 
 		
-		// Validate fields
-		try {
-			Validator.nameValidation(name);
-		} catch (ValidationException e) {
-			errors.put(Field.COMPUTER_NAME, e.getMessage());
-		}
-		try {
-			Validator.introducedValidation(introduced);
-		} catch (ValidationException e) {
-			errors.put(Field.INTRODUCED, e.getMessage());
-		}
-		try {
-			Validator.discontinuedValidation(discontinued, introduced);
-		} catch (ValidationException e) {
-			errors.put(Field.DISCONTINUED, e.getMessage());
-		}
-		try {
-			Validator.companyIdValidation(companyId);
-		} catch (ValidationException e) {
-			errors.put(Field.COMPANY_ID, e.getMessage());
-		}
-
-		
-		// Sends query if no errors, display error messages else
-		if (errors.isEmpty()) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		// Sends query if no errors and redirects to dashboard, display error
+		// messages else
+		if (!bindingResult.hasErrors()) {
+			LOG.info("Valid request, adding computer to database.");
 			
-			computer.setName(name);
-			if (StringUtils.isNotBlank(introduced)) {
-				computer.setIntroduced(LocalDate.parse(introduced, formatter));
-			}
-			if (StringUtils.isNotBlank(discontinued)) {
-				computer.setDiscontinued(LocalDate.parse(discontinued, formatter));
-			}
+			computerDto.setName(name);
+			computerDto.setIntroduced(introduced);
+			computerDto.setDiscontinued(discontinued);
 			if (StringUtils.isNotBlank(companyId) && !companyId.equals("0")) {
-				computer.setCompany(companyService.getById(Integer.parseInt(companyId)));
+				CompanyDto companyDto = new CompanyDto();
+				CompanyDtoMapper.createDto(companyService.getById(Integer.parseInt(companyId)));
+				computerDto.setCompany(companyDto);
 			}
 			
+			Computer computer = ComputerDtoMapper.createObject(computerDto);
 			computerService.create(computer);
-			
-			// Redirects to the dashboard once add query is completed
-			response.sendRedirect(this.getServletContext().getContextPath() + DASHBOARD);
+
+			modelView.setViewName("redirect:" + DASHBOARD);
 		} else {
-			request.setAttribute(ERRORS, errors);
+			LOG.info("Invalid request, displaying error messages.");
+			Map<String, String> errors = new HashMap<String, String>();
+			Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));			
 			
-			// Displays jsp with errors
-			this.getServletContext().getRequestDispatcher(VIEW).forward(request, response);
+			if (bindingResult.getFieldError(Field.COMPUTER_NAME) != null)
+				errors.put(Field.COMPUTER_NAME, bindingResult.getFieldError(Field.COMPUTER_NAME).getDefaultMessage());
+			if (bindingResult.getFieldError(Field.INTRODUCED) != null)
+				errors.put(Field.INTRODUCED, bindingResult.getFieldError(Field.INTRODUCED).getDefaultMessage());
+			if (bindingResult.getFieldError(Field.DISCONTINUED) != null)
+				errors.put(Field.DISCONTINUED, bindingResult.getFieldError(Field.DISCONTINUED).getDefaultMessage());
+			if (bindingResult.getFieldError(Field.COMPUTER_ID) != null)
+				errors.put(Field.COMPANY_ID, bindingResult.getFieldError(Field.COMPANY_ID).getDefaultMessage());
+			
+			modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
+			modelView.addObject(ERRORS, errors);
 		}
+
+		return modelView;
 	}
-	
+
 }
