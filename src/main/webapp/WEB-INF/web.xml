@@ -6,18 +6,15 @@
 	<!-- Errors pages configuration -->
 	<error-page>
 		<error-code>403</error-code>
-		<location>/errors</location>
+		<location>/WEB-INF/views/403.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>404</error-code>
-		<location>/errors</location>
+		<location>/WEB-INF/views/404.jsp</location>
 	</error-page>
 	<error-page>
 		<error-code>500</error-code>
-		<location>/errors</location>
-	</error-page>
-	<error-page>
-		<location>/errors</location>
+		<location>/WEB-INF/views/500.jsp</location>
 	</error-page>
 
 	<!-- JSP configuration -->

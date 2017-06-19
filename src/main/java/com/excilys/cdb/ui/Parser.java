@@ -201,11 +201,17 @@ public class Parser {
 		computer.setName(getString(scanner));
 
 		System.out.println("Date introduced (yyyy-mm-dd or null): ");
-		computer.setIntroduced(getDate(scanner));
+		LocalDate introduced = getDate(scanner);
+		computer.setIntroduced(introduced);
 
 		System.out.println("Date discontinued (yyyy-mm-dd or null): ");
-		computer.setDiscontinued(getDate(scanner));
-
+		LocalDate discontinued = getDate(scanner);
+		if (introduced != null && discontinued.isBefore(introduced)) {
+			throw new InvalidCommandException("Discontinued date cannot be anterior to date of introduction.");
+		} else {
+			computer.setDiscontinued(discontinued);
+		}
+		
 		Company company;
 		System.out.println("Company id: ");
 		company = companyService.getById(getInt(scanner));

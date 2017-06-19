@@ -1,6 +1,5 @@
 package com.excilys.cdb.persistence;
 
-import com.excilys.cdb.exceptions.DaoException;
 import com.excilys.cdb.model.Page;
 
 /**
@@ -42,5 +41,5 @@ public interface CommonDao<T> {
 	 * @param id
 	 *            Identifier of the element in the database.
 	 */
-	public void delete(int id) throws DaoException ;
+	public void delete(int id) ;
 }

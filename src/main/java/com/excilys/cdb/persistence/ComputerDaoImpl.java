@@ -1,18 +1,13 @@
 package com.excilys.cdb.persistence;
 
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Types;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCreator;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
@@ -34,6 +29,8 @@ public class ComputerDaoImpl implements ComputerDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
+	@Autowired
+	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	private final static String LIST = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id ORDER BY ISNULL(%s), %s LIMIT ?, ?";
@@ -41,19 +38,18 @@ public class ComputerDaoImpl implements ComputerDao {
 			+ "ON computer.company_id = company.id WHERE computer.id=?";
 	private final static String SEARCH_BY_NAME = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY ISNULL(%s), %s LIMIT ?, ?";
-	private final static String CREATE = "INSERT INTO computer SET name=?, introduced=?, discontinued=?, company_id=?";
-	private final static String UPDATE = "UPDATE computer SET name=?, introduced=?, discontinued=?, company_id=? WHERE id=?";
+	private final static String CREATE = "INSERT INTO computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId";
+	private final static String UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId WHERE id=:id";
 	private final static String DELETE = "DELETE FROM computer WHERE id=?";
 	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM computer";
 	private final static String NB_SEARCH_ELEMENTS = "SELECT count(*) FROM computer LEFT JOIN company "
 			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
 	private final static String DELETE_COMPUTERS_BY_COMPANYID = "DELETE FROM computer WHERE company_id=?";
 
-
 	@Override
 	public Page<Computer> getAll(Page<Computer> computerPage) {
 		LOG.info("getAll request.");
-		
+
 		String order = computerPage.getOrder().equals("name") ? "computer.name" : computerPage.getOrder();
 		String query = String.format(LIST, order, order);
 		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
@@ -70,7 +66,12 @@ public class ComputerDaoImpl implements ComputerDao {
 	public Computer getById(int id) {
 		LOG.info("getById request.");
 
-		Computer computer = this.jdbcTemplate.queryForObject(GET_BY_ID, new Object[] { id }, new ComputerMapper());
+		Computer computer = null;
+		List<Computer> computerList = this.jdbcTemplate.query(GET_BY_ID, new ComputerMapper(), id);
+
+		if (!computerList.isEmpty()) {
+			computer = computerList.get(0);
+		}
 
 		return computer;
 	}
@@ -78,7 +79,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Page<Computer> searchByName(Page<Computer> computerPage, String name) {
 		LOG.info("searchByName request.");
-		
+
 		String order = computerPage.getOrder().equals("name") ? "computer.name" : computerPage.getOrder();
 		String query = String.format(SEARCH_BY_NAME, order, order);
 		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
@@ -96,32 +97,8 @@ public class ComputerDaoImpl implements ComputerDao {
 		LOG.info("create request.");
 
 		KeyHolder holder = new GeneratedKeyHolder();
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			// Create prepared statement in which query variables are set
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				PreparedStatement statement = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
-				statement.setString(1, computer.getName());
 
-				if (computer.getIntroduced() != null) {
-					statement.setDate(2, Date.valueOf(computer.getIntroduced()));
-				} else {
-					statement.setNull(2, Types.TIMESTAMP);
-				}
-				if (computer.getDiscontinued() != null) {
-					statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
-				} else {
-					statement.setNull(3, Types.TIMESTAMP);
-				}
-				if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
-					statement.setLong(4, computer.getCompany().getId());
-				} else {
-					statement.setNull(4, Types.BIGINT);
-				}
-				return statement;
-			}
-		}, holder);
-
+		namedParameterJdbcTemplate.update(CREATE, initParameters(computer), holder);
 		computer.setId(holder.getKey().intValue());
 
 		return computer;
@@ -131,32 +108,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	public Computer update(Computer computer) {
 		LOG.info("update request.");
 
-		jdbcTemplate.update(new PreparedStatementCreator() {
-			// Create prepared statement in which query variables are set
-			@Override
-			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
-				PreparedStatement statement = connection.prepareStatement(UPDATE);
-				statement.setInt(5, computer.getId());
-				statement.setString(1, computer.getName());
-
-				if (computer.getIntroduced() != null) {
-					statement.setDate(2, Date.valueOf(computer.getIntroduced()));
-				} else {
-					statement.setNull(2, Types.TIMESTAMP);
-				}
-				if (computer.getDiscontinued() != null) {
-					statement.setDate(3, Date.valueOf(computer.getDiscontinued()));
-				} else {
-					statement.setNull(3, Types.TIMESTAMP);
-				}
-				if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
-					statement.setLong(4, computer.getCompany().getId());
-				} else {
-					statement.setNull(4, Types.BIGINT);
-				}
-				return statement;
-			}
-		});
+		namedParameterJdbcTemplate.update(UPDATE, initParameters(computer).addValue("id", computer.getId()));
 
 		return computer;
 	}
@@ -216,5 +168,28 @@ public class ComputerDaoImpl implements ComputerDao {
 		} else {
 			computerPage.setNumberOfPages(numberOfPages);
 		}
+	}
+
+	/**
+	 * 
+	 * @param computer
+	 *            Computer which value to add in map.
+	 * @return Map of parameters.
+	 */
+	private MapSqlParameterSource initParameters(Computer computer) {
+		LOG.info("Init MapSqlParameterSource.");
+
+		MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+		paramsMap.addValue("name", computer.getName());
+		paramsMap.addValue("introduced", computer.getIntroduced());
+		paramsMap.addValue("discontinued", computer.getDiscontinued());
+		if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
+			paramsMap.addValue("companyId", computer.getCompany().getId());
+		} else {
+			paramsMap.addValue("companyId", null);
+		}
+
+		return paramsMap;
 	}
 }

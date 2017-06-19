@@ -38,7 +38,6 @@ public class UserInterface {
 				parse = parser.parseLine(scanner.nextLine());
 			} catch (InvalidCommandException e) {
 				System.out.println(e.getMessage());
-				parse = false;
 			}
 		}
 	}

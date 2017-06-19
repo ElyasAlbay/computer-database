@@ -12,7 +12,6 @@ public class Main {
 		AnnotationConfigApplicationContext appContext = new AnnotationConfigApplicationContext();
 		appContext.register(AppConfig.class);
 		appContext.refresh();
-		appContext.scan("com.excilys.cdb");
 		
 		UserInterface instance = new UserInterface(appContext.getBean(ComputerService.class), appContext.getBean(CompanyService.class));
 		instance.getUserInput();

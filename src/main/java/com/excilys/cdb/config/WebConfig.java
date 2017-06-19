@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.excilys.cdb.webui")
+@Import(ServiceConfig.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 	private static final Logger LOG = LoggerFactory.getLogger(WebConfig.class);
 
@@ -40,8 +42,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public MessageSource messageSource() {
+		LOG.info("Message source init");
+		
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-		messageSource.setBasename("/resources/messages/messages");
+		messageSource.setBasename("/WEB-INF/i18n/lang");
 		messageSource.setDefaultEncoding("UTF-8");
 		
 		return messageSource;
@@ -49,6 +53,8 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public LocaleResolver localeResolver() {
+		LOG.info("LocaleResolver init");
+		
 		final CookieLocaleResolver localeResolver = new CookieLocaleResolver();
 		localeResolver.setDefaultLocale(new Locale("en"));
 		
@@ -71,8 +77,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
+		LOG.info("Interceptors init");
 		
+		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
 		interceptor.setParamName("locale");
 		registry.addInterceptor(interceptor);
 	}

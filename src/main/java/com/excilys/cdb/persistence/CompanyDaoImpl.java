@@ -47,7 +47,12 @@ public class CompanyDaoImpl implements CompanyDao {
 	public Company getById(int id) {
 		LOG.info("getById request.");
 
-		Company company = this.jdbcTemplate.queryForObject(GET_BY_ID, new Object[] { id }, new CompanyMapper());
+		Company company = null;
+		List<Company> companyList = this.jdbcTemplate.query(GET_BY_ID, new CompanyMapper(), id);
+		
+		if (!companyList.isEmpty()) {
+			company = companyList.get(0);
+		}
 
 		return company;
 	}

@@ -47,6 +47,7 @@ public class DashboardController {
 	@GetMapping
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		LOG.info("Get request.");
+		
 		ModelAndView modelView = new ModelAndView(VIEW);
 		Page<Computer> computerPage = new Page<>();
 		Page<ComputerDto> computerDtoPage = new Page<>();

@@ -1,4 +1,3 @@
-<%@ taglib tagdir="/WEB-INF/resources/tags" prefix="page"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <%@ tag language="java" pageEncoding="UTF-8"%>
@@ -15,21 +14,22 @@
 
 	StringBuilder sb = new StringBuilder("dashboard?");
 
-	sb.append("page_size=").append(size).append("&amp;");
-	sb.append("order=").append(computerPage.getOrder()).append("&amp;");
 	if (search != null && !search.trim().isEmpty()) {
 		sb.append("search=").append(search).append("&amp;");
 	}
+	sb.append("order=").append(computerPage.getOrder()).append("&amp;");
+	sb.append("page_size=").append(size).append("&amp;");
 	sb.append("page_number=");
 
 	String before = sb.toString();
 %>
 
+
 <ul class="pagination">
 
-	<c:if test="${omputerPage.pageNumber >1}">
+	<c:if test="${computerPage.pageNumber > 1}">
 		<li><a href="<%= before %>1" aria-label="Previous"> <span
-				aria-hidden="true">&laquo;</span>>&lsaquo;&lsaquo;
+				aria-hidden="true">&laquo;</span>
 		</a></li>
 	</c:if>
 
@@ -38,7 +38,6 @@
 			<c:forEach var="i" begin="1" end="5">
 				<li><a href="<%= before %>${i}">${i}</a></li>
 			</c:forEach>
-
 		</c:when>
 		
 		<c:when test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
@@ -57,8 +56,8 @@
 	</c:choose>
 
 	<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
-		<li><a href="<%= before %>${computerPage.numberOfPages}">&rsaquo;
+		<li><a href="<%= before %>${computerPage.numberOfPages}" aria-label="Next">&raquo;
 		</a></li>
 	</c:if>
-
+	
 </ul>

@@ -16,15 +16,13 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> 
-			<spring:message	code="label.navbar" />
-			</a>
-			<a class="navbar-brand pull-right" href=${pageContext.request.contextPath}/dashboard?page_number=1&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}&locale=en>
-			en
-			</a>
-			<a class="navbar-brand pull-right" href=${pageContext.request.contextPath}/dashboard?page_number=1&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}&locale=fr>
-			fr
-			</a>
+			<a class="navbar-brand" href="dashboard"> <spring:message
+					code="label.navbar" />
+			</a> <a class="navbar-brand pull-right"
+				href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}&locale=en>
+				en </a> <a class="navbar-brand pull-right"
+				href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}&locale=fr>
+				fr </a>
 		</div>
 	</header>
 
@@ -52,7 +50,8 @@
 							code="label.addButton" /></a> <a class="btn btn-default"
 						id="editComputer" href="#"
 						onclick="$.fn.toggleEditMode('<spring:message code="label.editButton"/>', '<spring:message code="label.viewButton"/>');">
-						<spring:message	code="label.editButton" /></a>
+						<spring:message code="label.editButton" />
+					</a>
 				</div>
 			</div>
 		</div>
@@ -71,27 +70,28 @@
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected" onclick="$.fn.deleteSelected();"> <i
-									class="fa fa-trash-o fa-lg"></i>
+								id="deleteSelected"
+								onclick="$.fn.deleteSelected('<spring:message code="label.deleteConfirm"/>');">
+									<i class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
 						<!-- Table header for Computer Name -->
-						<th><a id="orderByName"
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=name">
-								<spring:message code="label.computerName" />
+						<th><a 
+							href="<tags:link computerPage="${computerPage}" search="${search}" pageOrder="name"/>">
+								<spring:message code="label.computerName" />	
 						</a></th>
 						<!-- Table header for Introduced Date -->
-						<th><a id="orderByName"
+						<th><a 
 							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=introduced">
 								<spring:message code="label.introduced" />
 						</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a id="orderByName"
+						<th><a 
 							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=discontinued">
 								<spring:message code="label.discontinued" />
 						</a></th>
 						<!-- Table header for Company -->
-						<th><a id="orderByName"
+						<th><a 
 							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=company.name">
 								<spring:message code="label.company" />
 						</a></th>
@@ -119,47 +119,7 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<ul class="pagination">
-				<c:if test="${computerPage.pageNumber > 1}">
-					<li><a
-						href=${pageContext.request.contextPath}/dashboard?page_number=1&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}
-						aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-					</a></li>
-				</c:if>
-
-				<c:choose>
-					<c:when test="${computerPage.pageNumber < 4}">
-						<c:forEach var="i" begin="1" end="5">
-							<li><a
-								href=${pageContext.request.contextPath}/dashboard?page_number=${i}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}>${i}</a>
-							</li>
-						</c:forEach>
-					</c:when>
-					<c:when
-						test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
-						<c:forEach var="i" begin="1" end="5">
-							<li><a
-								href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages-5+i}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}>${computerPage.numberOfPages-5+i}</a>
-							</li>
-						</c:forEach>
-					</c:when>
-					<c:otherwise>
-						<c:forEach var="i" begin="1" end="5">
-							<li><a
-								href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber-3+i}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}>${computerPage.pageNumber-3+i}</a>
-							</li>
-						</c:forEach>
-					</c:otherwise>
-				</c:choose>
-
-				<c:if test="${computerPage.pageNumber < computerPage.numberOfPages}">
-					<li><a
-						href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.numberOfPages}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}
-						aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-					</a></li>
-				</c:if>
-			</ul>
-
+			<tags:pagination computerPage="${computerPage}" search="${search}"/>
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<a
@@ -173,6 +133,7 @@
 					<button type="button" class="btn btn-default">100</button>
 				</a>
 			</div>
+		</div>
 	</footer>
 	<script src=resources/js/jquery.min.js></script>
 	<script src=resources/js/bootstrap.min.js></script>
