@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
+<title><spring:message code="label.title"/></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
 <link href="resources/css/main.css"
@@ -14,8 +14,7 @@
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> Application - Computer
-				Database </a>
+			<a class="navbar-brand" href="dashboard"> <spring:message code="label.navbar"/> </a>
 		</div>
 	</header>
 
@@ -28,25 +27,25 @@
 						<fieldset>
 
 							<div class="form-group">
-								<label for="name">Computer name</label> <input
+								<label for="name"><spring:message code="label.computerName"/></label> <input
 									type="text" class="form-control" id="name"
-									name="name" placeholder="Computer name"> ${errors["name"]}
+									name="name" placeholder="<spring:message code="label.computerName"/>"> ${errors["name"]}
 							</div>
 
 							<div class="form-group">
-								<label for="introduced">Introduced date</label> <input
+								<label for="introduced"><spring:message code="label.introduced"/></label> <input
 									type="date" class="form-control" id="introduced"
 									name="introduced" placeholder="Introduced date"> ${errors["introduced"]}
 							</div>
 
 							<div class="form-group">
-								<label for="discontinued">Discontinued date</label> <input
+								<label for="discontinued"><spring:message code="label.discontinued"/></label> <input
 									type="date" class="form-control" id="discontinued"
 									name="discontinued" placeholder="Discontinued date"> ${errors["discontinued"]}
 							</div>
 
 							<div class="form-group">
-								<label for="companyId">Company</label> <select
+								<label for="companyId"><spring:message code="label.company"/></label> <select
 									class="form-control" id="companyId" name="companyId">
 									<option value="0">--</option>
 									<c:forEach items="${companyPage.elementList}" var="company">

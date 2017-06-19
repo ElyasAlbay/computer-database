@@ -44,14 +44,14 @@ $(function() {
 // Function toggleEditMode
 (function ( $ ) {
 
-    $.fn.toggleEditMode = function() {
+    $.fn.toggleEditMode = function(labelEdit, labelView) {
         if($(".editMode").is(":visible")) {
             $(".editMode").hide();
-            $("#editComputer").text("Edit");
+            $("#editComputer").text(labelEdit);
         }
         else {
             $(".editMode").show();
-            $("#editComputer").text("View");
+            $("#editComputer").text(labelView);
         }
         return this;
     };
