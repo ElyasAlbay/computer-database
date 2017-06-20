@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
  */
 public class CompanyDto {
 	@Min(0)
-	private int id;
+	private long id;
 	
 	@NotNull
 	@Size(min=2, max=30)
@@ -28,14 +28,12 @@ public class CompanyDto {
 	
 
 	/* Getters and setters */
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
-		if (id >= 0) {
-			this.id = id;
-		}
+	public void setId(long id) {
+		this.id = id;
 	}
 
 	public String getName() {

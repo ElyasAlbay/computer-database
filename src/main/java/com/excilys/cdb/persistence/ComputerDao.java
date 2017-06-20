@@ -49,5 +49,5 @@ public interface ComputerDao extends CommonDao<Computer> {
 	 * @param id
 	 *            Company identifier.
 	 */
-	public void deleteComputersByCompanyId(int companyId);
+	public void deleteComputersByCompanyId(long companyId);
 }

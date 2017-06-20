@@ -1,7 +1,5 @@
 package com.excilys.cdb.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +18,6 @@ import com.excilys.cdb.persistence.ComputerDao;
  */
 @Service
 public class CompanyServiceImpl implements CompanyService {
-	private static final Logger LOG = LoggerFactory.getLogger(CompanyServiceImpl.class);
-	
 	@Autowired
 	CompanyDao companyDao;
 	@Autowired
@@ -32,7 +28,7 @@ public class CompanyServiceImpl implements CompanyService {
 	 * Class constructor.
 	 */
 	public CompanyServiceImpl() {
-
+		
 	}
 	
 
@@ -43,16 +39,15 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public Company getById(int id) {
+	public Company getById(long id) {
 
 		return companyDao.getById(id);
 	}
 
 	@Override
 	@Transactional
-	public void delete(int id) {
-		LOG.info("Company deletion...");
-		
+	public void delete(long id) {
+
 		computerDao.deleteComputersByCompanyId(id);
 		companyDao.delete(id);
 	}

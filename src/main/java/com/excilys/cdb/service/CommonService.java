@@ -28,7 +28,7 @@ public interface CommonService<T> {
 	 *            Identifier of the element in the database.
 	 * @return Instance of element.
 	 */
-	public T getById(int id);
+	public T getById(long id);
 
 	/**
 	 * Calls corresponding method of DAO instance to delete an element by its id in
@@ -37,5 +37,5 @@ public interface CommonService<T> {
 	 * @param id
 	 *            Identifier of the element in the database.
 	 */
-	public void delete(int id);
+	public void delete(long id);
 }

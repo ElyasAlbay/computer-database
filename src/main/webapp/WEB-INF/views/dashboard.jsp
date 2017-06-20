@@ -19,9 +19,9 @@
 			<a class="navbar-brand" href="dashboard"> <spring:message
 					code="label.navbar" />
 			</a> <a class="navbar-brand pull-right"
-				href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}&locale=en>
+				href="<tags:link computerPage="${computerPage}" search="${search}" pageNumber="1"/>&locale=en">
 				en </a> <a class="navbar-brand pull-right"
-				href=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=${computerPage.order}&locale=fr>
+				href="<tags:link computerPage="${computerPage}" search="${search}"/>&locale=fr">
 				fr </a>
 		</div>
 	</header>
@@ -34,7 +34,7 @@
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm"
-						action=${pageContext.request.contextPath}/dashboard?page_size=${computerPage.pageSize}&search=${search}
+						action=<tags:link computerPage="${computerPage}" search="${search}" pageNumber="1"/>
 						method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
@@ -57,7 +57,7 @@
 		</div>
 
 		<form id="deleteForm"
-			action=${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}
+			action=<tags:link computerPage="${computerPage}" search="${search}"/>
 			method="POST">
 			<input type="hidden" name="selection" value="">
 		</form>
@@ -76,23 +76,23 @@
 							</a>
 						</span></th>
 						<!-- Table header for Computer Name -->
-						<th><a 
-							href="<tags:link computerPage="${computerPage}" search="${search}" pageOrder="name"/>">
-								<spring:message code="label.computerName" />	
+						<th><a
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="name"/>>
+								<spring:message code="label.computerName" />
 						</a></th>
 						<!-- Table header for Introduced Date -->
-						<th><a 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=introduced">
+						<th><a
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="introduced"/>>
 								<spring:message code="label.introduced" />
 						</a></th>
 						<!-- Table header for Discontinued Date -->
-						<th><a 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=discontinued">
+						<th><a
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="discontinued"/>>
 								<spring:message code="label.discontinued" />
 						</a></th>
 						<!-- Table header for Company -->
-						<th><a 
-							href="${pageContext.request.contextPath}/dashboard?page_number=${computerPage.pageNumber}&page_size=${computerPage.pageSize}&search=${search}&order=company.name">
+						<th><a
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="company.name"/>>
 								<spring:message code="label.company" />
 						</a></th>
 
@@ -119,17 +119,17 @@
 
 	<footer class="navbar-fixed-bottom">
 		<div class="container text-center">
-			<tags:pagination computerPage="${computerPage}" search="${search}"/>
+			<tags:pagination computerPage="${computerPage}" search="${search}" />
 
 			<div class="btn-group btn-group-sm pull-right" role="group">
 				<a
-					href=${pageContext.request.contextPath}/dashboard?page_size=10&search=${search}&order=${computerPage.order}>
+					href=<tags:link computerPage="${computerPage}" search="${search}" pageSize="10" pageNumber="1"/>>
 					<button type="button" class="btn btn-default">10</button>
 				</a> <a
-					href=${pageContext.request.contextPath}/dashboard?page_size=50&search=${search}&order=${computerPage.order}>
+					href=<tags:link computerPage="${computerPage}" search="${search}" pageSize="50" pageNumber="1"/>>
 					<button type="button" class="btn btn-default">50</button>
 				</a> <a
-					href=${pageContext.request.contextPath}/dashboard?page_size=100&search=${search}&order=${computerPage.order}>
+					href=<tags:link computerPage="${computerPage}" search="${search}" pageSize="100" pageNumber="1"/>>
 					<button type="button" class="btn btn-default">100</button>
 				</a>
 			</div>

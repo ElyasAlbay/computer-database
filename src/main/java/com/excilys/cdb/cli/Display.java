@@ -1,4 +1,4 @@
-package com.excilys.cdb.ui;
+package com.excilys.cdb.cli;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;

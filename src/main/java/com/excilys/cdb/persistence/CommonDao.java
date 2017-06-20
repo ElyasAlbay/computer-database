@@ -27,7 +27,7 @@ public interface CommonDao<T> {
 	 *            Identifier of the element in the dabatase.
 	 * @return Element.
 	 */
-	public T getById(int id);
+	public T getById(long id);
 
 	/**
 	 * Sends a request to the database to delete a given entry of the element
@@ -41,5 +41,12 @@ public interface CommonDao<T> {
 	 * @param id
 	 *            Identifier of the element in the database.
 	 */
-	public void delete(int id) ;
+	public void delete(long id) ;
+	
+	/**
+	 * Gets number of elements in the database.
+	 * 
+	 * @return Count of elements.
+	 */
+	public void getNumberOfElements(Page<T> page);
 }

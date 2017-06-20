@@ -63,7 +63,7 @@ public class EditComputerController {
 		String computerId = params.get(COMPUTER_ID);
 
 		if (StringUtils.isNotBlank(computerId) && Integer.parseInt(computerId) > 0) {
-				computerDto = ComputerDtoMapper.createDto(computerService.getById(Integer.parseInt(computerId)));
+				computerDto = ComputerDtoMapper.createDto(computerService.getById(Long.parseLong(computerId)));
 		}
 
 		modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
@@ -90,13 +90,13 @@ public class EditComputerController {
 		if (!bindingResult.hasErrors()) {
 			LOG.info("Valid request, adding computer to database.");
 			
-			computerDto.setId(Integer.parseInt(id));
+			computerDto.setId(Long.parseLong(id));
 			computerDto.setName(name);
 			computerDto.setIntroduced(introduced);
 			computerDto.setDiscontinued(discontinued);
 			if (StringUtils.isNotBlank(companyId) && !companyId.equals("0")) {
 				CompanyDto companyDto = new CompanyDto();
-				CompanyDtoMapper.createDto(companyService.getById(Integer.parseInt(companyId)));
+				CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
 				computerDto.setCompany(companyDto);
 			}
 			

@@ -1,13 +1,27 @@
 package com.excilys.cdb.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  * Model for a company.
  * 
  * @author Elyas Albay
  *
  */
+@Entity
+@Table(name="company")
 public class Company {
-	private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name="id")
+	private long id;
+	
+	@Column(name="name")
 	private String name;
 
 	
@@ -24,7 +38,7 @@ public class Company {
 	 * @param id
 	 *            Unique identifier for the company.
 	 */
-	public Company(int id) {
+	public Company(long id) {
 		this.id = id;
 	}
 	
@@ -36,33 +50,21 @@ public class Company {
 	 * @param pName
 	 *            Company name.
 	 */
-	public Company(int id, String name) {
+	public Company(long id, String name) {
 		this.id = id;
 		this.name = name;
 	}
 
 	
-	/**
-	 * Returns Company instance hash code.
-	 * 
-	 * @return result Generated Hash Code.
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + id;
+		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-
-	/**
-	 * Returns true if instance is equal to the paramater. False else.
-	 * 
-	 * @param obj
-	 *            Object to compare.
-	 * @return boolean
-	 */
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -94,11 +96,11 @@ public class Company {
 	}
 
 	/* Getters and setters */
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

@@ -1,4 +1,4 @@
-package com.excilys.cdb.ui;
+package com.excilys.cdb.cli;
 
 /**
  * Enumeration listing every command usable.

@@ -2,6 +2,7 @@ package com.excilys.cdb.persistence;
 
 import java.util.List;
 
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ import com.excilys.cdb.persistence.utility.mapper.ComputerMapper;
  */
 @Repository
 public class ComputerDaoImpl implements ComputerDao {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
-
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);	
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	@Autowired
@@ -50,11 +51,14 @@ public class ComputerDaoImpl implements ComputerDao {
 	public Page<Computer> getAll(Page<Computer> computerPage) {
 		LOG.info("getAll request.");
 
-		String order = computerPage.getOrder().equals("name") ? "computer.name" : computerPage.getOrder();
-		String query = String.format(LIST, order, order);
-		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
-		List<Computer> computerList = this.jdbcTemplate.query(query, new ComputerMapper(), pageOffset,
-				computerPage.getPageSize());
+		 String order = computerPage.getOrder().equals("name") ?
+		 "computer.name" : computerPage.getOrder();
+		 String query = String.format(LIST, order, order);
+		 int pageOffset = (computerPage.getPageNumber() - 1) *
+		 computerPage.getPageSize();
+		 List<Computer> computerList = this.jdbcTemplate.query(query, new
+		 ComputerMapper(), pageOffset,
+		 computerPage.getPageSize());
 
 		computerPage.setElementList(computerList);
 		getNumberOfElements(computerPage);
@@ -63,7 +67,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public Computer getById(int id) {
+	public Computer getById(long id) {
 		LOG.info("getById request.");
 
 		Computer computer = null;
@@ -99,7 +103,7 @@ public class ComputerDaoImpl implements ComputerDao {
 		KeyHolder holder = new GeneratedKeyHolder();
 
 		namedParameterJdbcTemplate.update(CREATE, initParameters(computer), holder);
-		computer.setId(holder.getKey().intValue());
+		computer.setId(holder.getKey().longValue());
 
 		return computer;
 	}
@@ -114,25 +118,21 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public void delete(int id) {
+	public void delete(long id) {
 		LOG.info("delete request.");
 
 		this.jdbcTemplate.update(DELETE, id);
 	}
 
 	@Override
-	public void deleteComputersByCompanyId(int companyId) {
+	public void deleteComputersByCompanyId(long companyId) {
 		LOG.info("deleteComputerByCompanyId request.");
 
 		this.jdbcTemplate.update(DELETE_COMPUTERS_BY_COMPANYID, companyId);
 	}
-
-	/**
-	 * Gets number of computers in the database.
-	 * 
-	 * @return Count of computers.
-	 */
-	private void getNumberOfElements(Page<Computer> computerPage) {
+	
+	@Override
+	public void getNumberOfElements(Page<Computer> computerPage) {
 		LOG.info("getNumberOfElements request.");
 
 		computerPage.setNumberOfElements(this.jdbcTemplate.queryForObject(NUMBER_OF_ELEMENTS, Integer.class));

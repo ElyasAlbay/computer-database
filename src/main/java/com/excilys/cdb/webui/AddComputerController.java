@@ -55,7 +55,6 @@ public class AddComputerController {
 		LOG.info("Get request.");
 
 		ModelAndView modelView = new ModelAndView(VIEW);
-		//Page<Company> companyPage = new Page<>();
 		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));
 
 		modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
@@ -88,7 +87,7 @@ public class AddComputerController {
 			computerDto.setDiscontinued(discontinued);
 			if (StringUtils.isNotBlank(companyId) && !companyId.equals("0")) {
 				CompanyDto companyDto = new CompanyDto();
-				CompanyDtoMapper.createDto(companyService.getById(Integer.parseInt(companyId)));
+				CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
 				computerDto.setCompany(companyDto);
 			}
 			

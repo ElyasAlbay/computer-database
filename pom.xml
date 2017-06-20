@@ -18,6 +18,11 @@
 		<tomcatVersion>2.2</tomcatVersion>
 
 		<mysqlVersion>6.0.6</mysqlVersion>
+		<hibernateVersion>5.1.3.Final</hibernateVersion>
+		<hibernateJava8Version>5.2.5.Final</hibernateJava8Version>
+		<queryDslVersion>4.1.4</queryDslVersion>
+		<aptVersion>1.1.3</aptVersion>
+
 		<servletVersion>3.1.0</servletVersion>
 		<jspVersion>2.1.1</jspVersion>
 		<jstlVersion>1.2</jstlVersion>
@@ -52,6 +57,7 @@
 					<target>${compilerConfig}</target>
 				</configuration>
 			</plugin>
+
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -63,6 +69,23 @@
 					<username>admin</username>
 					<password>admin</password>
 				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>${aptVersion}</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>target/generated-sources/java</outputDirectory>
+							<processor>com.querydsl.apt.hibernate.HibernateAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -99,13 +122,38 @@
 			<artifactId>spring-jdbc</artifactId>
 			<version>${springVersion}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${springVersion}</version>
+		</dependency>
 
-		<!-- MySql connector dependency -->
+		<!-- Database dependency -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>${mysqlVersion}</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>${hibernateVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-java8</artifactId>
+			<version>${hibernateJava8Version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+			<version>${queryDslVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-jpa</artifactId>
+			<version>${queryDslVersion}</version>
 		</dependency>
 
 		<!-- Web ui and server dependencies -->

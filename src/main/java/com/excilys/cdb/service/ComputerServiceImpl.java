@@ -1,17 +1,11 @@
 package com.excilys.cdb.service;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.persistence.ComputerDao;
-import com.zaxxer.hikari.HikariDataSource;
 
 /**
  * This class is the intermediary between user interface and Computer DAO.
@@ -22,10 +16,6 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 @Service
 public class ComputerServiceImpl implements ComputerService {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerServiceImpl.class);
-
-	@Autowired
-	HikariDataSource dataSource;
 	@Autowired
 	ComputerDao computerDao;
 
@@ -45,7 +35,7 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public Computer getById(int id) {
+	public Computer getById(long id) {
 
 		return computerDao.getById(id);
 	}
@@ -69,13 +59,8 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void delete(int id) {
-		try (Connection connection = dataSource.getConnection()) {
-
-			computerDao.delete(id);
-		} catch (SQLException e) {
-			LOG.error("Delete("+id+") SQLException:" + e.getMessage());
-		}
-
+	public void delete(long id) {
+		
+		computerDao.delete(id);
 	}
 }

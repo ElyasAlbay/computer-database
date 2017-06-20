@@ -113,7 +113,7 @@ public class DashboardController {
 
 		// Delete computers from received identifiers
 		for (String id : selection.split(",")) {
-			computerService.delete(Integer.parseInt(id));
+			computerService.delete(Long.parseLong(id));
 		}
 
 		// Redirects to the GET request.

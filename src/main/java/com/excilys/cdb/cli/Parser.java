@@ -1,4 +1,4 @@
-package com.excilys.cdb.ui;
+package com.excilys.cdb.cli;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -126,7 +126,7 @@ public class Parser {
 	 *            Input id.
 	 */
 	private void parseShow(String token) {
-		Computer computer = computerService.getById(Integer.parseInt(token));
+		Computer computer = computerService.getById(Long.parseLong(token));
 		display.displayShow(computer);
 
 	}
@@ -155,7 +155,7 @@ public class Parser {
 	 *            Input id.
 	 */
 	private void parseUpdate(String token) {
-		Computer computer = new Computer(Integer.parseInt(token));
+		Computer computer = new Computer(Long.parseLong(token));
 		scanner = new Scanner(System.in);
 
 		getComputerInfo(computer, scanner);
@@ -182,7 +182,6 @@ public class Parser {
 			computerService.delete(getInt(scanner));
 
 		} else {
-			scanner.close();
 			throw new InvalidCommandException("Unknown id.");
 		}
 		

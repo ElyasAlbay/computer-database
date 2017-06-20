@@ -1,16 +1,21 @@
 package com.excilys.cdb.persistence;
 
 import java.util.List;
+import java.util.function.Supplier;
 
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
+import com.excilys.cdb.model.QCompany;
 import com.excilys.cdb.persistence.utility.mapper.CompanyMapper;
+import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 
 /**
  * Implementation of CompanyDao, sends requests to the database and gets an
@@ -20,23 +25,26 @@ import com.excilys.cdb.persistence.utility.mapper.CompanyMapper;
  *
  */
 @Repository
+@Transactional
 public class CompanyDaoImpl implements CompanyDao {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
+
+	private QCompany qCompany = QCompany.company;
+	@Autowired
+	private SessionFactory sessionFactory;
+	private Supplier<HibernateQueryFactory> queryFactory = () -> new HibernateQueryFactory(
+			sessionFactory.getCurrentSession());
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
-	private final static String LIST = "SELECT * FROM company";
-	private final static String GET_BY_ID = "SELECT * FROM company WHERE id=?";
-	private final static String DELETE = "DELETE FROM company WHERE id=?";
 	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM company";
-
 
 	@Override
 	public Page<Company> getAll(Page<Company> companyPage) {
 		LOG.info("getAll request.");
 
-		List<Company> companyList = this.jdbcTemplate.query(LIST, new CompanyMapper());
+		List<Company> companyList = queryFactory.get().selectFrom(qCompany).fetch();
 		companyPage.setElementList(companyList);
 		getNumberOfElements(companyPage);
 
@@ -44,12 +52,12 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public Company getById(int id) {
+	public Company getById(long id) {
 		LOG.info("getById request.");
 
 		Company company = null;
-		List<Company> companyList = this.jdbcTemplate.query(GET_BY_ID, new CompanyMapper(), id);
-		
+		List<Company> companyList = queryFactory.get().selectFrom(qCompany).where(qCompany.id.eq(id)).fetch();
+
 		if (!companyList.isEmpty()) {
 			company = companyList.get(0);
 		}
@@ -58,23 +66,20 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public void delete(int id) {
-		LOG.info("getById request.");
+	public void delete(long id) {
+		LOG.info("delete request.");
 
-		this.jdbcTemplate.update(DELETE, id);
+		queryFactory.get().delete(qCompany).where(qCompany.id.eq(id)).execute();
 	}
 
-	/**
-	 * Gets number of companies in the database.
-	 * 
-	 * @param companyPage Page of companies to edit.
-	 */
-	private void getNumberOfElements(Page<Company> companyPage) {
+	@Override
+	public void getNumberOfElements(Page<Company> companyPage) {
 		LOG.info("getNumberOfElements request.");
 
-		companyPage.setNumberOfElements(this.jdbcTemplate.queryForObject(NUMBER_OF_ELEMENTS, Integer.class));
+		companyPage.setNumberOfElements((int) queryFactory.get().selectFrom(qCompany).fetchCount());
 
-		// Set number of pages, rounds to the upper integer if the division has a remainder
+		// Set number of pages, rounds to the upper integer if the division has
+		// a remainder
 		int numberOfPages = companyPage.getNumberOfElements() / companyPage.getPageSize();
 
 		if ((companyPage.getNumberOfElements() % companyPage.getPageSize()) != 0) {

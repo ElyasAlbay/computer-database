@@ -26,8 +26,8 @@ public class ComputerMapper implements RowMapper<Computer> {
 		Date dateInt = null;
 		Date dateDis = null;
 
-		computer = new Computer(resultSet.getInt("id"), resultSet.getString("name"));
-		company = new Company(resultSet.getInt("company_id"), resultSet.getString("company_name"));
+		computer = new Computer(resultSet.getLong("id"), resultSet.getString("name"));
+		company = new Company(resultSet.getLong("company_id"), resultSet.getString("company_name"));
 
 		Timestamp timeInt = resultSet.getTimestamp("introduced");
 		if (timeInt != null) {

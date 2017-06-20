@@ -1,4 +1,4 @@
-package com.excilys.cdb.ui;
+package com.excilys.cdb.cli;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

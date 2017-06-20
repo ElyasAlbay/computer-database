@@ -2,17 +2,30 @@ package com.excilys.cdb.model;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
 /**
  * Model for a computer.
  * 
  * @author excilys
  *
  */
+@Entity
+@Table(name="computer")
 public class Computer {
-	private int id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	
 	private String name;
 	private LocalDate introduced;
 	private LocalDate discontinued;
+	@ManyToOne
 	private Company company;
 	
 	
@@ -31,7 +44,7 @@ public class Computer {
 	 * @param id
 	 *            Unique identifier for the computer.
 	 */
-	public Computer(int id) {
+	public Computer(long id) {
 		this.id = id;
 
 		this.introduced = null;
@@ -47,7 +60,7 @@ public class Computer {
 	 * @param name
 	 *            Name of the computer.
 	 */
-	public Computer(int id, String name) {
+	public Computer(long id, String name) {
 		this.id = id;
 		this.name = name;
 
@@ -57,30 +70,18 @@ public class Computer {
 	}
 
 	
-	/**
-	 * Returns Computer instance hash code.
-	 * 
-	 * @return result Generated Hash Code.
-	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((company == null) ? 0 : company.hashCode());
 		result = prime * result + ((discontinued == null) ? 0 : discontinued.hashCode());
-		result = prime * result + id;
+		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((introduced == null) ? 0 : introduced.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
 
-	/**
-	 * Returns true if instance is equal to the paramater. False else.
-	 * 
-	 * @param obj
-	 *            Object to compare.
-	 * @return boolean
-	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -115,9 +116,6 @@ public class Computer {
 		return true;
 	}
 
-	/**
-	 * Converts computer into a string detailing its fields.
-	 */
 	@Override
 	public String toString() {
 		String delimit = " | ";
@@ -142,12 +140,13 @@ public class Computer {
 		return string;
 	}
 
+	
 	/* Getters and setters */
-	public int getId() {
+	public long getId() {
 		return this.id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
