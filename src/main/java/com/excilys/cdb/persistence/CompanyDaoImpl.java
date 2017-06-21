@@ -7,19 +7,17 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.QCompany;
-import com.excilys.cdb.persistence.utility.mapper.CompanyMapper;
 import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 
 /**
- * Implementation of CompanyDao, sends requests to the database and gets an
- * instance of Company from the corresponding Mapper.
+ * Implementation of CompanyDao, sends requests to the database and gets one or more
+ * instance(s) of Company.
  * 
  * @author Elyas Albay
  *
@@ -30,15 +28,12 @@ public class CompanyDaoImpl implements CompanyDao {
 	private static final Logger LOG = LoggerFactory.getLogger(CompanyDaoImpl.class);
 
 	private QCompany qCompany = QCompany.company;
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	private Supplier<HibernateQueryFactory> queryFactory = () -> new HibernateQueryFactory(
 			sessionFactory.getCurrentSession());
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-
-	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM company";
 
 	@Override
 	public Page<Company> getAll(Page<Company> companyPage) {
@@ -55,12 +50,7 @@ public class CompanyDaoImpl implements CompanyDao {
 	public Company getById(long id) {
 		LOG.info("getById request.");
 
-		Company company = null;
-		List<Company> companyList = queryFactory.get().selectFrom(qCompany).where(qCompany.id.eq(id)).fetch();
-
-		if (!companyList.isEmpty()) {
-			company = companyList.get(0);
-		}
+		Company company = queryFactory.get().selectFrom(qCompany).where(qCompany.id.eq(id)).fetchOne();
 
 		return company;
 	}

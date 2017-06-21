@@ -87,6 +87,8 @@ public class EditComputerController {
 		String companyId = params.get(Field.COMPANY_ID);
 
 		
+		// Sends query if no errors and redirects to dashboard, display error
+				// messages else
 		if (!bindingResult.hasErrors()) {
 			LOG.info("Valid request, adding computer to database.");
 			
@@ -95,9 +97,10 @@ public class EditComputerController {
 			computerDto.setIntroduced(introduced);
 			computerDto.setDiscontinued(discontinued);
 			if (StringUtils.isNotBlank(companyId) && !companyId.equals("0")) {
-				CompanyDto companyDto = new CompanyDto();
-				CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
+				CompanyDto companyDto = CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
 				computerDto.setCompany(companyDto);
+			} else {
+				computerDto.setCompany(null);
 			}
 			
 			Computer computer = ComputerDtoMapper.createObject(computerDto);

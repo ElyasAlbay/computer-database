@@ -46,7 +46,7 @@
 
 							<div class="form-group">
 								<label for="companyId"><spring:message code="label.company"/></label> <select
-									class="form-control" id="companyId" name="companyId">
+									class="form-control" id="company.id" name="company.id">
 									<option value="0">--</option>
 									<c:forEach items="${companyPage.elementList}" var="company">
 										<option value="${company.id}">${company.name}</option>

@@ -1,64 +1,57 @@
 package com.excilys.cdb.persistence;
 
 import java.util.List;
+import java.util.function.Supplier;
 
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
-import com.excilys.cdb.persistence.utility.mapper.ComputerMapper;
+import com.excilys.cdb.model.QCompany;
+import com.excilys.cdb.model.QComputer;
+import com.excilys.cdb.webui.utility.Field;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 
 /**
- * Implementation of ComputerDao, sends requests to the database and gets an
- * instance of Computer from the corresponding Mapper.
+ * Implementation of ComputerDao, sends requests to the database and gets one or
+ * more instance(s) of Computer.
  * 
  * @author Elyas Albay
  *
  */
 @Repository
+@Transactional
 public class ComputerDaoImpl implements ComputerDao {
-	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);	
-	
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	@Autowired
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	private static final Logger LOG = LoggerFactory.getLogger(ComputerDaoImpl.class);
 
-	private final static String LIST = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
-			+ "ON computer.company_id = company.id ORDER BY ISNULL(%s), %s LIMIT ?, ?";
-	private final static String GET_BY_ID = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
-			+ "ON computer.company_id = company.id WHERE computer.id=?";
-	private final static String SEARCH_BY_NAME = "SELECT computer.*, company.name AS company_name FROM computer LEFT JOIN company "
-			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ? ORDER BY ISNULL(%s), %s LIMIT ?, ?";
-	private final static String CREATE = "INSERT INTO computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId";
-	private final static String UPDATE = "UPDATE computer SET name=:name, introduced=:introduced, discontinued=:discontinued, company_id=:companyId WHERE id=:id";
-	private final static String DELETE = "DELETE FROM computer WHERE id=?";
-	private final static String NUMBER_OF_ELEMENTS = "SELECT count(*) FROM computer";
-	private final static String NB_SEARCH_ELEMENTS = "SELECT count(*) FROM computer LEFT JOIN company "
-			+ "ON computer.company_id = company.id WHERE computer.name LIKE ? OR company.name LIKE ?";
-	private final static String DELETE_COMPUTERS_BY_COMPANYID = "DELETE FROM computer WHERE company_id=?";
+	private QComputer qComputer = QComputer.computer;
+	private QCompany qCompany = QCompany.company;
+
+	@Autowired
+	private SessionFactory sessionFactory;
+	private Supplier<HibernateQueryFactory> queryFactory = () -> new HibernateQueryFactory(
+			sessionFactory.getCurrentSession());
 
 	@Override
 	public Page<Computer> getAll(Page<Computer> computerPage) {
 		LOG.info("getAll request.");
+		LOG.debug("Listing computers. Page size=" + computerPage.getPageSize() + ", page number="
+				+ computerPage.getPageNumber() + ", order by " + computerPage.getOrder() + "...");
 
-		 String order = computerPage.getOrder().equals("name") ?
-		 "computer.name" : computerPage.getOrder();
-		 String query = String.format(LIST, order, order);
-		 int pageOffset = (computerPage.getPageNumber() - 1) *
-		 computerPage.getPageSize();
-		 List<Computer> computerList = this.jdbcTemplate.query(query, new
-		 ComputerMapper(), pageOffset,
-		 computerPage.getPageSize());
+		// Initialization of parameters for query
+		int pageSize = computerPage.getPageSize();
+		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
+		OrderSpecifier<?> order = getOrderSpecifier(computerPage.getOrder());
+
+		// Query to database
+		List<Computer> computerList = queryFactory.get().selectFrom(qComputer).leftJoin(qComputer.company, qCompany)
+				.limit(pageSize).offset(pageOffset).orderBy(order).fetch();
 
 		computerPage.setElementList(computerList);
 		getNumberOfElements(computerPage);
@@ -69,13 +62,10 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Computer getById(long id) {
 		LOG.info("getById request.");
+		LOG.debug("Searching computer with id=" + id + "...");
 
-		Computer computer = null;
-		List<Computer> computerList = this.jdbcTemplate.query(GET_BY_ID, new ComputerMapper(), id);
-
-		if (!computerList.isEmpty()) {
-			computer = computerList.get(0);
-		}
+		Computer computer = queryFactory.get().selectFrom(qComputer).leftJoin(qComputer.company, qCompany)
+				.where(qComputer.id.eq(id)).fetchOne();
 
 		return computer;
 	}
@@ -83,12 +73,17 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Page<Computer> searchByName(Page<Computer> computerPage, String name) {
 		LOG.info("searchByName request.");
+		LOG.debug("Searching computers with name or company name=" + name + "...");
 
-		String order = computerPage.getOrder().equals("name") ? "computer.name" : computerPage.getOrder();
-		String query = String.format(SEARCH_BY_NAME, order, order);
+		// Initialization of parameters for query
+		int pageSize = computerPage.getPageSize();
 		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
-		List<Computer> computerList = this.jdbcTemplate.query(query, new ComputerMapper(), name + '%', name + '%',
-				pageOffset, computerPage.getPageSize());
+		OrderSpecifier<?> order = getOrderSpecifier(computerPage.getOrder());
+
+		// Query to database
+		List<Computer> computerList = queryFactory.get().selectFrom(qComputer).leftJoin(qComputer.company, qCompany)
+				.limit(pageSize).offset(pageOffset).orderBy(order)
+				.where(qComputer.name.like(name + "%").or(qComputer.company.name.like(name + "%"))).fetch();
 
 		computerPage.setElementList(computerList);
 		getNbSearchElements(computerPage, name);
@@ -99,11 +94,9 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Computer create(Computer computer) {
 		LOG.info("create request.");
+		LOG.debug("Creating computer " + computer.toString() + "...");
 
-		KeyHolder holder = new GeneratedKeyHolder();
-
-		namedParameterJdbcTemplate.update(CREATE, initParameters(computer), holder);
-		computer.setId(holder.getKey().longValue());
+		sessionFactory.getCurrentSession().save(computer);
 
 		return computer;
 	}
@@ -111,8 +104,13 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public Computer update(Computer computer) {
 		LOG.info("update request.");
+		LOG.debug("Updating computer with id=" + computer.getId() + "...");
 
-		namedParameterJdbcTemplate.update(UPDATE, initParameters(computer).addValue("id", computer.getId()));
+		queryFactory.get().update(qComputer).where(qComputer.id.eq(computer.getId()))
+				.set(qComputer.name, computer.getName())
+				.set(qComputer.introduced, computer.getIntroduced())
+				.set(qComputer.discontinued, computer.getDiscontinued())
+				.set(qComputer.company, computer.getCompany()).execute();
 
 		return computer;
 	}
@@ -120,22 +118,24 @@ public class ComputerDaoImpl implements ComputerDao {
 	@Override
 	public void delete(long id) {
 		LOG.info("delete request.");
+		LOG.debug("Deleting computer with id=" + id + "...");
 
-		this.jdbcTemplate.update(DELETE, id);
+		queryFactory.get().delete(qComputer).where(qComputer.id.eq(id)).execute();
 	}
 
 	@Override
 	public void deleteComputersByCompanyId(long companyId) {
 		LOG.info("deleteComputerByCompanyId request.");
+		LOG.debug("Deleting computers with company_id=" + companyId + "...");
 
-		this.jdbcTemplate.update(DELETE_COMPUTERS_BY_COMPANYID, companyId);
+		queryFactory.get().delete(qComputer).where(qComputer.company.id.eq(companyId)).execute();
 	}
-	
+
 	@Override
 	public void getNumberOfElements(Page<Computer> computerPage) {
 		LOG.info("getNumberOfElements request.");
 
-		computerPage.setNumberOfElements(this.jdbcTemplate.queryForObject(NUMBER_OF_ELEMENTS, Integer.class));
+		computerPage.setNumberOfElements((int) queryFactory.get().from(qComputer).fetchCount());
 
 		// Set number of pages and rounds to the upper integer if the division
 		// has a remainder
@@ -156,8 +156,8 @@ public class ComputerDaoImpl implements ComputerDao {
 	private void getNbSearchElements(Page<Computer> computerPage, String name) {
 		LOG.info("getNbSearchElements request.");
 
-		computerPage.setNumberOfElements(
-				this.jdbcTemplate.queryForObject(NB_SEARCH_ELEMENTS, Integer.class, name + '%', name + '%'));
+		computerPage.setNumberOfElements( (int) queryFactory.get().from(qComputer)
+				.where(qComputer.name.like(name + "%").or(qCompany.name.like(name + "%"))).fetchCount());
 
 		// set number of elements in search query and rounds to the upper
 		// integer if the division has a remainder
@@ -171,25 +171,33 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	/**
+	 * Get order specifier to order elements by.
 	 * 
-	 * @param computer
-	 *            Computer which value to add in map.
-	 * @return Map of parameters.
+	 * @param order
+	 *            Column to order by.
+	 * @return Order Specifier.
 	 */
-	private MapSqlParameterSource initParameters(Computer computer) {
-		LOG.info("Init MapSqlParameterSource.");
+	private OrderSpecifier<?> getOrderSpecifier(String order) {
+		OrderSpecifier<?> orderSpecifier;
 
-		MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-
-		paramsMap.addValue("name", computer.getName());
-		paramsMap.addValue("introduced", computer.getIntroduced());
-		paramsMap.addValue("discontinued", computer.getDiscontinued());
-		if (computer.getCompany() != null && computer.getCompany().getId() > 0) {
-			paramsMap.addValue("companyId", computer.getCompany().getId());
-		} else {
-			paramsMap.addValue("companyId", null);
+		switch (order) {
+		case Field.COMPUTER_NAME:
+			orderSpecifier = qComputer.name.asc();
+			break;
+		case Field.INTRODUCED:
+			orderSpecifier = qComputer.introduced.asc();
+			break;
+		case Field.DISCONTINUED:
+			orderSpecifier = qComputer.discontinued.asc();
+			break;
+		case Field.COMPANY_NAME:
+			orderSpecifier = qComputer.company.name.asc();
+			break;
+		default:
+			orderSpecifier = qComputer.id.asc();
+			break;
 		}
 
-		return paramsMap;
+		return orderSpecifier.nullsLast();
 	}
 }

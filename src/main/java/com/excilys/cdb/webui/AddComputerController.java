@@ -89,6 +89,8 @@ public class AddComputerController {
 				CompanyDto companyDto = new CompanyDto();
 				CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
 				computerDto.setCompany(companyDto);
+			} else {
+				computerDto.setCompany(null);
 			}
 			
 			Computer computer = ComputerDtoMapper.createObject(computerDto);

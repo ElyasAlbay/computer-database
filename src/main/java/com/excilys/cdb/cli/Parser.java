@@ -205,7 +205,7 @@ public class Parser {
 
 		System.out.println("Date discontinued (yyyy-mm-dd or null): ");
 		LocalDate discontinued = getDate(scanner);
-		if (introduced != null && discontinued.isBefore(introduced)) {
+		if (introduced != null && discontinued != null && discontinued.isBefore(introduced)) {
 			throw new InvalidCommandException("Discontinued date cannot be anterior to date of introduction.");
 		} else {
 			computer.setDiscontinued(discontinued);
@@ -225,8 +225,7 @@ public class Parser {
 	 * @param scanner
 	 *            Scanner instance to get user input.
 	 */
-	@SuppressWarnings("rawtypes")
-	public void getPageInfo(Page page, Scanner scanner) {
+	public void getPageInfo(Page<?> page, Scanner scanner) {
 
 		System.out.println("Page size: ");
 		page.setPageSize(getInt(scanner));

@@ -1,20 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title><spring:message code="label.title"/></title>
+<title><spring:message code="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="resources/css/bootstrap.min.css"
-	rel="stylesheet" type="text/css" media="screen" />
-<link href="resources/css/font-awesome.css"
-	rel="stylesheet" type="text/css" media="screen" />
-<link href="resources/css/main.css"
-	rel="stylesheet" type="text/css" media="screen" />
+<link href="resources/css/bootstrap.min.css" rel="stylesheet"
+	type="text/css" media="screen" />
+<link href="resources/css/font-awesome.css" rel="stylesheet"
+	type="text/css" media="screen" />
+<link href="resources/css/main.css" rel="stylesheet" type="text/css"
+	media="screen" />
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard"> <spring:message code="label.navbar"/> </a>
+			<a class="navbar-brand" href="dashboard"> <spring:message
+					code="label.navbar" />
+			</a>
 		</div>
 	</header>
 	<section id="main">
@@ -23,34 +25,41 @@
 				<div class="col-xs-8 col-xs-offset-2 box">
 					<div class="label label-default pull-right">id:
 						${computer.id}</div>
-					<h1><spring:message code="label.edit"/></h1>
+					<h1>
+						<spring:message code="label.edit" />
+					</h1>
 
 					<form action="editComputer" method="POST">
 						<input type="hidden" value="${computer.id}" id="id" name="id" />
 						<fieldset>
 							<div class="form-group">
-								<label for="name"><spring:message code="label.computerName"/></label> <input
-									type="text" class="form-control" id="name"
-									name="name" value="${computer.name}"> ${errors["name"]}
+								<label for="name"><spring:message
+										code="label.computerName" /></label> <input type="text"
+									class="form-control" id="name" name="name"
+									value="${computer.name}"> ${errors["name"]}
 							</div>
 							<div class="form-group">
-								<label for="introduced"><spring:message code="label.introduced"/></label> <input
-									type="date" class="form-control" id="introduced"
-									name="introduced" value="${computer.introduced}">  ${errors["introduced"]}
+								<label for="introduced"><spring:message
+										code="label.introduced" /></label> <input type="date"
+									class="form-control" id="introduced" name="introduced"
+									value="${computer.introduced}"> ${errors["introduced"]}
 							</div>
 							<div class="form-group">
-								<label for="discontinued"><spring:message code="label.discontinued"/></label> <input
-									type="date" class="form-control" id="discontinued"
-									name="discontinued" value="${computer.discontinued}"> ${errors["discontinued"]}
-							</div> 
+								<label for="discontinued"><spring:message
+										code="label.discontinued" /></label> <input type="date"
+									class="form-control" id="discontinued" name="discontinued"
+									value="${computer.discontinued}">
+								${errors["discontinued"]}
+							</div>
 							<div class="form-group">
-								<label for="companyId"><spring:message code="label.company"/></label> <select
-									class="form-control" id="companyId" name="companyId">
+								<label for="companyId"><spring:message
+										code="label.company" /></label> <select class="form-control"
+									id="company.id" name="company.id">
 									<option value="0">--</option>
 									<c:forEach items="${companyPage.elementList}" var="company">
-										<option value="${company.id}" <c:if test="${company.id == computer.company.id}">
-										selected
-										</c:if> >${company.name}</option>
+										<option value="${company.id}"
+											<c:if test="${company.id == computer.company.id}">
+										selected</c:if>>${company.name}</option>
 									</c:forEach>
 								</select>
 							</div>

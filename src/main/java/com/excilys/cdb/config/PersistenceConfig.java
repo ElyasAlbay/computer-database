@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -31,20 +29,6 @@ public class PersistenceConfig {
 		HikariConfig config = new HikariConfig(PROP_FILE);
 
 		return new HikariDataSource(config);
-	}
-
-	@Bean
-	public JdbcTemplate jdbcTemplate() {
-		LOG.info("JdbcTemplate init");
-
-		return new JdbcTemplate(dataSource());
-	}
-
-	@Bean
-	public NamedParameterJdbcTemplate namedParameterJdbcTemplate() {
-		LOG.info("NamedParameterJdbcTemplate init");
-
-		return new NamedParameterJdbcTemplate(dataSource());
 	}
 
 	@Bean
