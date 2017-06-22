@@ -7,5 +7,5 @@
 *.tmp
 .classpath
 .project
-/src/main/resources/hikari.properties
-/src/test/resources/hikari.properties
+persistence/src/main/resources/hikari.properties
+persistence/src/test/resources/hikari.properties
