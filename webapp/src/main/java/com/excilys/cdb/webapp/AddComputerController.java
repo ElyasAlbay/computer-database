@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.cdb.binding.CompanyDtoMapper;
-import com.excilys.cdb.binding.ComputerDtoMapper;
+import com.excilys.cdb.binding.CompanyMapper;
+import com.excilys.cdb.binding.ComputerMapper;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -56,7 +56,7 @@ public class AddComputerController {
 		LOG.info("Get request.");
 
 		ModelAndView modelView = new ModelAndView(VIEW);
-		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));
+		Page<CompanyDto> companyDtoPage = CompanyMapper.createDtoPage(companyService.getAll(new Page<Company>()));
 
 		modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
 
@@ -71,7 +71,7 @@ public class AddComputerController {
 
 		ModelAndView modelView = new ModelAndView(VIEW);
 		Map<String, String> errors = new HashMap<String, String>();
-		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));
+		Page<CompanyDto> companyDtoPage = CompanyMapper.createDtoPage(companyService.getAll(new Page<Company>()));
 
 		// Get form fields
 		String name = params.get(Field.COMPUTER_NAME);
@@ -87,13 +87,13 @@ public class AddComputerController {
 			computerDto.setIntroduced(introduced);
 			computerDto.setDiscontinued(discontinued);
 			if (StringUtils.isNotBlank(companyId) && !companyId.equals("0")) {
-				CompanyDto companyDto = CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
+				CompanyDto companyDto = CompanyMapper.createDto(companyService.getById(Long.parseLong(companyId)));
 				computerDto.setCompany(companyDto);
 			} else {
 				computerDto.setCompany(null);
 			}
 
-			Computer computer = ComputerDtoMapper.createObject(computerDto);
+			Computer computer = ComputerMapper.createObject(computerDto);
 			if (computer.getIntroduced() != null && computer.getDiscontinued() != null
 					&& computer.getDiscontinued().isBefore(computer.getIntroduced())) {
 				errors.put(Field.INTRODUCED, dateInvalidMessage);

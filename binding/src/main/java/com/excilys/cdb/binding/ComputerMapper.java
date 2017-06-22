@@ -11,7 +11,7 @@ import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.dto.ComputerDto;
 
-public class ComputerDtoMapper {
+public class ComputerMapper {
 	
 	
 	/**
@@ -72,7 +72,7 @@ public class ComputerDtoMapper {
 			computerDto.setDiscontinued(computer.getDiscontinued().toString());
 		}
 		if (computer.getCompany() != null) {
-			computerDto.setCompany(CompanyDtoMapper.createDto(computer.getCompany()));
+			computerDto.setCompany(CompanyMapper.createDto(computer.getCompany()));
 		}
 
 		return computerDto;
@@ -98,7 +98,7 @@ public class ComputerDtoMapper {
 			computer.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued().toString(), formatter));
 		}
 		if (computerDto.getCompany() != null) {
-			computer.setCompany(CompanyDtoMapper.createObject(computerDto.getCompany()));
+			computer.setCompany(CompanyMapper.createObject(computerDto.getCompany()));
 		}
 
 		return computer;

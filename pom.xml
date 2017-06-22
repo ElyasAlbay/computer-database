@@ -53,49 +53,56 @@
 
 	<build>
 		<finalName>cdb</finalName>
-		<!-- Plugins -->
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${compilerVersion}</version>
-				<configuration>
-					<source>${compilerConfig}</source>
-					<target>${compilerConfig}</target>
-				</configuration>
-			</plugin>
 
-			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>${tomcatVersion}</version>
-				<configuration>
-					<url>http://localhost:8080/manager/text</url>
-					<path>/cdb</path>
-					<server>tomcat_server</server>
-					<username>admin</username>
-					<password>admin</password>
-				</configuration>
-			</plugin>
+		<pluginManagement>
+			<plugins>
+				<!-- Maven plugin -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${compilerVersion}</version>
+					<configuration>
+						<source>${compilerConfig}</source>
+						<target>${compilerConfig}</target>
+					</configuration>
+				</plugin>
 
-			<plugin>
-				<groupId>com.mysema.maven</groupId>
-				<artifactId>apt-maven-plugin</artifactId>
-				<version>${aptVersion}</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>target/generated-sources/java</outputDirectory>
-							<processor>com.querydsl.apt.hibernate.HibernateAnnotationProcessor</processor>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
+				<!-- Tomcat plugin -->
+				<plugin>
+					<groupId>org.apache.tomcat.maven</groupId>
+					<artifactId>tomcat7-maven-plugin</artifactId>
+					<version>${tomcatVersion}</version>
+					<configuration>
+						<url>http://localhost:8080/manager/text</url>
+						<path>/cdb</path>
+						<server>tomcat_server</server>
+						<username>admin</username>
+						<password>admin</password>
+					</configuration>
+				</plugin>
+
+				<!-- QueryDsl mapping plugin -->
+				<plugin>
+					<groupId>com.mysema.maven</groupId>
+					<artifactId>apt-maven-plugin</artifactId>
+					<version>${aptVersion}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>process</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>target/generated-sources/java</outputDirectory>
+								<processor>com.querydsl.apt.hibernate.HibernateAnnotationProcessor</processor>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
 	</build>
+
+
 	<dependencyManagement>
 		<dependencies>
 			<!-- Spring dependencies -->
@@ -126,21 +133,32 @@
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring-jdbc</artifactId>
+				<artifactId>spring-orm</artifactId>
 				<version>${springVersion}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
-				<artifactId>spring-orm</artifactId>
+				<artifactId>spring-jdbc</artifactId>
 				<version>${springVersion}</version>
 			</dependency>
 
-			<!-- Database dependency -->
+			<!-- Database dependencies -->
 			<dependency>
 				<groupId>mysql</groupId>
 				<artifactId>mysql-connector-java</artifactId>
 				<version>${mysqlVersion}</version>
 				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.zaxxer</groupId>
+				<artifactId>HikariCP</artifactId>
+				<version>${hikariVersion}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>slf4j-api</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -186,17 +204,6 @@
 				<groupId>javax.servlet</groupId>
 				<artifactId>jstl</artifactId>
 				<version>${jstlVersion}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.zaxxer</groupId>
-				<artifactId>HikariCP</artifactId>
-				<version>${hikariVersion}</version>
-				<exclusions>
-					<exclusion>
-						<groupId>org.slf4j</groupId>
-						<artifactId>slf4j-api</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 
 			<!-- Utilities dependencies -->

@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.excilys.cdb.console.exceptions.InvalidCommandException;
+import com.excilys.cdb.console.util.InvalidCommandException;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;

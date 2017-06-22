@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.excilys.cdb.binding.ComputerDtoMapper;
+import com.excilys.cdb.binding.ComputerMapper;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.dto.ComputerDto;
@@ -82,9 +82,9 @@ public class DashboardController {
 		// Creates a new computerDto page from computer page.
 		if (StringUtils.isNotBlank(search)) {
 			modelView.addObject(SEARCH, search);
-			computerDtoPage = ComputerDtoMapper.createDtoPage(computerService.searchByName(computerPage, search));
+			computerDtoPage = ComputerMapper.createDtoPage(computerService.searchByName(computerPage, search));
 		} else {
-			computerDtoPage = ComputerDtoMapper.createDtoPage(computerService.getAll(computerPage));
+			computerDtoPage = ComputerMapper.createDtoPage(computerService.getAll(computerPage));
 		}
 		
 		modelView.addObject(ATT_COMPUTER_PG, computerDtoPage);

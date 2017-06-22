@@ -2,7 +2,7 @@ package com.excilys.cdb.console;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import com.excilys.cdb.config.AppConfig;
+import com.excilys.cdb.console.config.AppConfig;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 

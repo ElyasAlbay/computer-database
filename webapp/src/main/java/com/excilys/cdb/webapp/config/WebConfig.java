@@ -1,4 +1,4 @@
-package com.excilys.cdb.config;
+package com.excilys.cdb.webapp.config;
 
 import java.util.Locale;
 
@@ -21,6 +21,8 @@ import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+
+import com.excilys.cdb.service.config.ServiceConfig;
 
 @Configuration
 @EnableWebMvc

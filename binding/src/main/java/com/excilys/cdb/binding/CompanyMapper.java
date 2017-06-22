@@ -7,7 +7,7 @@ import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.dto.CompanyDto;
 
-public class CompanyDtoMapper {	
+public class CompanyMapper {	
 	
 	/**
 	 * Converts a page of companies into a list of company DTOs.
