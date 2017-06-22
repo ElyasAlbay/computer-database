@@ -46,6 +46,7 @@ public class EditComputerController {
 	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String COMPUTER_ID = "computer_id";
 	private static final String ERRORS = "errors";
+	private static final String dateInvalidMessage = "Introduced date cannot be anterior to discontinued date.";
 
 	@Autowired
 	private ComputerService computerService;
@@ -78,6 +79,8 @@ public class EditComputerController {
 		LOG.info("Post request.");
 		
 		ModelAndView modelView = new ModelAndView(VIEW);
+		Map<String, String> errors = new HashMap<String, String>();
+		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));	
 
 		// Get form fields
 		String id = params.get(Field.COMPUTER_ID);
@@ -90,7 +93,6 @@ public class EditComputerController {
 		// Sends query if no errors and redirects to dashboard, display error
 				// messages else
 		if (!bindingResult.hasErrors()) {
-			LOG.info("Valid request, adding computer to database.");
 			
 			computerDto.setId(Long.parseLong(id));
 			computerDto.setName(name);
@@ -104,13 +106,18 @@ public class EditComputerController {
 			}
 			
 			Computer computer = ComputerDtoMapper.createObject(computerDto);
-			computerService.update(computer);
-
-			modelView.setViewName("redirect:" + DASHBOARD);
+			if (computer.getIntroduced() != null && computer.getDiscontinued() != null
+					&& computer.getDiscontinued().isBefore(computer.getIntroduced())) {
+				errors.put(Field.INTRODUCED, dateInvalidMessage);
+				modelView.addObject(ERRORS, errors);
+				modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
+				
+			} else {
+				computerService.update(computer);
+				modelView.setViewName("redirect:" + DASHBOARD);
+			}
+			
 		} else {
-			LOG.info("Invalid request, displaying error messages.");
-			Map<String, String> errors = new HashMap<String, String>();
-			Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));			
 			
 			if (bindingResult.getFieldError(Field.COMPUTER_NAME) != null)
 				errors.put(Field.COMPUTER_NAME, bindingResult.getFieldError(Field.COMPUTER_NAME).getDefaultMessage());

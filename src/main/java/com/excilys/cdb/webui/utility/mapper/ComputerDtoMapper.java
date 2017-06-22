@@ -95,7 +95,7 @@ public class ComputerDtoMapper {
 			computer.setIntroduced(LocalDate.parse(computerDto.getIntroduced().toString(), formatter));
 		}
 		if (StringUtils.isNotBlank(computerDto.getDiscontinued())) {
-			computer.setDiscontinued(LocalDate.parse(computer.getDiscontinued().toString(), formatter));
+			computer.setDiscontinued(LocalDate.parse(computerDto.getDiscontinued().toString(), formatter));
 		}
 		if (computerDto.getCompany() != null) {
 			computer.setCompany(CompanyDtoMapper.createObject(computerDto.getCompany()));

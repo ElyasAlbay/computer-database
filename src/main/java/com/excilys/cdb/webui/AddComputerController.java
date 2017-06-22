@@ -44,6 +44,7 @@ public class AddComputerController {
 	private static final String DASHBOARD = "/dashboard";
 	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String ERRORS = "errors";
+	private static final String dateInvalidMessage = "Introduced date cannot be anterior to discontinued date.";
 
 	@Autowired
 	private ComputerService computerService;
@@ -69,6 +70,8 @@ public class AddComputerController {
 		LOG.info("Post request.");
 
 		ModelAndView modelView = new ModelAndView(VIEW);
+		Map<String, String> errors = new HashMap<String, String>();
+		Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));
 
 		// Get form fields
 		String name = params.get(Field.COMPUTER_NAME);
@@ -76,31 +79,33 @@ public class AddComputerController {
 		String discontinued = params.get(Field.DISCONTINUED);
 		String companyId = params.get(Field.COMPANY_ID);
 
-		
 		// Sends query if no errors and redirects to dashboard, display error
 		// messages else
 		if (!bindingResult.hasErrors()) {
-			LOG.info("Valid request, adding computer to database.");
 			
 			computerDto.setName(name);
 			computerDto.setIntroduced(introduced);
 			computerDto.setDiscontinued(discontinued);
 			if (StringUtils.isNotBlank(companyId) && !companyId.equals("0")) {
-				CompanyDto companyDto = new CompanyDto();
-				CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
+				CompanyDto companyDto = CompanyDtoMapper.createDto(companyService.getById(Long.parseLong(companyId)));
 				computerDto.setCompany(companyDto);
 			} else {
 				computerDto.setCompany(null);
 			}
-			
-			Computer computer = ComputerDtoMapper.createObject(computerDto);
-			computerService.create(computer);
 
-			modelView.setViewName("redirect:" + DASHBOARD);
+			Computer computer = ComputerDtoMapper.createObject(computerDto);
+			if (computer.getIntroduced() != null && computer.getDiscontinued() != null
+					&& computer.getDiscontinued().isBefore(computer.getIntroduced())) {
+				errors.put(Field.INTRODUCED, dateInvalidMessage);
+				modelView.addObject(ERRORS, errors);
+				modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
+				
+			} else {
+				computerService.create(computer);
+				modelView.setViewName("redirect:" + DASHBOARD);
+			}
+			
 		} else {
-			LOG.info("Invalid request, displaying error messages.");
-			Map<String, String> errors = new HashMap<String, String>();
-			Page<CompanyDto> companyDtoPage = CompanyDtoMapper.createDtoPage(companyService.getAll(new Page<Company>()));			
 			
 			if (bindingResult.getFieldError(Field.COMPUTER_NAME) != null)
 				errors.put(Field.COMPUTER_NAME, bindingResult.getFieldError(Field.COMPUTER_NAME).getDefaultMessage());
@@ -110,7 +115,7 @@ public class AddComputerController {
 				errors.put(Field.DISCONTINUED, bindingResult.getFieldError(Field.DISCONTINUED).getDefaultMessage());
 			if (bindingResult.getFieldError(Field.COMPUTER_ID) != null)
 				errors.put(Field.COMPANY_ID, bindingResult.getFieldError(Field.COMPANY_ID).getDefaultMessage());
-			
+
 			modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
 			modelView.addObject(ERRORS, errors);
 		}
