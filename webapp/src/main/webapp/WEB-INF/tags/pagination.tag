@@ -36,7 +36,7 @@
 	<c:choose>
 		<c:when test="${computerPage.pageNumber < 4}">
 			<c:choose>
-				<c:when test="${computerPage.numberOfPages > 4}">
+				<c:when test="${computerPage.numberOfPages >= 5}">
 					<c:forEach var="i" begin="1" end="5">
 						<li><a href="<%= before %>${i}">${i}</a></li>
 					</c:forEach>
@@ -51,10 +51,19 @@
 
 		<c:when
 			test="${computerPage.pageNumber > computerPage.numberOfPages-3}">
-			<c:forEach var="i" begin="1" end="5">
-				<li><a href="<%= before %>${computerPage.numberOfPages-5+i}">${computerPage.numberOfPages-5+i}</a>
-				</li>
-			</c:forEach>
+			<c:choose>
+				<c:when test="${computerPage.numberOfPages < 5}">
+					<c:forEach var="i" begin="1" end="${computerPage.numberOfPages}">
+						<li><a href="<%= before %>${i}">${i}</a></li>
+					</c:forEach>
+				</c:when>
+				<c:otherwise>
+					<c:forEach var="i" begin="1" end="5">
+						<li><a href="<%= before %>${computerPage.numberOfPages-5+i}">${computerPage.numberOfPages-5+i}</a>
+						</li>
+					</c:forEach>
+				</c:otherwise>
+			</c:choose>
 		</c:when>
 
 		<c:otherwise>
