@@ -1,7 +1,5 @@
 package com.excilys.cdb.service;
 
-import com.excilys.cdb.model.Page;
-
 /**
  * Interface inherited by each service interface.
  * 
@@ -13,12 +11,14 @@ import com.excilys.cdb.model.Page;
 public interface CommonService<T> {
 
 	/**
-	 * Calls corresponding method of DAO instance to get a page of all elements
-	 * in the database.
+	 * Calls corresponding method of DAO instance to create an element in the
+	 * database.
 	 * 
-	 * @return List of elements.
+	 * @param element
+	 *            Element to create.
+	 * @return Element.
 	 */
-	public Page<T> getAll(Page<T> page);
+	public T create(T element);
 
 	/**
 	 * Calls corresponding method of DAO instance to get an element by its id in
@@ -26,10 +26,20 @@ public interface CommonService<T> {
 	 * 
 	 * @param id
 	 *            Identifier of the element in the database.
-	 * @return Instance of element.
+	 * @return Element.
 	 */
 	public T getById(long id);
-
+	
+	/**
+	 * Calls corresponding method of DAO instance to update an element in the
+	 * database.
+	 * 
+	 * @param element
+	 *            Element to update.
+	 * @return Element.
+	 */
+	public T update(T element);
+	
 	/**
 	 * Calls corresponding method of DAO instance to delete an element by its id in
 	 * the dabatase.

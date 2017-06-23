@@ -10,25 +10,13 @@ import com.excilys.cdb.model.Page;
  *
  */
 public interface ComputerDao extends CommonDao<Computer> {
-
+	
 	/**
-	 * Sends a request to the database to get a unique instance of Computer
-	 * corresponding to the given name.
+	 * Sends a request to the database to get a page of computers.
 	 * 
-	 * @param name
-	 *            Name of the computer in the dabatase.
-	 * @return Instance of computer.
+	 * @return Page of computers.
 	 */
-	public Computer create(Computer computer);
-
-	/**
-	 * Sends a request to the database to update a given entry of the Computer
-	 * table in the database.
-	 * 
-	 * @param computer
-	 *            Instance of Computer to update.
-	 */
-	public Computer update(Computer computer);
+	public Page<Computer> getAll(Page<Computer> page);
 	
 	/**
 	 * Sends a request to the database to get a page of computers where computer name
@@ -50,4 +38,11 @@ public interface ComputerDao extends CommonDao<Computer> {
 	 *            Company identifier.
 	 */
 	public void deleteComputersByCompanyId(long companyId);
+	
+	/**
+	 * Gets number of elements in the database.
+	 * 
+	 * @return Count of elements.
+	 */
+	public int getNumberOfElements();
 }

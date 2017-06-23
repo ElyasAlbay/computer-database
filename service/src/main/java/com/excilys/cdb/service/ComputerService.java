@@ -12,28 +12,17 @@ import com.excilys.cdb.model.Page;
 public interface ComputerService extends CommonService<Computer> {
 
 	/**
-	 * Calls corresponding method of DAO instance to create a computer in the
-	 * database.
+	 * Calls corresponding method of DAO instance to get a page of all computers
+	 * in the database.
 	 * 
-	 * @param computer
-	 *            Instance of Computer to create.
-	 * @return Instance of Computer.
+	 * @return Page of computers..
 	 */
-	public Computer create(Computer computer);
+	public Page<Computer> getAll(Page<Computer> page);
 
 	/**
-	 * Calls corresponding method of DAO instance to update a computer in the
-	 * database.
-	 * 
-	 * @param computer
-	 *            Instance of Computer to update.
-	 * @return Instance of Computer.
-	 */
-	public Computer update(Computer computer);
-	
-	/**
 	 * Calls corresponding method of DAO instance to get a page of computers
-	 * where computer name or corresponding company name contains provided string.
+	 * where computer name or corresponding company name contains provided
+	 * string.
 	 * 
 	 * @param page
 	 *            Page of computers.
@@ -42,4 +31,13 @@ public interface ComputerService extends CommonService<Computer> {
 	 * @return Page of computers.
 	 */
 	public Page<Computer> searchByName(Page<Computer> page, String name);
+	
+	/**
+	 * Deletes computers where company_id is equal to the parameter.
+	 * 
+	 * @param id
+	 *            Company identifier.
+	 */
+	public void deleteComputersByCompanyId(long companyId);
+	
 }

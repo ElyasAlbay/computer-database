@@ -31,7 +31,7 @@ public class ComputerDto {
 
 	
 	/**
-	 * Class constructor.
+	 * Default class constructor.
 	 */
 	public ComputerDto() {
 		companyDto = new CompanyDto();

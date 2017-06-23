@@ -18,7 +18,7 @@ public class Page<T> {
 
 	
 	/**
-	 * Constructor for Page class.
+	 * Default class constructor.
 	 */
 	public Page() {
 		this.pageNumber = PAGE_NUMBER;

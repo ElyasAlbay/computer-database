@@ -1,9 +1,7 @@
 package com.excilys.cdb.persistence;
 
-import com.excilys.cdb.model.Page;
-
 /**
- * Interface inherited by each DAO interface.
+ * Interface inherited by each DAO interface. Provides CRUD requests.
  * 
  * @author Elyas Albay
  *
@@ -13,11 +11,14 @@ import com.excilys.cdb.model.Page;
 public interface CommonDao<T> {
 
 	/**
-	 * Sends a request to the database to get a complete list of elements.
+	 * Sends a request to the database to insert an element in the
+	 * corresponding table.
 	 * 
-	 * @return Page of elements.
+	 * @param element
+	 *            Element to insert.
+	 * @return Element.
 	 */
-	public Page<T> getAll(Page<T> page);
+	public T create(T element);
 
 	/**
 	 * Sends a request to the database to get a unique element identified by the
@@ -28,12 +29,21 @@ public interface CommonDao<T> {
 	 * @return Element.
 	 */
 	public T getById(long id);
+	
+	/**
+	 * Sends a request to the database to update a given entry in the
+	 * corresponding table.
+	 * 
+	 * @param computer
+	 *            Instance of Computer to update.
+	 */
+	public T update(T element);	
 
 	/**
 	 * Sends a request to the database to delete a given entry of the element
 	 * table in the database.
 	 * 
-	 * <i> For a company deletion, uses a transaction system to ensure all
+	 * For a company deletion, uses a <i>transaction</i> system to ensure all
 	 * related computers (i.e. which foreign id identifies the company) are
 	 * safely deleted before comitting changes.
 	 * 
@@ -42,11 +52,4 @@ public interface CommonDao<T> {
 	 *            Identifier of the element in the database.
 	 */
 	public void delete(long id) ;
-	
-	/**
-	 * Gets number of elements in the database.
-	 * 
-	 * @return Count of elements.
-	 */
-	public void getNumberOfElements(Page<T> page);
 }

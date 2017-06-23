@@ -1,4 +1,4 @@
-package com.excilys.cdb.persistence;
+package com.excilys.cdb.persistence.implementation;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -15,12 +15,12 @@ import com.excilys.cdb.model.Page;
 import com.excilys.cdb.model.QCompany;
 import com.excilys.cdb.model.QComputer;
 import com.excilys.cdb.model.util.Field;
+import com.excilys.cdb.persistence.ComputerDao;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.jpa.hibernate.HibernateQueryFactory;
 
 /**
- * Implementation of ComputerDao, sends requests to the database and gets one or
- * more instance(s) of Computer.
+ * Implementation of ComputerDao, sends requests to the database to manipulate computer table.
  * 
  * @author Elyas Albay
  *
@@ -54,39 +54,6 @@ public class ComputerDaoImpl implements ComputerDao {
 				.limit(pageSize).offset(pageOffset).orderBy(order).fetch();
 
 		computerPage.setElementList(computerList);
-		getNumberOfElements(computerPage);
-
-		return computerPage;
-	}
-
-	@Override
-	public Computer getById(long id) {
-		LOG.info("getById request.");
-		LOG.debug("Searching computer with id=" + id + "...");
-
-		Computer computer = queryFactory.get().selectFrom(qComputer).leftJoin(qComputer.company, qCompany)
-				.where(qComputer.id.eq(id)).fetchOne();
-
-		return computer;
-	}
-
-	@Override
-	public Page<Computer> searchByName(Page<Computer> computerPage, String name) {
-		LOG.info("searchByName request.");
-		LOG.debug("Searching computers with name or company name=" + name + "...");
-
-		// Initialization of parameters for query
-		int pageSize = computerPage.getPageSize();
-		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
-		OrderSpecifier<?> order = getOrderSpecifier(computerPage.getOrder());
-
-		// Query to database
-		List<Computer> computerList = queryFactory.get().selectFrom(qComputer).leftJoin(qComputer.company, qCompany)
-				.limit(pageSize).offset(pageOffset).orderBy(order)
-				.where(qComputer.name.like(name + "%").or(qComputer.company.name.like(name + "%"))).fetch();
-
-		computerPage.setElementList(computerList);
-		getNbSearchElements(computerPage, name);
 
 		return computerPage;
 	}
@@ -97,6 +64,17 @@ public class ComputerDaoImpl implements ComputerDao {
 		LOG.debug("Creating computer " + computer.toString() + "...");
 
 		sessionFactory.getCurrentSession().save(computer);
+
+		return computer;
+	}
+	
+	@Override
+	public Computer getById(long id) {
+		LOG.info("getById request.");
+		LOG.debug("Searching computer with id=" + id + "...");
+
+		Computer computer = queryFactory.get().selectFrom(qComputer).leftJoin(qComputer.company, qCompany)
+				.where(qComputer.id.eq(id)).fetchOne();
 
 		return computer;
 	}
@@ -122,6 +100,27 @@ public class ComputerDaoImpl implements ComputerDao {
 
 		queryFactory.get().delete(qComputer).where(qComputer.id.eq(id)).execute();
 	}
+	
+	@Override
+	public Page<Computer> searchByName(Page<Computer> computerPage, String name) {
+		LOG.info("searchByName request.");
+		LOG.debug("Searching computers with name or company name=" + name + "...");
+
+		// Initialization of parameters for query
+		int pageSize = computerPage.getPageSize();
+		int pageOffset = (computerPage.getPageNumber() - 1) * computerPage.getPageSize();
+		OrderSpecifier<?> order = getOrderSpecifier(computerPage.getOrder());
+
+		// Query to database
+		List<Computer> computerList = queryFactory.get().selectFrom(qComputer).leftJoin(qComputer.company, qCompany)
+				.limit(pageSize).offset(pageOffset).orderBy(order)
+				.where(qComputer.name.like(name + "%").or(qComputer.company.name.like(name + "%"))).fetch();
+
+		computerPage.setElementList(computerList);
+		getNbSearchElements(computerPage, name);
+
+		return computerPage;
+	}
 
 	@Override
 	public void deleteComputersByCompanyId(long companyId) {
@@ -132,20 +131,10 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public void getNumberOfElements(Page<Computer> computerPage) {
+	public int getNumberOfElements() {
 		LOG.info("getNumberOfElements request.");
 
-		computerPage.setNumberOfElements((int) queryFactory.get().from(qComputer).fetchCount());
-
-		// Set number of pages and rounds to the upper integer if the division
-		// has a remainder
-		int numberOfPages = computerPage.getNumberOfElements() / computerPage.getPageSize();
-
-		if ((computerPage.getNumberOfElements() % computerPage.getPageSize()) != 0) {
-			computerPage.setNumberOfPages(numberOfPages + 1);
-		} else {
-			computerPage.setNumberOfPages(numberOfPages);
-		}
+		return (int) queryFactory.get().from(qComputer).fetchCount();
 	}
 
 	/**
@@ -156,7 +145,7 @@ public class ComputerDaoImpl implements ComputerDao {
 	private void getNbSearchElements(Page<Computer> computerPage, String name) {
 		LOG.info("getNbSearchElements request.");
 
-		computerPage.setNumberOfElements( (int) queryFactory.get().from(qComputer)
+		computerPage.setNumberOfElements((int) queryFactory.get().from(qComputer)
 				.where(qComputer.name.like(name + "%").or(qCompany.name.like(name + "%"))).fetchCount());
 
 		// set number of elements in search query and rounds to the upper
