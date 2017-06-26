@@ -27,51 +27,60 @@ import com.excilys.cdb.service.config.ServiceConfig;
 @Configuration
 @EnableWebMvc
 @ComponentScan("com.excilys.cdb.webapp")
-@Import(ServiceConfig.class)
+@Import({ServiceConfig.class, SecurityConfig.class})
 public class WebConfig extends WebMvcConfigurerAdapter {
 	private static final Logger LOG = LoggerFactory.getLogger(WebConfig.class);
 
 	@Bean
 	public ViewResolver internalRessourceViewResolver() {
 		LOG.info("ViewResolver init");
+		
 		InternalResourceViewResolver resolver = new InternalResourceViewResolver();
 		resolver.setViewClass(JstlView.class);
 		resolver.setSuffix(".jsp");
+		
 		return resolver;
 	}
 
 	@Bean
 	public MessageSource messageSource() {
 		LOG.info("Message source init");
+		
 		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 		messageSource.setBasename("/resources/i18n/lang");
 		messageSource.setDefaultEncoding("UTF-8");
+		
 		return messageSource;
 	}
 
 	@Bean
 	public LocaleResolver localeResolver() {
 		LOG.info("LocaleResolver init");
+		
 		final CookieLocaleResolver localeResolver = new CookieLocaleResolver();
 		localeResolver.setDefaultLocale(new Locale("en"));
+		
 		return localeResolver;
 	}
 
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		LOG.info("ResourceHandler init");
+		
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
 	}
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
 		LOG.info("RedirectViewController");
+		
 		registry.addRedirectViewController("/", "/dashboard");
 	}
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		LOG.info("Interceptors init");
+		
 		LocaleChangeInterceptor interceptor = new LocaleChangeInterceptor();
 		interceptor.setParamName("locale");
 		registry.addInterceptor(interceptor);

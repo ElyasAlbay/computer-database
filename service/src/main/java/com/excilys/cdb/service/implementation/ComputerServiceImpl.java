@@ -1,6 +1,5 @@
 package com.excilys.cdb.service.implementation;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excilys.cdb.model.Computer;
@@ -17,17 +16,20 @@ import com.excilys.cdb.service.ComputerService;
  */
 @Service
 public class ComputerServiceImpl implements ComputerService {
-	@Autowired
 	ComputerDao computerDao;
 	int totalElements;
 
+	
 	/**
 	 * Default class constructor.
 	 */
-	public ComputerServiceImpl() {
+	public ComputerServiceImpl(ComputerDao computerDao) {
+		this.computerDao=computerDao;
+		
 		totalElements = computerDao.getNumberOfElements();
 	}
 
+	
 	@Override
 	public Page<Computer> getAll(Page<Computer> computerPage) {
 		// Set number of pages and rounds to the upper integer if the division

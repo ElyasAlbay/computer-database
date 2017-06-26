@@ -41,7 +41,7 @@ public class AddComputerController {
 	private static final Logger LOG = LoggerFactory.getLogger(AddComputerController.class);
 
 	private static final String VIEW = "/WEB-INF/views/addComputer";
-	private static final String DASHBOARD = "/dashboard";
+	private static final String DASHBOARD = "redirect:/dashboard";
 	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String ERRORS = "errors";
 	private static final String dateInvalidMessage = "Introduced date cannot be anterior to discontinued date.";
@@ -102,7 +102,7 @@ public class AddComputerController {
 				
 			} else {
 				computerService.create(computer);
-				modelView.setViewName("redirect:" + DASHBOARD);
+				modelView.setViewName(DASHBOARD);
 			}
 			
 		} else {

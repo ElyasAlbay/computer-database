@@ -17,7 +17,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.excilys.cdb.persistence")
+@ComponentScan("com.excilys.cdb.persistence.*")
 public class PersistenceConfig {
 	private static final Logger LOG = LoggerFactory.getLogger(PersistenceConfig.class);
 	private static final String PROP_FILE = "/hikari.properties";

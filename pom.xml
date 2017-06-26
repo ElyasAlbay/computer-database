@@ -12,6 +12,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
 		<springVersion>4.3.8.RELEASE</springVersion>
+		<springSecurityVersion>4.2.3.RELEASE</springSecurityVersion>
 		<compilerVersion>3.6.1</compilerVersion>
 		<compilerConfig>1.8</compilerConfig>
 		<warVersion>3.0.0</warVersion>
@@ -140,6 +141,16 @@
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-jdbc</artifactId>
 				<version>${springVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-web</artifactId>
+				<version>${springSecurityVersion}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.security</groupId>
+				<artifactId>spring-security-config</artifactId>
+				<version>${springSecurityVersion}</version>
 			</dependency>
 
 			<!-- Database dependencies -->
