@@ -6,7 +6,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -18,9 +17,8 @@ public class Role {
 	@Column(name = "id")
 	private long id;
 
-	@ManyToOne
 	@JoinColumn(name = "username")
-	private User user;
+	private String username;
 
 	@Column(name = "role", nullable = false)
 	private String role;
@@ -33,8 +31,8 @@ public class Role {
 
 	}
 
-	public Role(User user, String role) {
-		this.user = user;
+	public Role(String username, String role) {
+		this.username = username;
 		this.role = role;
 	}
 
@@ -45,7 +43,7 @@ public class Role {
 		int result = 1;
 		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
-		result = prime * result + ((user == null) ? 0 : user.hashCode());
+		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
 
@@ -65,17 +63,17 @@ public class Role {
 				return false;
 		} else if (!role.equals(other.role))
 			return false;
-		if (user == null) {
-			if (other.user != null)
+		if (username == null) {
+			if (other.username != null)
 				return false;
-		} else if (!user.equals(other.user))
+		} else if (!username.equals(other.username))
 			return false;
 		return true;
 	}
 	
 	@Override
 	public String toString() {
-		return "Role [id=" + id + ", user=" + user + ", role=" + role + "]";
+		return "Role [id=" + id + ", user=" + username + ", role=" + role + "]";
 	}
 
 	
@@ -88,12 +86,12 @@ public class Role {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public String getUser() {
+		return username;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getRole() {

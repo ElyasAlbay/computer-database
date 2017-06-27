@@ -29,7 +29,7 @@ public class User {
 	@Column(name = "enabled", nullable = false)
 	private boolean enabled;
 
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "username")
 	private Set<Role> roles = new HashSet<>(0);
 
 	
