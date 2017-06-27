@@ -32,7 +32,7 @@ public class PersistenceConfig {
 	}
 
 	@Bean
-	HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+	public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
 		LOG.info("HibernateTransactionManager init");
 		
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
@@ -48,12 +48,12 @@ public class PersistenceConfig {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
 		sessionFactory.setDataSource(dataSource());
 		sessionFactory.setPackagesToScan("com.excilys.cdb.model");
-		sessionFactory.setHibernateProperties(properties());
+		sessionFactory.setHibernateProperties(getProperties());
 
 		return sessionFactory;
 	}
 
-	Properties properties() {
+	private Properties getProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.show_sql", "true");
 		properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");

@@ -14,14 +14,14 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="company")
+@Table(name = "company")
 public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private long id;
-	
-	@Column(name="name")
+
+	@Column(name = "name", nullable = false)
 	private String name;
 
 	
@@ -32,16 +32,6 @@ public class Company {
 
 	}
 
-	/**
-	 * Constructor using identifier of the company.
-	 * 
-	 * @param id
-	 *            Unique identifier for the company.
-	 */
-	public Company(long id) {
-		this.id = id;
-	}
-	
 	/**
 	 * Constructor using identifier and name of the company.
 	 * 
@@ -64,7 +54,7 @@ public class Company {
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -84,16 +74,11 @@ public class Company {
 		return true;
 	}
 
-	/**
-	 * Converts company to a string detailing its fields.
-	 */
 	@Override
 	public String toString() {
-		String delimit = " | ";
-		String string = this.getId() + delimit + this.getName();
-
-		return string;
+		return "Company [id=" + id + ", name=" + name + "]";
 	}
+	
 
 	/* Getters and setters */
 	public long getId() {

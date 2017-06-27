@@ -155,7 +155,7 @@ public class Parser {
 	 *            Input id.
 	 */
 	private void parseUpdate(String token) {
-		Computer computer = new Computer(Long.parseLong(token));
+		Computer computer = new Computer(Long.parseLong(token), "");
 		scanner = new Scanner(System.in);
 
 		getComputerInfo(computer, scanner);

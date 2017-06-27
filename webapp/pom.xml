@@ -43,6 +43,8 @@
 			<artifactId>spring-webmvc</artifactId>
 		</dependency>
 		<dependency>
+		
+		<!-- Spring security dependencies -->
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
 		</dependency>
@@ -71,5 +73,4 @@
 			<artifactId>selenium-java</artifactId>
 		</dependency>
 	</dependencies>
-
 </project>

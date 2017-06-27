@@ -18,43 +18,29 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="computer")
+@Table(name = "computer")
 public class Computer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name = "id")
 	private long id;
-	
-	@Column(name="name")
+
+	@Column(name = "name", nullable = false)
 	private String name;
-	@Column(name="introduced")
+	@Column(name = "introduced")
 	private LocalDate introduced;
-	@Column(name="discontinued")
+	@Column(name = "discontinued")
 	private LocalDate discontinued;
 	@ManyToOne
-	@JoinColumn(name="company_id")
+	@JoinColumn(name = "company_id")
 	private Company company;
-	
+
 	
 	/**
 	 * Default class constructor.
 	 */
 	public Computer() {
 
-	}
-
-	/**
-	 * Constructor using identifier of the computer.
-	 * 
-	 * @param id
-	 *            Unique identifier for the computer.
-	 */
-	public Computer(long id) {
-		this.id = id;
-
-		this.introduced = null;
-		this.discontinued = null;
-		this.company = null;
 	}
 
 	/**
@@ -120,32 +106,14 @@ public class Computer {
 			return false;
 		return true;
 	}
-
+	
 	@Override
 	public String toString() {
-		String delimit = " | ";
-		String string = this.getId() + delimit + this.getName();
-
-		if (this.getIntroduced() != null) {
-			string += delimit + this.getIntroduced();
-		} else {
-			string += delimit + "null";
-		}
-		if (this.getDiscontinued() != null) {
-			string += delimit + this.getDiscontinued();
-		} else {
-			string += delimit + "null";
-		}
-		if (this.getCompany() != null) {
-			string += delimit + this.getCompany().toString();
-		} else {
-			string += delimit + "null";
-		}
-
-		return string;
+		return "Computer [id=" + id + ", name=" + name + ", introduced=" + introduced + ", discontinued=" + discontinued
+				+ ", company=" + company + "]";
 	}
-
 	
+
 	/* Getters and setters */
 	public long getId() {
 		return this.id;

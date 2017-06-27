@@ -34,41 +34,16 @@ public class UserDaoImpl implements UserDao {
 	
 	
 	@Override
-	public User create(User user) {
-		LOG.info("create request.");
-		LOG.debug("Creating user " + user.toString() + "...");
-
-		sessionFactory.getCurrentSession().save(user);
+	public User getByName(String name) {
+		LOG.info("getByName request.");
+		LOG.debug("Searching company with name=" + name + "...");
 		
-		return user;
-	}
+		User user = queryFactory.get().selectFrom(qUser).where(qUser.name.eq(name)).fetchOne();
 
-	@Override
-	public User getById(long id) {
-		LOG.info("getById request.");
-
-		User user = queryFactory.get().selectFrom(qUser).where(qUser.id.eq(id)).fetchOne();
-
-		return user;
-	}
-
-	@Override
-	public User update(User user) {
-		LOG.info("update request.");
-		LOG.debug("Updating user with id=" + user.getId() + "...");
-		
-		queryFactory.get().update(qUser).where(qUser.id.eq(user.getId()))
-		.set(qUser.name, user.getName()).execute();
-		
 		return user;
 	}
 	
-	@Override
-	public void delete(long id) {
-		LOG.info("delete request.");
-
-		queryFactory.get().delete(qUser).where(qUser.id.eq(id)).execute();
-	}
-
+	
+	
 	
 }

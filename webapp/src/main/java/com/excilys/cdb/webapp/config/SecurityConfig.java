@@ -23,10 +23,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
 
-		auth.jdbcAuthentication().dataSource(dataSource)
-				.passwordEncoder(passwordEncoder())
-				.usersByUsernameQuery("SELECT name, password, enabled from user where name=?")
-				.authoritiesByUsernameQuery("SELECT username, role from role where username=?");
+		auth.jdbcAuthentication().dataSource(dataSource).passwordEncoder(passwordEncoder())
+				.usersByUsernameQuery("select name, password, enabled from user where name=?")
+				.authoritiesByUsernameQuery("select username, role from role where username=?");
 	}
 
 	@Override
@@ -37,13 +36,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.POST, "/dashboard").hasAnyRole("ADMIN")
 				.antMatchers("/addComputer").hasAnyRole("ADMIN")
 				.antMatchers("/editComputer").hasAnyRole("ADMIN")
-					.and().formLogin();
+					.and().formLogin()
+					.and().csrf();
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
-		
+
 		return encoder;
 	}
 }

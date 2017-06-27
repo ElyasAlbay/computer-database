@@ -8,6 +8,15 @@ import com.excilys.cdb.model.User;
  * @author Elyas Albay
  *
  */
-public interface UserDao extends CommonDao<User> {
+public interface UserDao {
 
+	/**
+	 * Sends a request to the database to get a unique user identified by the
+	 * given name.
+	 * 
+	 * @param name
+	 *            User name in the dabatase.
+	 * @return User.
+	 */
+	public User getByName(String name);
 }

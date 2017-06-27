@@ -15,5 +15,11 @@
 			<artifactId>persistence</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		
+		<!-- Spring security dependencies -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+		</dependency>
 	</dependencies>
 </project>
