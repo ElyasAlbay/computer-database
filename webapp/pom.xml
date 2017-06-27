@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.excilys.cdb</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>1.4-SNAPSHOT</version>
+		<version>1.4-RELEASE</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>webapp</artifactId>
@@ -51,6 +51,10 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-taglibs</artifactId>
 		</dependency>
 
 		<!-- Web ui and server dependencies -->

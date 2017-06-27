@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title><spring:message code="label.title"/></title>
+<title><spring:message code="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
@@ -45,14 +45,16 @@
 							class="btn btn-primary" />
 					</form>
 				</div>
-				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
-							code="label.addButton" /></a> <a class="btn btn-default"
-						id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode('<spring:message code="label.editButton"/>', '<spring:message code="label.viewButton"/>');">
-						<spring:message code="label.editButton" />
-					</a>
-				</div>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
+					<div class="pull-right">
+						<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
+								code="label.addButton" /></a> <a class="btn btn-default"
+							id="editComputer" href="#"
+							onclick="$.fn.toggleEditMode('<spring:message code="label.editButton"/>', '<spring:message code="label.viewButton"/>');">
+							<spring:message code="label.editButton" />
+						</a>
+					</div>
+				</sec:authorize>
 			</div>
 		</div>
 
@@ -66,15 +68,17 @@
 			<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
-						<!-- Variable declarations for passing labels as parameters -->
-						<th class="editMode" style="width: 60px; height: 22px;"><input
-							type="checkbox" id="selectall" /> <span
-							style="vertical-align: top;"> - <a href="#"
-								id="deleteSelected"
-								onclick="$.fn.deleteSelected('<spring:message code="label.deleteConfirm"/>');">
-									<i class="fa fa-trash-o fa-lg"></i>
-							</a>
-						</span></th>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
+							<!-- Variable declarations for passing labels as parameters -->
+							<th class="editMode" style="width: 60px; height: 22px;"><input
+								type="checkbox" id="selectall" /> <span
+								style="vertical-align: top;"> - <a href="#"
+									id="deleteSelected"
+									onclick="$.fn.deleteSelected('<spring:message code="label.deleteConfirm"/>');">
+										<i class="fa fa-trash-o fa-lg"></i>
+								</a>
+							</span></th>
+						</sec:authorize>
 						<!-- Table header for Computer Name -->
 						<th><a
 							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="name"/>>
@@ -104,7 +108,8 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id}"></td>
-							<td><a href=editComputer?computer_id=${computer.id}
+							<td><a
+								<sec:authorize access="hasRole('ROLE_ADMIN')">href=editComputer?computer_id=${computer.id}</sec:authorize>
 								onclick="">${computer.name}</a></td>
 							<td>${computer.introduced}</td>
 							<td>${computer.discontinued}</td>
