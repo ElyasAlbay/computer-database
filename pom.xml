@@ -28,6 +28,7 @@
 		<jspVersion>2.1.1</jspVersion>
 		<jstlVersion>1.2</jstlVersion>
 		<jacksonVersion>2.8.9</jacksonVersion>
+		<restEasyVersion>3.0.13.Final</restEasyVersion>
 
 		<commonLangVersion>3.0</commonLangVersion>
 		<javaxValidationVersion>1.1.0.Final</javaxValidationVersion>
@@ -234,6 +235,28 @@
 				<artifactId>jackson-databind</artifactId>
 				<version>${jacksonVersion}</version>
 			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${restEasyVersion}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.jboss.logging</groupId>
+						<artifactId>jboss-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-client</artifactId>
+				<version>${restEasyVersion}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.jboss.logging</groupId>
+						<artifactId>jboss-logging</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
 
 			<!-- Utilities dependencies -->
 			<dependency>
@@ -350,6 +373,9 @@
 			<id>excilys-release</id>
 			<url>http://repository.excilys.com/content/repositories/releases</url>
 		</repository>
+		<repository>
+			<id>JBoss repository</id>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
 	</repositories>
-
 </project>

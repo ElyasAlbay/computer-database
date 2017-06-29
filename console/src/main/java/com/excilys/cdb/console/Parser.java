@@ -8,6 +8,7 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.cdb.console.exceptions.InvalidCommandException;
+import com.excilys.cdb.console.webservice.ComputerWS;
 import com.excilys.cdb.model.Company;
 import com.excilys.cdb.model.Computer;
 import com.excilys.cdb.model.Page;
@@ -109,8 +110,9 @@ public class Parser {
 			Page<Computer> computerPage = new Page<>();
 			getPageInfo(computerPage, scanner);
 
-			computerPage = computerService.getAll(computerPage);
-			display.displayListComputer(computerPage);
+			ComputerWS.getPage(computerPage.getPageNumber());
+//			computerPage = computerService.getAll(computerPage);
+//			display.displayListComputer(computerPage);
 
 		} else {
 			scanner.close();
