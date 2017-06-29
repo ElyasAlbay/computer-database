@@ -29,15 +29,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http.authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/dashboard").hasAnyRole("ADMIN", "USER")
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/dashboard").hasAnyRole("ADMIN", "USER")
 				.antMatchers(HttpMethod.POST, "/dashboard").hasAnyRole("ADMIN")
 				.antMatchers("/addComputer").hasAnyRole("ADMIN")
 				.antMatchers("/editComputer").hasAnyRole("ADMIN")
-					.and().formLogin()
-					.and().csrf().disable();
+				.antMatchers("/computer/add**", "/computer/delete**", "/computer/update**").hasAnyRole("ADMIN")
+				.antMatchers("/company/add**", "/company/delete**", "/company/update**").hasAnyRole("ADMIN")
+				.and().formLogin()
+				.and().csrf().disable();
 	}
-
+	
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();

@@ -45,4 +45,3 @@ drop schema if exists `computer-database-db`;
   create index ix_computer_name on computer (name);
   create index ix_computer_introduced on computer (introduced);
   create index ix_computer_discontinued on computer (discontinued);
-  create index ix_company_name on company (name);

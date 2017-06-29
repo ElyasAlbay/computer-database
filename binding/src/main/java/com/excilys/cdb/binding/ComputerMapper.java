@@ -63,6 +63,10 @@ public class ComputerMapper {
 	public static ComputerDto createDto(Computer computer) {
 		ComputerDto computerDto = new ComputerDto();
 
+		if (computer == null) {
+			return null;
+		}
+		
 		computerDto.setId(computer.getId());
 		computerDto.setName(computer.getName());
 		if (computer.getIntroduced() != null) {
@@ -89,6 +93,10 @@ public class ComputerMapper {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		Computer computer = new Computer();
 
+		if (computerDto == null) {
+			return null;
+		}
+		
 		computer.setId(computerDto.getId());
 		computer.setName(computerDto.getName());
 		if (StringUtils.isNotBlank(computerDto.getIntroduced())) {

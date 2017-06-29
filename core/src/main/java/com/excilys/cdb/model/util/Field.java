@@ -11,8 +11,8 @@ public class Field {
 	public static final String COMPUTER_NAME = "name";
 	public static final String INTRODUCED = "introduced";
 	public static final String DISCONTINUED = "discontinued";
-	public static final String COMPANY_ID = "company.id";
-	public static final String COMPANY_NAME = "company.name";
+	public static final String COMPANY_ID = "companyId";
+	public static final String COMPANY_NAME = "companyName";
 
 
 	public static boolean isValidOrder(String field) {

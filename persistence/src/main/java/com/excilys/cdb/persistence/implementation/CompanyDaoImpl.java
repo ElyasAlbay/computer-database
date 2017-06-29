@@ -78,11 +78,11 @@ public class CompanyDaoImpl implements CompanyDao {
 	}
 
 	@Override
-	public void delete(long id) {
+	public long delete(long id) {
 		LOG.info("delete request.");
 		LOG.debug("Deleting computer with id=" + id + "...");
 
-		queryFactory.get().delete(qCompany).where(qCompany.id.eq(id)).execute();
+		return queryFactory.get().delete(qCompany).where(qCompany.id.eq(id)).execute();
 	}
 	
 }

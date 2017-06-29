@@ -51,6 +51,12 @@ public class AddComputerController {
 	@Autowired
 	private CompanyService companyService;
 
+	/**
+	 * GET request. Sends request to database to get list of companies then
+	 * sends jsp with parameters to client.
+	 * 
+	 * @return Model and View.
+	 */
 	@GetMapping
 	public ModelAndView get() {
 		LOG.info("Get request.");
@@ -64,6 +70,19 @@ public class AddComputerController {
 		return modelView;
 	}
 
+	/**
+	 * POST request. Gets form parameters, validates fields, sends request to
+	 * database to create computer if validation successful, then redirects to
+	 * dashboard. Else, resends jsp with errors.
+	 * 
+	 * @param params
+	 *            Jsp parameters.
+	 * @param computerDto
+	 *            Object to validate.
+	 * @param bindingResult
+	 *            Result of validation.
+	 * @return Model and View.
+	 */
 	@PostMapping
 	public ModelAndView doPost(@RequestParam Map<String, String> params, @Valid @ModelAttribute ComputerDto computerDto,
 			BindingResult bindingResult) {
@@ -82,7 +101,7 @@ public class AddComputerController {
 		// Sends query if no errors and redirects to dashboard, display error
 		// messages else
 		if (!bindingResult.hasErrors()) {
-			
+
 			computerDto.setName(name);
 			computerDto.setIntroduced(introduced);
 			computerDto.setDiscontinued(discontinued);
@@ -99,14 +118,14 @@ public class AddComputerController {
 				errors.put(Field.INTRODUCED, dateInvalidMessage);
 				modelView.addObject(ERRORS, errors);
 				modelView.addObject(ATT_COMPANY_PG, companyDtoPage);
-				
+
 			} else {
 				computerService.create(computer);
 				modelView.setViewName(DASHBOARD);
 			}
-			
+
 		} else {
-			
+
 			if (bindingResult.getFieldError(Field.COMPUTER_NAME) != null)
 				errors.put(Field.COMPUTER_NAME, bindingResult.getFieldError(Field.COMPUTER_NAME).getDefaultMessage());
 			if (bindingResult.getFieldError(Field.INTRODUCED) != null)

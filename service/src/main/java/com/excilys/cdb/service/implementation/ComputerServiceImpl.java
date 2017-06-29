@@ -19,17 +19,15 @@ public class ComputerServiceImpl implements ComputerService {
 	ComputerDao computerDao;
 	int totalElements;
 
-	
 	/**
 	 * Default class constructor.
 	 */
 	public ComputerServiceImpl(ComputerDao computerDao) {
-		this.computerDao=computerDao;
-		
+		this.computerDao = computerDao;
+
 		totalElements = computerDao.getNumberOfElements();
 	}
 
-	
 	@Override
 	public Page<Computer> getAll(Page<Computer> computerPage) {
 		// Set number of pages and rounds to the upper integer if the division
@@ -42,7 +40,7 @@ public class ComputerServiceImpl implements ComputerService {
 		} else {
 			computerPage.setNumberOfPages(numberOfPages);
 		}
-		
+
 		return computerDao.getAll(computerPage);
 	}
 
@@ -66,10 +64,12 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void delete(long id) {
-		totalElements--;
-		
-		computerDao.delete(id);
+	public long delete(long id) {
+
+		long count = computerDao.delete(id);
+		totalElements -= count;
+
+		return count;
 	}
 
 	@Override
@@ -79,9 +79,11 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public void deleteComputersByCompanyId(long companyId) {
-		
-		computerDao.deleteComputersByCompanyId(companyId);
-		totalElements = computerDao.getNumberOfElements();
+	public long deleteComputersByCompanyId(long companyId) {
+
+		long count = computerDao.deleteComputersByCompanyId(companyId);
+		totalElements -= count;
+
+		return count;
 	}
 }

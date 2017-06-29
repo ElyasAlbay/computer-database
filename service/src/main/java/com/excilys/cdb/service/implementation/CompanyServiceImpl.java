@@ -51,10 +51,12 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	@Transactional
-	public void delete(long id) {
+	public long delete(long id) {
 
 		computerService.deleteComputersByCompanyId(id);
-		companyDao.delete(id);
+		long count = companyDao.delete(id);
+		
+		return count;
 	}
 
 

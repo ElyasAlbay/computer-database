@@ -94,11 +94,11 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public void delete(long id) {
+	public long delete(long id) {
 		LOG.info("delete request.");
 		LOG.debug("Deleting computer with id=" + id + "...");
 
-		queryFactory.get().delete(qComputer).where(qComputer.id.eq(id)).execute();
+		return queryFactory.get().delete(qComputer).where(qComputer.id.eq(id)).execute();
 	}
 	
 	@Override
@@ -123,11 +123,11 @@ public class ComputerDaoImpl implements ComputerDao {
 	}
 
 	@Override
-	public void deleteComputersByCompanyId(long companyId) {
+	public long deleteComputersByCompanyId(long companyId) {
 		LOG.info("deleteComputerByCompanyId request.");
 		LOG.debug("Deleting computers with company_id=" + companyId + "...");
 
-		queryFactory.get().delete(qComputer).where(qComputer.company.id.eq(companyId)).execute();
+		return queryFactory.get().delete(qComputer).where(qComputer.company.id.eq(companyId)).execute();
 	}
 
 	@Override

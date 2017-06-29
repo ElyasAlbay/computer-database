@@ -43,22 +43,28 @@ public class DashboardController {
 	@Autowired
 	private ComputerService computerService;
 
-
+	/**
+	 * GET request. Gets page parameters from jsp if exist, sends request to
+	 * database then sends jsp with parameters to client.
+	 * 
+	 * @param params
+	 *            Jsp parameters.
+	 * @return Model and View.
+	 */
 	@GetMapping
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		LOG.info("Get request.");
-		
+
 		ModelAndView modelView = new ModelAndView(VIEW);
 		Page<Computer> computerPage = new Page<>();
 		Page<ComputerDto> computerDtoPage = new Page<>();
 
-		
 		// Get parameters from GET request if exists
 		String pageNumber = params.get(PAGE_NUMBER);
 		String pageSize = params.get(PAGE_SIZE);
 		String order = params.get(ORDER);
 		String search = params.get(SEARCH);
-		
+
 		if (StringUtils.isNotBlank(pageNumber)) {
 			int number = Integer.parseInt(pageNumber);
 
@@ -86,17 +92,25 @@ public class DashboardController {
 		} else {
 			computerDtoPage = ComputerMapper.createDtoPage(computerService.getAll(computerPage));
 		}
-		
+
 		modelView.addObject(ATT_COMPUTER_PG, computerDtoPage);
-		
+
 		// Redirects to dashboard page with new parameters
 		return modelView;
 	}
 
+	/**
+	 * POST request. Gets form parameters and sends request to database to
+	 * delete selected computers.
+	 * 
+	 * @param params
+	 *            Jsp parameters.
+	 * @return Model and View.
+	 */
 	@PostMapping
 	public String doPost(@RequestParam Map<String, String> params) {
 		LOG.info("Post request.");
-		
+
 		// Get computer id selection from POST request
 		String selection = params.get(SELECTION);
 		String pageNumber = params.get(PAGE_NUMBER);
@@ -117,6 +131,6 @@ public class DashboardController {
 		}
 
 		// Redirects to the GET request.
-		return DASHBOARD+linkParams;
+		return DASHBOARD + linkParams;
 	}
 }

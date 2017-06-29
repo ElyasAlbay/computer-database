@@ -2,7 +2,7 @@ package com.excilys.cdb.console;
 
 import java.util.Scanner;
 
-import com.excilys.cdb.console.util.InvalidCommandException;
+import com.excilys.cdb.console.exceptions.InvalidCommandException;
 import com.excilys.cdb.service.CompanyService;
 import com.excilys.cdb.service.ComputerService;
 

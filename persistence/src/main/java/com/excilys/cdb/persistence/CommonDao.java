@@ -11,8 +11,8 @@ package com.excilys.cdb.persistence;
 public interface CommonDao<T> {
 
 	/**
-	 * Sends a request to the database to insert an element in the
-	 * corresponding table.
+	 * Sends a request to the database to insert an element in the corresponding
+	 * table.
 	 * 
 	 * @param element
 	 *            Element to insert.
@@ -29,7 +29,7 @@ public interface CommonDao<T> {
 	 * @return Element.
 	 */
 	public T getById(long id);
-	
+
 	/**
 	 * Sends a request to the database to update a given entry in the
 	 * corresponding table.
@@ -37,19 +37,20 @@ public interface CommonDao<T> {
 	 * @param computer
 	 *            Instance of Computer to update.
 	 */
-	public T update(T element);	
+	public T update(T element);
 
 	/**
 	 * Sends a request to the database to delete a given entry of the element
 	 * table in the database.
 	 * 
-	 * For a company deletion, uses a <i>transaction</i> system to ensure all
-	 * related computers (i.e. which foreign id identifies the company) are
-	 * safely deleted before comitting changes.
+	 * For a company deletion, uses a <i>transaction</i> to ensure all related
+	 * computers (i.e. which foreign id identifies the company) are safely
+	 * deleted before comitting changes.
 	 * 
 	 * 
 	 * @param id
 	 *            Identifier of the element in the database.
+	 * @return Amount of deleted elements.
 	 */
-	public void delete(long id) ;
+	public long delete(long id);
 }

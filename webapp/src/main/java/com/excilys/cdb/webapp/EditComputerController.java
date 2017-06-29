@@ -41,7 +41,7 @@ public class EditComputerController {
 	private static final Logger LOG = LoggerFactory.getLogger(EditComputerController.class);
 
 	private static final String VIEW = "/WEB-INF/views/editComputer";
-	private static final String DASHBOARD = "/dashboard";
+	private static final String DASHBOARD = "redirect:/dashboard";
 	private static final String ATT_COMPUTER = "computer";
 	private static final String ATT_COMPANY_PG = "companyPage";
 	private static final String COMPUTER_ID = "computer_id";
@@ -53,6 +53,12 @@ public class EditComputerController {
 	@Autowired
 	private CompanyService companyService;
 
+	/**
+	 * GET request. Sends request to database to get list of companies then
+	 * sends jsp with parameters to client.
+	 * 
+	 * @return Model and View.
+	 */
 	@GetMapping
 	public ModelAndView get(@RequestParam Map<String, String> params) {
 		LOG.info("Get request");
@@ -73,6 +79,19 @@ public class EditComputerController {
 		return modelView;
 	}
 
+	/**
+	 * POST request. Gets form parameters, validates fields, sends request to
+	 * database to update computer if validation successful, then redirects to
+	 * dashboard. Else, resends jsp with errors.
+	 * 
+	 * @param params
+	 *            Jsp parameters.
+	 * @param computerDto
+	 *            Object to validate.
+	 * @param bindingResult
+	 *            Result of validation.
+	 * @return Model and View.
+	 */
 	@PostMapping
 	public ModelAndView post(@RequestParam Map<String, String> params, @Valid @ModelAttribute ComputerDto computerDto,
 			BindingResult bindingResult) {
@@ -114,7 +133,7 @@ public class EditComputerController {
 				
 			} else {
 				computerService.update(computer);
-				modelView.setViewName("redirect:" + DASHBOARD);
+				modelView.setViewName(DASHBOARD);
 			}
 			
 		} else {

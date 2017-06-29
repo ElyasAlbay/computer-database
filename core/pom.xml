@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>com.excilys.cdb</groupId>
 		<artifactId>computer-database</artifactId>
-		<version>1.4-RELEASE</version>
+		<version>1.5-SNAPSHOT</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>core</artifactId>
@@ -42,8 +42,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.querydsl</groupId>
+			<artifactId>querydsl-apt</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
 		</dependency>
+
 
 
 		<!-- Slj4f dependencies -->

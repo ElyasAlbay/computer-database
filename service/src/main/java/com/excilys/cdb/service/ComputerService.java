@@ -31,13 +31,14 @@ public interface ComputerService extends CommonService<Computer> {
 	 * @return Page of computers.
 	 */
 	public Page<Computer> searchByName(Page<Computer> page, String name);
-	
+
 	/**
 	 * Deletes computers where company_id is equal to the parameter.
 	 * 
 	 * @param id
 	 *            Company identifier.
+	 * @return Amount of deleted computers.
 	 */
-	public void deleteComputersByCompanyId(long companyId);
-	
+	public long deleteComputersByCompanyId(long companyId);
+
 }

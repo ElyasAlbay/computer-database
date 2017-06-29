@@ -29,7 +29,7 @@ public interface CommonService<T> {
 	 * @return Element.
 	 */
 	public T getById(long id);
-	
+
 	/**
 	 * Calls corresponding method of DAO instance to update an element in the
 	 * database.
@@ -39,13 +39,14 @@ public interface CommonService<T> {
 	 * @return Element.
 	 */
 	public T update(T element);
-	
+
 	/**
-	 * Calls corresponding method of DAO instance to delete an element by its id in
-	 * the dabatase.
+	 * Calls corresponding method of DAO instance to delete an element by its id
+	 * in the dabatase.
 	 * 
 	 * @param id
 	 *            Identifier of the element in the database.
+	 * @Return Amount of deleted elements.
 	 */
-	public void delete(long id);
+	public long delete(long id);
 }

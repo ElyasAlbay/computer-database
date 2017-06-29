@@ -4,11 +4,11 @@
 <title><spring:message code="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="resources/css/bootstrap.min.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"
 	type="text/css" media="screen" />
-<link href="resources/css/font-awesome.css" rel="stylesheet"
+<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet"
 	type="text/css" media="screen" />
-<link href="resources/css/main.css" rel="stylesheet" type="text/css"
+<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css"
 	media="screen" />
 </head>
 <body>
@@ -30,7 +30,11 @@
 					</h1>
 
 					<form action="editComputer" method="POST">
-						<input type="hidden" value="${computer.id}" id="id" name="id" />
+						<input type="hidden" name="${_csrf.parameterName}"
+							value="${_csrf.token}" />
+						<input type="hidden"
+							value="${computer.id}" id="id" name="id" />
+							
 						<fieldset>
 							<div class="form-group">
 								<label for="name"><spring:message
@@ -54,7 +58,7 @@
 							<div class="form-group">
 								<label for="companyId"><spring:message
 										code="label.company" /></label> <select class="form-control"
-									id="company.id" name="company.id">
+									id="companyId" name="companyId">
 									<option value="0">--</option>
 									<c:forEach items="${companyPage.elementList}" var="company">
 										<option value="${company.id}"
@@ -64,6 +68,7 @@
 								</select>
 							</div>
 						</fieldset>
+						
 						<div class="actions pull-right">
 							<input type="submit" value="Edit" class="btn btn-primary">
 							or <a href="dashboard" class="btn btn-default">Cancel</a>

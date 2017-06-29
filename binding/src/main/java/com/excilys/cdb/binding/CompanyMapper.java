@@ -58,6 +58,10 @@ public class CompanyMapper {
 	public static CompanyDto createDto(Company company) {
 		CompanyDto companyDto = new CompanyDto();
 
+		if (company == null) {
+			return null;
+		}
+		
 		companyDto.setId(company.getId());
 		companyDto.setName(company.getName());
 
@@ -73,6 +77,10 @@ public class CompanyMapper {
 	 */
 	public static Company createObject(CompanyDto companyDto) {
 		Company company = new Company();
+		
+		if (companyDto == null) {
+			return null;
+		}
 
 		company.setId(companyDto.getId());
 		company.setName(companyDto.getName());

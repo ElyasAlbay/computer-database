@@ -1,4 +1,4 @@
-package com.excilys.cdb.console.util;
+package com.excilys.cdb.console.exceptions;
 
 /**
  * New exception for invalid user input.
