@@ -18,20 +18,10 @@
 		<div class="container">
 			<a class="navbar-brand" href="dashboard"> <spring:message
 					code="label.navbar" />
-			</a><span class="pull-right"> <a class="navbar-brand"
-				href="<tags:link computerPage="${computerPage}" search="${search}" pageNumber="1"/>&locale=en">
-					<img
-					src="${pageContext.request.contextPath}/resources/fonts/uk.png"
-					alt="en" style="width: 30px; height: 30px;">
-			</a> <a class="navbar-brand"
-				href="<tags:link computerPage="${computerPage}" search="${search}"/>&locale=fr">
-					<img
-					src="${pageContext.request.contextPath}/resources/fonts/fr.png"
-					alt="fr" style="width: 30px; height: 30px;">
-			</a><a class="navbar-brand" href="javascript:formSubmit()"> <img
+			</a><span class="pull-right"><a class="navbar-brand"
+				href="javascript:formSubmit()"> <img
 					src="${pageContext.request.contextPath}/resources/fonts/logout.png"
-					alt="logout" style="width: 30px; height: 30px;"></a>
-			</span>
+					alt="logout" style="width: 30px; height: 30px;"></a> </span>
 
 			<form action="<c:url value='j_spring_security_logout' />"
 				method="post" id="logoutForm">
