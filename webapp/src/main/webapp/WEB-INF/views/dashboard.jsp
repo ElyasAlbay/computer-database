@@ -5,12 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta charset="utf-8">
 <!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css"
-	media="screen" />
-<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"
-	type="text/css" media="screen" />
-<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet"
-	type="text/css" media="screen" />
+<link href="${pageContext.request.contextPath}/resources/css/main.css"
+	rel="stylesheet" type="text/css" media="screen" />
+<link
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
+	rel="stylesheet" type="text/css" media="screen" />
+<link
+	href="${pageContext.request.contextPath}/resources/css/font-awesome.css"
+	rel="stylesheet" type="text/css" media="screen" />
 </head>
 
 <body>
@@ -18,11 +20,31 @@
 		<div class="container">
 			<a class="navbar-brand" href="dashboard"> <spring:message
 					code="label.navbar" />
-			</a> <a class="navbar-brand pull-right"
+			</a><span class="pull-right"> <a class="navbar-brand"
 				href="<tags:link computerPage="${computerPage}" search="${search}" pageNumber="1"/>&locale=en">
-				en </a> <a class="navbar-brand pull-right"
+					<img
+					src="${pageContext.request.contextPath}/resources/fonts/uk.png"
+					alt="en" style="width: 30px; height: 30px;">
+			</a> <a class="navbar-brand"
 				href="<tags:link computerPage="${computerPage}" search="${search}"/>&locale=fr">
-				fr </a>
+					<img
+					src="${pageContext.request.contextPath}/resources/fonts/fr.png"
+					alt="fr" style="width: 30px; height: 30px;">
+			</a><a class="navbar-brand" href="javascript:formSubmit()"> <img
+					src="${pageContext.request.contextPath}/resources/fonts/logout.png"
+					alt="logout" style="width: 30px; height: 30px;"></a>
+			</span>
+
+			<form action="<c:url value='j_spring_security_logout' />"
+				method="post" id="logoutForm">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+			</form>
+			<script>
+				function formSubmit() {
+					document.getElementById("logoutForm").submit();
+				}
+			</script>
 		</div>
 	</header>
 
@@ -62,8 +84,8 @@
 			action=<tags:link computerPage="${computerPage}" search="${search}"/>
 			method="POST">
 			<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" />
-			<input type="hidden" name="selection" value="">
+				value="${_csrf.token}" /> <input type="hidden" name="selection"
+				value="">
 		</form>
 
 		<div class="container" style="margin-top: 10px;">
@@ -85,22 +107,27 @@
 						<th><a
 							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="name"/>>
 								<spring:message code="label.computerName" />
-						</a></th>
+						</a> <span class="pull-right"><c:if
+									test="${computerPage.order == 'name'}">&#x25BC;</c:if></span></th>
 						<!-- Table header for Introduced Date -->
 						<th><a
 							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="introduced"/>>
 								<spring:message code="label.introduced" />
-						</a></th>
+						</a> <span class="pull-right"><c:if
+									test="${computerPage.order == 'introduced'}">&#x25BC;</c:if></span></th>
 						<!-- Table header for Discontinued Date -->
 						<th><a
 							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="discontinued"/>>
 								<spring:message code="label.discontinued" />
-						</a></th>
+						</a> <span class="pull-right"><c:if
+									test="${computerPage.order == 'discontinued'}">&#x25BC;</c:if></span>
+						</th>
 						<!-- Table header for Company -->
 						<th><a
-							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="company.name"/>>
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="companyName"/>>
 								<spring:message code="label.company" />
-						</a></th>
+						</a> <span class="pull-right"><c:if
+									test="${computerPage.order == 'companyName'}">&#x25BC;</c:if></span></th>
 
 					</tr>
 				</thead>
@@ -142,9 +169,12 @@
 			</div>
 		</div>
 	</footer>
-	<script src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/jquery.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/dashboard.js"></script>
 
 </body>
 </html>

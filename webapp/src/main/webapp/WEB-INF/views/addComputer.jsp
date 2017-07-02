@@ -4,19 +4,46 @@
 <title><spring:message code="label.title" /></title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- Bootstrap -->
-<link href="${pageContext.request.contextPath}/resources/css/main.css" rel="stylesheet" type="text/css"
-	media="screen" />
-<link href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"
-	type="text/css" media="screen" />
-<link href="${pageContext.request.contextPath}/resources/css/font-awesome.css" rel="stylesheet"
-	type="text/css" media="screen" />
+<link href="${pageContext.request.contextPath}/resources/css/main.css"
+	rel="stylesheet" type="text/css" media="screen" />
+<link
+	href="${pageContext.request.contextPath}/resources/css/bootstrap.min.css"
+	rel="stylesheet" type="text/css" media="screen" />
+<link
+	href="${pageContext.request.contextPath}/resources/css/font-awesome.css"
+	rel="stylesheet" type="text/css" media="screen" />
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
 			<a class="navbar-brand" href="dashboard"> <spring:message
 					code="label.navbar" />
-			</a>
+			</a><span class="pull-right"> <a class="navbar-brand"
+				href="<tags:link computerPage="${computerPage}" search="${search}"
+				pageNumber="1" />&locale=en">
+					<img
+					src="${pageContext.request.contextPath}/resources/fonts/uk.png"
+					alt="en" style="width: 30px; height: 30px;">
+			</a> <a class="navbar-brand"
+				href="<tags:link computerPage="${computerPage}" search="${search}"/>&locale=fr">
+					<img
+					src="${pageContext.request.contextPath}/resources/fonts/fr.png"
+					alt="fr" style="width: 30px; height: 30px;">
+			</a><a class="navbar-brand" href="javascript:formSubmit()"> <img
+					src="${pageContext.request.contextPath}/resources/fonts/logout.png"
+					alt="logout" style="width: 30px; height: 30px;"></a>
+			</span>
+
+			<form action="<c:url value='j_spring_security_logout' />"
+				method="post" id="logoutForm">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" />
+			</form>
+			<script>
+				function formSubmit() {
+					document.getElementById("logoutForm").submit();
+				}
+			</script>
 		</div>
 	</header>
 
@@ -24,11 +51,13 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-8 col-xs-offset-2 box">
-					<h1>Add Computer</h1>
+					<h1>
+						<spring:message code="label.addButton" />
+					</h1>
 					<form action="addComputer" method="POST">
 						<input type="hidden" name="${_csrf.parameterName}"
 							value="${_csrf.token}" />
-							
+
 						<fieldset>
 							<div class="form-group">
 								<label for="name"><spring:message

@@ -35,10 +35,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/editComputer").hasAnyRole("ADMIN")
 				.antMatchers("/computer/add**", "/computer/delete**", "/computer/update**").hasAnyRole("ADMIN")
 				.antMatchers("/company/add**", "/company/delete**", "/company/update**").hasAnyRole("ADMIN")
-				.and().formLogin()
-				.and().csrf().disable();
+					.and().formLogin().loginPage("/login").failureUrl("/login?error")
+						.usernameParameter("username").passwordParameter("password")
+						.loginProcessingUrl("/j_spring_security_check")
+					.and().logout().logoutSuccessUrl("/login?logout").logoutUrl("/j_spring_security_logout")
+					.and().csrf();
 	}
-	
+
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		PasswordEncoder encoder = new BCryptPasswordEncoder();
