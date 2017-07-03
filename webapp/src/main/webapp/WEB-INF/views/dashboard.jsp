@@ -105,26 +105,26 @@
 						</sec:authorize>
 						<!-- Table header for Computer Name -->
 						<th><a
-							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="name"/>>
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="name" pageNumber="1"/>>
 								<spring:message code="label.computerName" />
 						</a> <span class="pull-right"><c:if
 									test="${computerPage.order == 'name'}">&#x25BC;</c:if></span></th>
 						<!-- Table header for Introduced Date -->
 						<th><a
-							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="introduced"/>>
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="introduced" pageNumber="1"/>>
 								<spring:message code="label.introduced" />
 						</a> <span class="pull-right"><c:if
 									test="${computerPage.order == 'introduced'}">&#x25BC;</c:if></span></th>
 						<!-- Table header for Discontinued Date -->
 						<th><a
-							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="discontinued"/>>
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="discontinued" pageNumber="1"/>>
 								<spring:message code="label.discontinued" />
 						</a> <span class="pull-right"><c:if
 									test="${computerPage.order == 'discontinued'}">&#x25BC;</c:if></span>
 						</th>
 						<!-- Table header for Company -->
 						<th><a
-							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="companyName"/>>
+							href=<tags:link computerPage="${computerPage}" search="${search}" pageOrder="companyName" pageNumber="1"/>>
 								<spring:message code="label.company" />
 						</a> <span class="pull-right"><c:if
 									test="${computerPage.order == 'companyName'}">&#x25BC;</c:if></span></th>
